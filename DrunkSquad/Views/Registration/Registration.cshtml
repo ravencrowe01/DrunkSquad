@@ -1,0 +1,48 @@
+﻿@model DrunkSquad.Models.User.UserProfile
+
+@{
+    ViewData ["Title"] = "Register";
+}
+
+<style>
+    #login-form {
+        margin: auto;
+        width: 60%;
+    }
+
+    #login {
+        margin: auto;
+        width: 50%;
+    }
+
+    .submit {
+        margin-top: 10px;
+    }
+</style>
+
+<div id="register">
+    <form asp-controller="Registration" asp-action="Register" id="register-form" method="post">
+        <h1>Register</h1>
+
+        <div class="form-group">
+            <label asp-for="ApiKey">API Key</label>
+            <input asp-for="ApiKey" class="form-control input-sm" id="key" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" class="form-control input-sm" id="password" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password">Confirm Password</label>
+            <input asp-for="Password" class="form-control input-sm" id="password" />
+        </div>
+
+        <input type="submit" value="Submit" class="submit" />
+    </form>
+
+    @if (Model.LoggedIn) {
+        <p style="color: forestgreen">Logged in!</p>
+    }
+</div>
