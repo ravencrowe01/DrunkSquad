@@ -1,5 +1,10 @@
 ﻿namespace DrunkSquad.Logic.User {
     public enum RegistrationStatus {
-        Registered, NoResponse, InvalidKey, KeyInUse
+        Registered, 
+        InvalidApiResponse, 
+        InvalidKey, 
+        KeyInUse,
+        NoResponse,
+        AlreadyRegistered
     }
 }

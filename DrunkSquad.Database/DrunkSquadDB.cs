@@ -13,7 +13,7 @@ namespace DrunkSquad.Database {
     }
 
     public interface IUserDBAccess : IDBAccess<UserProfile> {
-        UserProfile FindByUsername (string name);
+        UserProfile FindByID (int name);
 
         UserProfile FindByApiKey (string key);
     }

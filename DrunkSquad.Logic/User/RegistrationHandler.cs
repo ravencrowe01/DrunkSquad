@@ -6,7 +6,9 @@ using Newtonsoft.Json;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.User {
-    public class RegistrationHandler (IPasswordHasher<UserProfile> hasher, IUserDBAccess users, IHttpClientFactory clientFactory, IConfiguration config) : IRegistrationHandler {
+    public class RegistrationHandler (IPasswordHasher<UserProfile> hasher, IUserDBAccess users, IHttpClientFactory clientFactory) : IRegistrationHandler {
+        private ApiRequestClient _client = new ApiRequestClient (clientFactory, @"https://api.torn.com/");
+
         public async Task<RegistrationStatus> RegisterAsync (UserProfile user) {
             var found = users.FindByApiKey (user.ApiKey);
 
@@ -14,35 +16,34 @@ namespace DrunkSquad.Logic.User {
                 return RegistrationStatus.KeyInUse;
             }
 
-            user.Password = hasher.HashPassword (user, user.Password);
-
-            var requestClient = new ApiRequestClient (clientFactory);
-
-            var result = await requestClient.GetAsync (new RequestConfiguration {
-                ApiUrl = config.GetValue<string> ("ApiConfig:BaseApiUrl") ?? @"https://api.torn.com/",
+            ApiResponse<UserProfile> result = await _client.GetSingleObjectAsync<UserProfile> (new RequestConfiguration {
                 Key = user.ApiKey,
                 Section = "user",
                 Selections = new string [] { "profile" }
             });
 
-            if (result is null || !result.IsSuccessStatusCode) {
+            if(!result.KeyStatus.IsKeyUsable) {
+                return RegistrationStatus.InvalidKey;
+            }
+
+            if(result.HttpResponseMessage is null || result.HttpResponseMessage.IsSuccessStatusCode) {
+                return RegistrationStatus.InvalidApiResponse;
+            }
+
+            if(result.Content is null) {
                 return RegistrationStatus.NoResponse;
             }
 
-            var json = await result.Content.ReadAsStringAsync ();
+            found = users.FindByID (result.Content.ID);
 
-            if (json is null || json.Length <= 0) {
-                return RegistrationStatus.InvalidKey;
+            if(found is not null) {
+                return RegistrationStatus.AlreadyRegistered;
             }
 
-            var profile = JsonConvert.DeserializeObject<UserProfile> (json);
+            var profile = result.Content;
 
-            if (profile is null) {
-                return RegistrationStatus.InvalidKey;
-            }
-
+            profile.Password = hasher.HashPassword (profile, user.Password);
             profile.ApiKey = user.ApiKey;
-            profile.Password = user.Password;
 
             await users.AddAsync (profile);
 
