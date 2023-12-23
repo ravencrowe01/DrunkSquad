@@ -4,6 +4,7 @@ using DrunkSquad.Logic.User.Login;
 using DrunkSquad.Logic.User.Registration;
 using DrunkSquad.Models.User;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TornApi.Net.REST;
 
@@ -14,7 +15,7 @@ builder.Services.AddControllersWithViews ();
 
 AddServices (builder);
 
-builder.Services.AddDbContext<DBAccess> ();
+builder.Services.AddDbContext<DBAccess> (options => options.UseNpgsql(builder.Configuration.GetConnectionString("local")));
 
 var app = builder.Build ();
 

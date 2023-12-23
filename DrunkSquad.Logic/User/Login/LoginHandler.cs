@@ -8,10 +8,10 @@ namespace DrunkSquad.Logic.User.Login {
             var found = users.FindByApiKey (login.ApiKey);
 
             if (found is not null) {
-                var result = hasher.VerifyHashedPassword (login, found.Password, login.Password);
+                var result = hasher.VerifyHashedPassword (login, found.LoginDetails.Password, login.Password);
 
                 if (result == PasswordVerificationResult.SuccessRehashNeeded) {
-                    found.Password = hasher.HashPassword (login, login.Password);
+                    found.LoginDetails.Password = hasher.HashPassword (login, login.Password);
 
                     users.Update (found);
                 }

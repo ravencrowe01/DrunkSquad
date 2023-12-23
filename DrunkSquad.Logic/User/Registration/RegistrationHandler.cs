@@ -11,14 +11,14 @@ namespace DrunkSquad.Logic.User.Registration {
         private static readonly string [] selections = new string [] { "profile" };
 
         public async Task<RegistrationStatus> RegisterAsync (DSUser user) {
-            var found = users.FindByApiKey (user.ApiKey);
+            var found = users.FindByApiKey (user.LoginDetails.ApiKey);
 
             if (found is not null) {
                 return RegistrationStatus.KeyInUse;
             }
 
             ApiResponse<DSUser> result = await _client.GetSingleObjectAsync<DSUser> (new RequestConfiguration {
-                Key = user.ApiKey,
+                Key = user.LoginDetails.ApiKey,
                 Section = "user",
                 Selections = selections
             },
@@ -44,8 +44,8 @@ namespace DrunkSquad.Logic.User.Registration {
 
             var profile = result.Content;
 
-            profile.Password = hasher.HashPassword (profile, user.Password);
-            profile.ApiKey = user.ApiKey;
+            profile.LoginDetails.Password = hasher.HashPassword (profile, user.LoginDetails.Password);
+            profile.LoginDetails.ApiKey = user.LoginDetails.ApiKey;
 
             users.Add (profile);
 
