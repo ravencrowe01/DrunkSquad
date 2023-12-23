@@ -1,13 +1,15 @@
-﻿using DrunkSquad.Models.User;
+﻿using DrunkSquad.Logic.User.Registration;
+using DrunkSquad.Models.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {
-    public class RegistrationController : Controller {
+    public class RegistrationController(IRegistrationHandler handler) : Controller {
         public IActionResult Registration () {
-            return View (new UserProfile());
+            return View (new DSUser ());
         }
 
-        public IActionResult Register () {
+        public async Task<IActionResult> Register (DSUser profile) {
+            await handler.RegisterAsync (profile);
             return View ("Index");
         }
     }

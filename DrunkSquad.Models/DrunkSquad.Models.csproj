@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TornApi.Net.Models" Version="0.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
+    <PackageReference Include="TornApi.Net.Models" Version="0.3.3" />
   </ItemGroup>
 
 </Project>

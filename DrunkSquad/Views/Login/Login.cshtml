@@ -1,4 +1,4 @@
-﻿@model DrunkSquad.Models.User.UserProfile
+﻿@model DrunkSquad.Models.User.LoginDetails
 
 @{
     ViewData ["Title"] = "Login";
@@ -31,13 +31,13 @@
 
         <div class="form-group">
             <label asp-for="Password">Password</label>
-            <input asp-for="Password" class="form-control input-sm" id="password" />
+            <input asp-for="Password" class="form-control input-sm" id="password" type="password"/>
         </div>
 
         <input type="submit" value="Login" class="submit" />
     </form>
 
-    @if (Model.LoggedIn) {
+    @if (Model.AttemptFailed) {
         <p style="color: forestgreen">Logged in!</p>
     }
 </div>

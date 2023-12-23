@@ -1,8 +1,8 @@
 ﻿using DrunkSquad.Models.User;
 using Microsoft.AspNetCore.Identity;
 
-namespace DrunkSquad.Logic.User {
+namespace DrunkSquad.Logic.User.Login {
     public interface ILoginHandler {
-        Task<PasswordVerificationResult> AttemptLoginAsync (UserProfile user);
+        PasswordVerificationResult AttemptLogin (LoginDetails logjn);
     }
 }

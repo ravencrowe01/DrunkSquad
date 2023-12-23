@@ -1,4 +1,4 @@
-﻿@model DrunkSquad.Models.User.UserProfile
+﻿@model DrunkSquad.Models.User.RegistrationDetails
 
 @{
     ViewData ["Title"] = "Register";
@@ -31,18 +31,29 @@
 
         <div class="form-group">
             <label asp-for="Password">Password</label>
-            <input asp-for="Password" class="form-control input-sm" id="password" />
+            <input asp-for="Password" class="form-control input-sm" id="password" type="password"/>
         </div>
 
         <div class="form-group">
             <label asp-for="Password">Confirm Password</label>
-            <input asp-for="Password" class="form-control input-sm" id="password" />
+            <input asp-for="Password" class="form-control input-sm" id="password" type="password" />
         </div>
 
         <input type="submit" value="Submit" class="submit" />
     </form>
 
-    @if (Model.LoggedIn) {
-        <p style="color: forestgreen">Logged in!</p>
+    @switch(Model.Status) {
+        case DrunkSquad.Models.User.RegistrationStatus.Registered:
+            break;
+        case DrunkSquad.Models.User.RegistrationStatus.NoResponse:
+            break;
+        case DrunkSquad.Models.User.RegistrationStatus.InvalidKey:
+            break;
+        case DrunkSquad.Models.User.RegistrationStatus.KeyInUse:
+            break;
+        case DrunkSquad.Models.User.RegistrationStatus.AlreadyRegistered:
+            break;
+        case DrunkSquad.Models.User.RegistrationStatus.InvalidApiResponse:
+            break;
     }
 </div>

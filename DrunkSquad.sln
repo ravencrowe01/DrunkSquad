@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrunkSquad.Database", "Drun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrunkSquad", "DrunkSquad\DrunkSquad.csproj", "{05147850-E019-4386-9B45-C2AFD498EE85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrunkSquad.Logic", "DrunkSquad.Logic\DrunkSquad.Logic.csproj", "{41BCEEA9-C338-47C3-9A87-7BEE0E05EE40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrunkSquad.Logic", "DrunkSquad.Logic\DrunkSquad.Logic.csproj", "{41BCEEA9-C338-47C3-9A87-7BEE0E05EE40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
