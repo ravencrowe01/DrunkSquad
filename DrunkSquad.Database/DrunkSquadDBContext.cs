@@ -8,6 +8,7 @@ using TornApi.Net.Models.User;
 namespace DrunkSquad.Database {
     public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext(options), IDrunkSquadDBAccess {
         public DbSet<User> Users { get; set; }
+        // TODO Needs to be moved into the service constructor.
         public IUserAccess UserAccess {
             get {
                 if (_userAccess == null) {
@@ -20,6 +21,7 @@ namespace DrunkSquad.Database {
         private UserAccess _userAccess = null;
 
         public DbSet<Crime> Crimes { get; set; }
+        // TODO Needs to be moved into the service constructor.
         public IEntityAccess<Crime> CrimeAccess {
             get {
                 if (_crimeAccess == null) {
