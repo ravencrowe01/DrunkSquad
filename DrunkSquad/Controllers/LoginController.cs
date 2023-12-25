@@ -28,7 +28,7 @@ namespace DrunkSquad.Controllers {
                     break;
             }
 
-            return View (login);
+            return View ("Login", login);
         }
     }
 }
