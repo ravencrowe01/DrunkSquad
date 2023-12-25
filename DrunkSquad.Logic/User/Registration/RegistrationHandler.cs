@@ -1,34 +1,36 @@
 ﻿using DrunkSquad.Database;
+using DrunkSquad.Models.Config;
 using DrunkSquad.Models.User;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using TornApi.Net.Models.Key;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.User.Registration {
-    public class RegistrationHandler (IPasswordHasher<DSUser> hasher, IHttpClientFactory clientFactory, IConfigurationManager config, IUserAccess users) : IRegistrationHandler {
-        private readonly ApiRequestClient _client = new ApiRequestClient (clientFactory, config.GetSection ("Api") ["BaseApiUrl"]);
-        private static readonly string [] selections = new string [] { "profile" };
+    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, DrunkSquadDBContext db) : IRegistrationHandler {
+        private IPasswordHasher<LoginDetails> _hasher = hasher;
+        private readonly ApiRequestClient _client = new(clientFactory, config.GetBaseURL ());
+        private static readonly string [] selections = ["profile"];
 
-        public async Task<RegistrationStatus> RegisterAsync (DSUser user) {
-            var found = users.FindByApiKey (user.LoginDetails.ApiKey);
+        public async Task<RegistrationStatus> RegisterAsync (LoginDetails details) {
+            var found = db.UserAccess.FindByApiKey (details.ApiKey);
 
             if (found is not null) {
                 return RegistrationStatus.KeyInUse;
             }
 
+            var requiredLevel = config.GetRequiredAccessLevel ();
+
             ApiResponse<DSUser> result = await _client.GetSingleObjectAsync<DSUser> (new RequestConfiguration {
-                Key = user.LoginDetails.ApiKey,
+                Key = details.ApiKey,
                 Section = "user",
                 Selections = selections
             },
-            (AccessLevel) int.Parse (config.GetSection ("api") ["RequiredApiLeve"]));
+            requiredLevel);
 
             if (!result.KeyStatus.IsKeyUsable) {
                 return RegistrationStatus.InvalidKey;
             }
 
-            if (result.HttpResponseMessage is null || result.HttpResponseMessage.IsSuccessStatusCode) {
+            if (result.HttpResponseMessage is null || !result.HttpResponseMessage.IsSuccessStatusCode) {
                 return RegistrationStatus.InvalidApiResponse;
             }
 
@@ -36,7 +38,7 @@ namespace DrunkSquad.Logic.User.Registration {
                 return RegistrationStatus.NoResponse;
             }
 
-            found = users.FindByID (result.Content.ID);
+            found = db.UserAccess.FindByID (result.Content.ID);
 
             if (found is not null) {
                 return RegistrationStatus.AlreadyRegistered;
@@ -44,10 +46,10 @@ namespace DrunkSquad.Logic.User.Registration {
 
             var profile = result.Content;
 
-            profile.LoginDetails.Password = hasher.HashPassword (profile, user.LoginDetails.Password);
-            profile.LoginDetails.ApiKey = user.LoginDetails.ApiKey;
+            profile.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
+            profile.LoginDetails.ApiKey = details.ApiKey;
 
-            users.Add (profile);
+            db.UserAccess.Add (profile);
 
             return RegistrationStatus.Registered;
         }
