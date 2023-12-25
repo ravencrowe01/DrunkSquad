@@ -2,18 +2,17 @@
 using DrunkSquad.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Configuration;
 
 namespace DrunkSquad.Controllers {
     public class LoginController (ILoginHandler handler) : Controller {
         [Route ("login")]
         public IActionResult Login () {
-            return View (new LoginDetails ());
+            return View (new LoginAttempt ());
         }
 
         [HttpPost]
         [Route ("login/attempt")]
-        public IActionResult Attempt (LoginDetails login) {
+        public IActionResult Attempt (LoginAttempt login) {
             if (!ModelState.IsValid) {
                 // TODO This needs to be better
                 return View ();
@@ -22,14 +21,14 @@ namespace DrunkSquad.Controllers {
             switch (handler.AttemptLogin (login)) {
                 case PasswordVerificationResult.Success:
                 case PasswordVerificationResult.SuccessRehashNeeded:
-                    return View ("Index");
+                    return View ("../Home/Index");
                 case PasswordVerificationResult.Failed:
                     break;
                 default:
                     break;
             }
 
-            return View ("Login", login);
+            return View (login);
         }
     }
 }
