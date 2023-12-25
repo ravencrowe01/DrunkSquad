@@ -7,7 +7,7 @@ using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Database {
     public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext(options), IDrunkSquadDBAccess {
-        public DbSet<DSUser> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public IUserAccess UserAccess {
             get {
                 if (_userAccess == null) {
@@ -68,17 +68,17 @@ namespace DrunkSquad.Database {
 
             builder.Entity<Member> ().HasKey (member => member.ID);
 
-            builder.Entity<DSUser> ().HasKey (user => user.ID);
+            builder.Entity<User> ().HasKey (user => user.ID);
 
-            builder.Entity<DSUser> ().HasOne (user => user.Job);
-            builder.Entity<DSUser> ().HasOne (user => user.LastAction);
-            builder.Entity<DSUser> ().HasOne (user => user.Life);
-            builder.Entity<DSUser> ().HasOne (user => user.States);
-            builder.Entity<DSUser> ().HasOne (user => user.Status);
-            builder.Entity<DSUser> ().HasOne (user => user.LoginDetails);
+            builder.Entity<User> ().HasOne (user => user.Job);
+            builder.Entity<User> ().HasOne (user => user.LastAction);
+            builder.Entity<User> ().HasOne (user => user.Life);
+            builder.Entity<User> ().HasOne (user => user.States);
+            builder.Entity<User> ().HasOne (user => user.Status);
+            builder.Entity<User> ().HasOne (user => user.LoginDetails);
 
-            builder.Entity<DSUser> ().Ignore (user => user.Competition);
-            builder.Entity<DSUser> ().Ignore (user => user.BasicIcons);
+            builder.Entity<User> ().Ignore (user => user.Competition);
+            builder.Entity<User> ().Ignore (user => user.BasicIcons);
         }
     }
 }

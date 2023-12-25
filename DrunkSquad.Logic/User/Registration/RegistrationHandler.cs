@@ -19,7 +19,7 @@ namespace DrunkSquad.Logic.User.Registration {
 
             var requiredLevel = config.GetRequiredAccessLevel ();
 
-            ApiResponse<DSUser> result = await _client.GetSingleObjectAsync<DSUser> (new RequestConfiguration {
+            ApiResponse<User> result = await _client.GetSingleObjectAsync<User> (new RequestConfiguration {
                 Key = details.ApiKey,
                 Section = "user",
                 Selections = selections
