@@ -1,4 +1,4 @@
-﻿namespace DrunkSquad.Models.User {
+﻿namespace DrunkSquad.Models.Users {
     public enum RegistrationStatus {
         Registered,
         InvalidApiResponse,

@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Models.User;
+﻿using DrunkSquad.Models.Users;
 
 namespace DrunkSquad.Database {
     public interface IUserAccess : IEntityAccess<User> {

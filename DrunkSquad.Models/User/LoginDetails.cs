@@ -1,4 +1,4 @@
-﻿namespace DrunkSquad.Models.User {
+﻿namespace DrunkSquad.Models.Users {
     public class LoginDetails {
         public int ID { get; set; }
 

@@ -1,5 +1,5 @@
-﻿using DrunkSquad.Logic.User.Login;
-using DrunkSquad.Models.User;
+﻿using DrunkSquad.Logic.Users.Login;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

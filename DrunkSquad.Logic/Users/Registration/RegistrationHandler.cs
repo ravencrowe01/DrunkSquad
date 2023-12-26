@@ -1,10 +1,10 @@
 ﻿using DrunkSquad.Database;
 using DrunkSquad.Models.Config;
-using DrunkSquad.Models.User;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using TornApi.Net.REST;
 
-namespace DrunkSquad.Logic.User.Registration {
+namespace DrunkSquad.Logic.Users.Registration {
     public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, DrunkSquadDBContext db) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
         private readonly ApiRequestClient _client = new(clientFactory, config.GetBaseURL ());

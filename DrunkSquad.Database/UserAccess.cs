@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Models.User;
+﻿using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace DrunkSquad.Database {

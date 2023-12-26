@@ -1,4 +1,4 @@
-﻿@model DrunkSquad.Models.User.RegistrationAttempt
+﻿@model DrunkSquad.Models.Users.RegistrationAttempt
 
 @{
     ViewData ["Title"] = "Register";
@@ -43,17 +43,17 @@
     </form>
 
     @switch(Model.Status) {
-        case DrunkSquad.Models.User.RegistrationStatus.Registered:
+        case DrunkSquad.Models.Users.RegistrationStatus.Registered:
             break;
-        case DrunkSquad.Models.User.RegistrationStatus.NoResponse:
+        case DrunkSquad.Models.Users.RegistrationStatus.NoResponse:
             break;
-        case DrunkSquad.Models.User.RegistrationStatus.InvalidKey:
+        case DrunkSquad.Models.Users.RegistrationStatus.InvalidKey:
             break;
-        case DrunkSquad.Models.User.RegistrationStatus.KeyInUse:
+        case DrunkSquad.Models.Users.RegistrationStatus.KeyInUse:
             break;
-        case DrunkSquad.Models.User.RegistrationStatus.AlreadyRegistered:
+        case DrunkSquad.Models.Users.RegistrationStatus.AlreadyRegistered:
             break;
-        case DrunkSquad.Models.User.RegistrationStatus.InvalidApiResponse:
+        case DrunkSquad.Models.Users.RegistrationStatus.InvalidApiResponse:
             break;
     }
 </div>

@@ -1,5 +1,5 @@
-﻿using DrunkSquad.Logic.User.Registration;
-using DrunkSquad.Models.User;
+﻿using DrunkSquad.Logic.Users.Registration;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {

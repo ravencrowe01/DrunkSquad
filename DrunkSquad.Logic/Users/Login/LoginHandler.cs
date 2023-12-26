@@ -1,8 +1,8 @@
 ﻿using DrunkSquad.Database;
-using DrunkSquad.Models.User;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 
-namespace DrunkSquad.Logic.User.Login {
+namespace DrunkSquad.Logic.Users.Login {
     public class LoginHandler (IPasswordHasher<LoginDetails> hasher, DrunkSquadDBContext db) : ILoginHandler {
         public PasswordVerificationResult AttemptLogin (LoginDetails login) {
             var found = db.UserAccess.FindByApiKey (login.ApiKey);

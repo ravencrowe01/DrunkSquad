@@ -1,7 +1,7 @@
 ﻿using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 
-namespace DrunkSquad.Models.User;
+namespace DrunkSquad.Models.Users;
 
 public class User : Profile {
     public LoginDetails LoginDetails { get; set; } = new LoginDetails ();

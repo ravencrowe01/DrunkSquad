@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DrunkSquad.Models.User {
+namespace DrunkSquad.Models.Users {
     public class LoginAttempt : LoginDetails {
         public PasswordVerificationResult Result { get; set; }
 

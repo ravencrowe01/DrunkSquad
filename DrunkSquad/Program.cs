@@ -1,8 +1,8 @@
 using DrunkSquad.Database;
-using DrunkSquad.Logic.User.Login;
-using DrunkSquad.Logic.User.Registration;
+using DrunkSquad.Logic.Users.Login;
+using DrunkSquad.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
-using DrunkSquad.Models.User;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TornApi.Net.REST;

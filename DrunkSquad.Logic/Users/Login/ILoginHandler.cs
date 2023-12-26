@@ -1,7 +1,7 @@
-﻿using DrunkSquad.Models.User;
+﻿using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 
-namespace DrunkSquad.Logic.User.Login {
+namespace DrunkSquad.Logic.Users.Login {
     public interface ILoginHandler {
         PasswordVerificationResult AttemptLogin (LoginDetails logjn);
     }
