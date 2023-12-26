@@ -3,6 +3,7 @@ using DrunkSquad.Logic.Users.Login;
 using DrunkSquad.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TornApi.Net.REST;
@@ -56,4 +57,11 @@ void AddServices (WebApplicationBuilder builder) {
 
     services.AddScoped<ILoginHandler, LoginHandler> ();
     services.AddScoped<IRegistrationHandler, RegistrationHandler> ();
+
+    services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie (options => {
+                options.ExpireTimeSpan = TimeSpan.FromMinutes (20);
+                options.SlidingExpiration = true;
+                options.AccessDeniedPath = "/Home/Index";
+            });
 }

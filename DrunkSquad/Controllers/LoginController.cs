@@ -1,7 +1,10 @@
 ﻿using DrunkSquad.Logic.Users.Login;
 using DrunkSquad.Models.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DrunkSquad.Controllers {
     public class LoginController (ILoginHandler handler) : Controller {
@@ -12,7 +15,7 @@ namespace DrunkSquad.Controllers {
 
         [HttpPost]
         [Route ("login/attempt")]
-        public IActionResult Attempt (LoginAttempt login) {
+        public async Task<IActionResult> Attempt (LoginAttempt login) {
             if (!ModelState.IsValid) {
                 // TODO This needs to be better
                 return View ();
@@ -21,7 +24,18 @@ namespace DrunkSquad.Controllers {
             switch (handler.AttemptLogin (login)) {
                 case PasswordVerificationResult.Success:
                 case PasswordVerificationResult.SuccessRehashNeeded:
-                    return View ("../Home/Index");
+                    var claims = handler.BuildUserClaims (login);
+
+                    var claimsIdentity = new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties { 
+                        ExpiresUtc = new DateTimeOffset(DateTime.UtcNow.AddMinutes(1440)),
+                        IsPersistent = true
+                    };
+
+                    await HttpContext.SignInAsync (CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal (claimsIdentity), authProperties);
+
+                    return RedirectToAction("Index", "Home");
                 case PasswordVerificationResult.Failed:
                     break;
                 default:
@@ -29,6 +43,11 @@ namespace DrunkSquad.Controllers {
             }
 
             return View ("Login", login);
+        }
+
+        public async Task<IActionResult> Logout () {
+            await HttpContext.SignOutAsync ( CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction ("Index", "Home");
         }
     }
 }
