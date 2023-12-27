@@ -1,4 +1,5 @@
-﻿using DrunkSquad.Models.Users;
+﻿using DrunkSquad.Models.Faction;
+using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using TornApi.Net.Models.Common;
 using TornApi.Net.Models.Faction;

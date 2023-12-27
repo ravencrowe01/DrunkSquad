@@ -7,7 +7,7 @@ using TornApi.Net.REST;
 namespace DrunkSquad.Logic.Users.Registration {
     public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, IUserAccess userAccess) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
-        private readonly ApiRequestClient _client = new (clientFactory, config.GetBaseURL ());
+        private readonly ApiRequestClient _client = new (clientFactory, config.BaseURL);
         private static readonly string [] selections = ["profile"];
 
         public async Task<RegistrationStatus> RegisterAsync (LoginDetails details) {
@@ -17,9 +17,9 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.KeyInUse;
             }
 
-            var requiredLevel = config.GetRequiredAccessLevel ();
+            var requiredLevel = config.RequiredAccessLevel;
 
-            ApiResponse<User> result = await _client.GetSingleObjectAsync<User> (new RequestConfiguration {
+            ApiResponse<User> result = await _client.GetAsync<User> (new RequestConfiguration {
                 Key = details.ApiKey,
                 Section = "user",
                 Selections = selections,

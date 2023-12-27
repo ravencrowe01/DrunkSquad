@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrunkSquad.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,7 @@ namespace DrunkSquad.Database.Migrations
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FactionID = table.Column<int>(type: "integer", nullable: false),
+                    CrimeID = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Initiated = table.Column<bool>(type: "boolean", nullable: false),
                     InitiatedBy = table.Column<int>(type: "integer", nullable: false),
@@ -160,14 +161,27 @@ namespace DrunkSquad.Database.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     Details = table.Column<string>(type: "text", nullable: true),
                     State = table.Column<int>(type: "integer", nullable: false),
-                    Until = table.Column<long>(type: "bigint", nullable: false),
-                    CrimeID = table.Column<int>(type: "integer", nullable: true)
+                    Until = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Statuses", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CrimeParticipants",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParticipantID = table.Column<int>(type: "integer", nullable: false),
+                    CrimeID = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrimeParticipants", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Statuses_Crimes_CrimeID",
+                        name: "FK_CrimeParticipants_Crimes_CrimeID",
                         column: x => x.CrimeID,
                         principalTable: "Crimes",
                         principalColumn: "ID");
@@ -210,6 +224,7 @@ namespace DrunkSquad.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     LoginDetailsID = table.Column<int>(type: "integer", nullable: true),
                     MembershipInfoID = table.Column<int>(type: "integer", nullable: true),
+                    WebsiteRole = table.Column<int>(type: "integer", nullable: false),
                     Age = table.Column<int>(type: "integer", nullable: false),
                     Awards = table.Column<int>(type: "integer", nullable: false),
                     Donator = table.Column<bool>(type: "boolean", nullable: false),
@@ -284,6 +299,11 @@ namespace DrunkSquad.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CrimeParticipants_CrimeID",
+                table: "CrimeParticipants",
+                column: "CrimeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Members_LastActionID",
                 table: "Members",
                 column: "LastActionID");
@@ -292,11 +312,6 @@ namespace DrunkSquad.Database.Migrations
                 name: "IX_Members_StatusID",
                 table: "Members",
                 column: "StatusID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Statuses_CrimeID",
-                table: "Statuses",
-                column: "CrimeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_FactionID",
@@ -348,7 +363,13 @@ namespace DrunkSquad.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CrimeParticipants");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Crimes");
 
             migrationBuilder.DropTable(
                 name: "Bars");
@@ -376,9 +397,6 @@ namespace DrunkSquad.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuses");
-
-            migrationBuilder.DropTable(
-                name: "Crimes");
         }
     }
 }

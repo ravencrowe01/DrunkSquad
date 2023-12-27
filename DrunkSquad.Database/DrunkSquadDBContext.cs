@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Database.Accessors;
+﻿using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using TornApi.Net.Models.Common;
@@ -8,6 +8,8 @@ using TornApi.Net.Models.User;
 namespace DrunkSquad.Database {
     public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext (options), IDrunkSquadDBContext {
         public DbSet<User> Users { get; set; }
+
+        public DbSet<CrimeParticipant> CrimeParticipants { get; set; }
 
         public DbSet<Crime> Crimes { get; set; }
 
@@ -59,6 +61,11 @@ namespace DrunkSquad.Database {
 
             builder.Entity<User> ().Ignore (user => user.Competition);
             builder.Entity<User> ().Ignore (user => user.BasicIcons);
+
+            builder.Entity<Crime> ().HasKey (crime => crime.ID);
+
+            builder.Entity<Crime> ().HasMany (Crime => Crime.Participants);
+
         }
     }
 }

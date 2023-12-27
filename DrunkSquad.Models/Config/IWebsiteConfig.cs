@@ -2,10 +2,11 @@
 
 namespace DrunkSquad.Models.Config {
     public interface IWebsiteConfig {
-        string GetBaseURL ();
+        string BaseURL { get; }
+
         string GetConnectionString (string name);
 
-        AccessLevel GetRequiredAccessLevel ();
+        AccessLevel RequiredAccessLevel { get; }
 
         string [] GetSelectionsForSection (string section);
     }

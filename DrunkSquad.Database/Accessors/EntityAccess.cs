@@ -5,6 +5,8 @@ namespace DrunkSquad.Database.Accessors {
         protected DbSet<T> _set = set;
         protected DbContext _context = context;
 
+        public IEnumerable<T> Set => _set;
+
         public T FindByID (int id) => _set.Find (id);
 
         public void Update (T entity) => _set.Update (entity);
@@ -19,5 +21,4 @@ namespace DrunkSquad.Database.Accessors {
             _context.SaveChanges ();
         }
     }
-
 }

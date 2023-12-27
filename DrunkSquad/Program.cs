@@ -1,5 +1,6 @@
 using DrunkSquad.Database;
 using DrunkSquad.Database.Accessors;
+using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Users.Login;
 using DrunkSquad.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
@@ -54,14 +55,15 @@ void AddServices (WebApplicationBuilder builder) {
     IServiceCollection services = builder.Services;
 
     services.AddSingleton<IConfiguration> (builder.Configuration);
-    services.AddSingleton<IWebsiteConfig, WebsiteConfig>((services) => new WebsiteConfig (services.GetService<IConfiguration> ()));
+    services.AddSingleton<IWebsiteConfig, WebsiteConfig> ((services) => new WebsiteConfig (services.GetService<IConfiguration> ()));
 
     services.AddSingleton<IHttpClientFactory> (DefaultApiRequestClientFactory.Instance);
 
-    services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>>();
+    services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>> ();
 
     services.AddScoped<ILoginHandler, LoginHandler> ();
     services.AddScoped<IRegistrationHandler, RegistrationHandler> ();
+    services.AddScoped<ICrimeHandler, CrimeHandler> ();
 
     services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie (options => {
@@ -74,74 +76,74 @@ void AddServices (WebApplicationBuilder builder) {
 void AddEntityAccessors (WebApplicationBuilder builder) {
     IServiceCollection services = builder.Services;
 
-    services.AddSingleton<IUserAccess, UserAccess> (services => {
+    services.AddScoped<IUserAccess, UserAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Users;
 
         return new UserAccess (set, context);
     });
 
-    services.AddSingleton<IJobAccess, JobAccess> (services => {
+    services.AddScoped<IJobAccess, JobAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Job> ();
 
         return new JobAccess (set, context);
     });
 
-    services.AddSingleton<ILastActionAccess, LastActionAccess> (services => {
+    services.AddScoped<ILastActionAccess, LastActionAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<LastAction> ();
 
         return new LastActionAccess (set, context);
     });
 
-    services.AddSingleton<IMarriageAccess, MarriageAccess> (services => {
+    services.AddScoped<IMarriageAccess, MarriageAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Marriage> ();
 
         return new MarriageAccess (set, context);
     });
 
-    services.AddSingleton<IPlayerStatesAccess, PlayerStatesAccess> (services => {
+    services.AddScoped<IPlayerStatesAccess, PlayerStatesAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<PlayerStates> ();
 
         return new PlayerStatesAccess (set, context);
     });
 
-    services.AddSingleton<IStatusAccess, StatusAccess> (services => {
+    services.AddScoped<IStatusAccess, StatusAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Status> ();
 
         return new StatusAccess (set, context);
     });
 
-    services.AddSingleton<IFactionStubAccess, FactionStubAccess> (services => {
+    services.AddScoped<IFactionStubAccess, FactionStubAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<FactionStub> ();
 
         return new FactionStubAccess (set, context);
     });
 
-    services.AddSingleton<ILoginDetailsAccess, LoginDetailsAccess> (services => {
+    services.AddScoped<ILoginDetailsAccess, LoginDetailsAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<LoginDetails> ();
 
         return new LoginDetailsAccess (set, context);
     });
 
-    services.AddSingleton<IMemberAccess, MemberAccess> (services => {
+    services.AddScoped<IMemberAccess, MemberAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Member> ();
 
         return new MemberAccess (set, context);
     });
 
-    services.AddSingleton<ICrimeAccess, CrimeAccess> (services => {
+    services.AddScoped<IFactionCrimeAccess, FactionCrimeAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Crime> ();
 
-        return new CrimeAccess (set, context);
+        return new FactionCrimeAccess (set, context);
     });
 
 }

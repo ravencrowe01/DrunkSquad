@@ -242,9 +242,6 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Color")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CrimeID")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -262,8 +259,6 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CrimeID");
-
                     b.ToTable("Statuses");
                 });
 
@@ -274,6 +269,9 @@ namespace DrunkSquad.Database.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("CrimeID")
+                        .HasColumnType("integer");
 
                     b.Property<int>("FactionID")
                         .HasColumnType("integer");
@@ -314,6 +312,27 @@ namespace DrunkSquad.Database.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Crimes");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Faction.CrimeParticipant", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("CrimeID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CrimeID");
+
+                    b.ToTable("CrimeParticipants");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
@@ -489,10 +508,10 @@ namespace DrunkSquad.Database.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("TornApi.Net.Models.Common.Status", b =>
+            modelBuilder.Entity("TornApi.Net.Models.Faction.CrimeParticipant", b =>
                 {
                     b.HasOne("TornApi.Net.Models.Faction.Crime", null)
-                        .WithMany("Members")
+                        .WithMany("Participants")
                         .HasForeignKey("CrimeID");
                 });
 
@@ -513,7 +532,7 @@ namespace DrunkSquad.Database.Migrations
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Crime", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }
