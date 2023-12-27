@@ -1,17 +1,17 @@
-﻿using DrunkSquad.Database;
+﻿using DrunkSquad.Database.Accessors;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users.Registration {
-    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, DrunkSquadDBContext db) : IRegistrationHandler {
+    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, IUserAccess userAccess) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
-        private readonly ApiRequestClient _client = new(clientFactory, config.GetBaseURL ());
+        private readonly ApiRequestClient _client = new (clientFactory, config.GetBaseURL ());
         private static readonly string [] selections = ["profile"];
 
         public async Task<RegistrationStatus> RegisterAsync (LoginDetails details) {
-            var found = db.UserAccess.FindByApiKey (details.ApiKey);
+            var found = userAccess.FindByApiKey (details.ApiKey);
 
             if (found is not null) {
                 return RegistrationStatus.KeyInUse;
@@ -22,7 +22,8 @@ namespace DrunkSquad.Logic.Users.Registration {
             ApiResponse<User> result = await _client.GetSingleObjectAsync<User> (new RequestConfiguration {
                 Key = details.ApiKey,
                 Section = "user",
-                Selections = selections
+                Selections = selections,
+                Comment = "Drunk Squad User Registration"
             },
             requiredLevel);
 
@@ -38,7 +39,7 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.NoResponse;
             }
 
-            found = db.UserAccess.FindByID (result.Content.ID);
+            found = userAccess.FindByID (result.Content.ID);
 
             if (found is not null) {
                 return RegistrationStatus.AlreadyRegistered;
@@ -49,7 +50,7 @@ namespace DrunkSquad.Logic.Users.Registration {
             profile.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
             profile.LoginDetails.ApiKey = details.ApiKey;
 
-            db.UserAccess.Add (profile);
+            userAccess.Add (profile);
 
             return RegistrationStatus.Registered;
         }

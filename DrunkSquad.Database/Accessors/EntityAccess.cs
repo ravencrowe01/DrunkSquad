@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DrunkSquad.Database {
+namespace DrunkSquad.Database.Accessors {
     public class EntityAccess<T> (DbSet<T> set, DbContext context) : IEntityAccess<T> where T : class {
         protected DbSet<T> _set = set;
         protected DbContext _context = context;
@@ -19,4 +19,5 @@ namespace DrunkSquad.Database {
             _context.SaveChanges ();
         }
     }
+
 }

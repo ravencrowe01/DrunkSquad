@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TornApi.Net.Models.Faction;
 
 namespace DrunkSquad.Controllers {
     public class CrimesController : Controller {
@@ -7,6 +8,7 @@ namespace DrunkSquad.Controllers {
         }
 
         public IActionResult OrganizedCrimesOverview () {
+            var crime = new Crime ();
             return View ();
         }
     }
