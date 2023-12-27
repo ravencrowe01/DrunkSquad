@@ -62,6 +62,6 @@ void AddServices (WebApplicationBuilder builder) {
             .AddCookie (options => {
                 options.ExpireTimeSpan = TimeSpan.FromMinutes (20);
                 options.SlidingExpiration = true;
-                options.AccessDeniedPath = "/Home/Index";
+                options.AccessDeniedPath = "/Login/Login";
             });
 }
