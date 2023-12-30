@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="TornApi.Net.Models" Version="0.5.2" />
+    <PackageReference Include="TornApi.Net.Models" Version="0.5.6" />
   </ItemGroup>
 
 </Project>

@@ -39,7 +39,7 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.NoResponse;
             }
 
-            found = userAccess.FindByID (result.Content.ID);
+            found = userAccess.FindByID (result.Content.ProfileID);
 
             if (found is not null) {
                 return RegistrationStatus.AlreadyRegistered;

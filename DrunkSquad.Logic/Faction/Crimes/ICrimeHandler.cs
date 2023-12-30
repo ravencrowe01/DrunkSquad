@@ -5,10 +5,10 @@ namespace DrunkSquad.Logic.Faction.Crimes {
     public interface ICrimeHandler {
         Task FetchMostRecentCrimesAsync (string key);
 
-        IEnumerable<Crime> GetAllCrimes ();
+        FactionCrimes GetAllCrimes ();
 
-        IEnumerable<Crime> GetCrimes (DateTime from, DateTime to);
+        FactionCrimes GetAllCrimes (DateTime from, DateTime to);
 
-        IEnumerable<Crime> GetCrimesForUser (int id, DateTime from, DateTime to);
+        FactionCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to);
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    [Migration("20231227082321_Initial")]
+    [Migration("20231230102444_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,255 +25,15 @@ namespace DrunkSquad.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DrunkSquad.Models.Users.LoginDetails", b =>
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("FactionCrimeID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FactionCrimeID"));
 
-                    b.Property<string>("ApiKey")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("LoginDetails");
-                });
-
-            modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Age")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Awards")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("Donator")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Enemies")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FactionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ForumPosts")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Friends")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Honor")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("JobID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Karma")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("LastActionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("LifeID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("LoginDetailsID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MarriageID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MembershipInfoID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Rank")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Revivable")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Signup")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("StatesID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("StatusID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WebsiteRole")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("FactionID");
-
-                    b.HasIndex("JobID");
-
-                    b.HasIndex("LastActionID");
-
-                    b.HasIndex("LifeID");
-
-                    b.HasIndex("LoginDetailsID");
-
-                    b.HasIndex("MarriageID");
-
-                    b.HasIndex("MembershipInfoID");
-
-                    b.HasIndex("StatesID");
-
-                    b.HasIndex("StatusID");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.Common.Bar", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Current")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Fulltime")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Increment")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Interval")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Maximum")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Ticktime")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Bars");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.Common.LastAction", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Relative")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("Timestamp")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("LastActions");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.Common.Marriage", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SpouseID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SpouseName")
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Marriages");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.Common.Status", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Color")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("State")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("Until")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Statuses");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.Faction.Crime", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("CrimeID")
+                    b.Property<int>("CrimeType")
                         .HasColumnType("integer");
 
                     b.Property<int>("FactionID")
@@ -312,12 +72,13 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<long>("TimeReady")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ID");
+                    b.HasKey("FactionCrimeID")
+                        .HasName("FactionCrimeID");
 
                     b.ToTable("Crimes");
                 });
 
-            modelBuilder.Entity("TornApi.Net.Models.Faction.CrimeParticipant", b =>
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -325,26 +86,315 @@ namespace DrunkSquad.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("CrimeID")
+                    b.Property<int>("Age")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ParticipantID")
+                    b.Property<int>("BestChain")
                         .HasColumnType("integer");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Coleader")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Leader")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("RankingID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Respect")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TagImage")
+                        .HasColumnType("text");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CrimeID");
+                    b.HasIndex("RankingID");
 
-                    b.ToTable("CrimeParticipants");
+                    b.ToTable("Factioninfo");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Users.LoginDetails", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("ApiKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LoginDetails");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
+                {
+                    b.Property<int>("ProfileID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProfileID"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Awards")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Donator")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Enemies")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("FactionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("FactionInfoID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ForumPosts")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Friends")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Honor")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("JobID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Karma")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LastActionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LifeBarID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LoginDetailsID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MarriageID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MembershipInfoMemberID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Rank")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Revivable")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Signup")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("StatesPlayerStatesID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StatusID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WebsiteRole")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProfileID")
+                        .HasName("ProfileID");
+
+                    b.HasIndex("FactionID");
+
+                    b.HasIndex("FactionInfoID");
+
+                    b.HasIndex("JobID");
+
+                    b.HasIndex("LastActionID");
+
+                    b.HasIndex("LifeBarID");
+
+                    b.HasIndex("LoginDetailsID");
+
+                    b.HasIndex("MarriageID");
+
+                    b.HasIndex("MembershipInfoMemberID");
+
+                    b.HasIndex("StatesPlayerStatesID");
+
+                    b.HasIndex("StatusID");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FactionCrimeUser", b =>
+                {
+                    b.Property<int>("CrimesFactionCrimeID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParticipantsProfileID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CrimesFactionCrimeID", "ParticipantsProfileID");
+
+                    b.HasIndex("ParticipantsProfileID");
+
+                    b.ToTable("FactionCrimeUser");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Common.Bar", b =>
+                {
+                    b.Property<int>("BarID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BarID"));
+
+                    b.Property<int>("Current")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Fulltime")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Increment")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Interval")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Maximum")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Ticktime")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BarID")
+                        .HasName("BarID");
+
+                    b.ToTable("Bars");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Common.LastAction", b =>
+                {
+                    b.Property<int>("LastActionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LastActionID"));
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Relative")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("Timestamp")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("LastActionID")
+                        .HasName("LastActionID");
+
+                    b.ToTable("LastActions");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Common.Marriage", b =>
+                {
+                    b.Property<int>("MarriageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MarriageID"));
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SpouseID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SpouseName")
+                        .HasColumnType("text");
+
+                    b.HasKey("MarriageID")
+                        .HasName("MarriageID");
+
+                    b.ToTable("Marriages");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Common.Status", b =>
+                {
+                    b.Property<int>("StatusID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StatusID"));
+
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("Until")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("StatusID")
+                        .HasName("ProfiStatusIDleID");
+
+                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("MemberID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MemberID"));
 
                     b.Property<int>("DaysInFaction")
                         .HasColumnType("integer");
@@ -367,13 +417,45 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int?>("StatusID")
                         .HasColumnType("integer");
 
-                    b.HasKey("ID");
+                    b.HasKey("MemberID")
+                        .HasName("MemberID");
 
                     b.HasIndex("LastActionID");
 
                     b.HasIndex("StatusID");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.Faction.Ranking", b =>
+                {
+                    b.Property<int>("RankingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RankingID"));
+
+                    b.Property<int>("Division")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FactionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RankingID");
+
+                    b.ToTable("Ranking");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.FactionStub", b =>
@@ -396,18 +478,19 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<string>("Position")
                         .HasColumnType("text");
 
-                    b.HasKey("FactionID");
+                    b.HasKey("FactionID")
+                        .HasName("FactionID");
 
                     b.ToTable("FactionStubs");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.Job", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("JobID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JobID"));
 
                     b.Property<int>("CompanyID")
                         .HasColumnType("integer");
@@ -427,18 +510,19 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.HasKey("ID");
+                    b.HasKey("JobID")
+                        .HasName("JobID");
 
                     b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.PlayerStates", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("PlayerStatesID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PlayerStatesID"));
 
                     b.Property<long>("HospitalTimestamp")
                         .HasColumnType("bigint");
@@ -449,9 +533,19 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("OwnerID")
                         .HasColumnType("integer");
 
-                    b.HasKey("ID");
+                    b.HasKey("PlayerStatesID")
+                        .HasName("PlayerStatesID");
 
                     b.ToTable("PlayerStates");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
+                {
+                    b.HasOne("TornApi.Net.Models.Faction.Ranking", "Rank")
+                        .WithMany()
+                        .HasForeignKey("RankingID");
+
+                    b.Navigation("Rank");
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
@@ -459,6 +553,10 @@ namespace DrunkSquad.Database.Migrations
                     b.HasOne("TornApi.Net.Models.User.FactionStub", "Faction")
                         .WithMany()
                         .HasForeignKey("FactionID");
+
+                    b.HasOne("DrunkSquad.Models.Faction.FactionInfo", null)
+                        .WithMany("Members")
+                        .HasForeignKey("FactionInfoID");
 
                     b.HasOne("TornApi.Net.Models.User.Job", "Job")
                         .WithMany()
@@ -470,7 +568,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasOne("TornApi.Net.Models.Common.Bar", "Life")
                         .WithMany()
-                        .HasForeignKey("LifeID");
+                        .HasForeignKey("LifeBarID");
 
                     b.HasOne("DrunkSquad.Models.Users.LoginDetails", "LoginDetails")
                         .WithMany()
@@ -482,11 +580,11 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasOne("TornApi.Net.Models.Faction.Member", "MembershipInfo")
                         .WithMany()
-                        .HasForeignKey("MembershipInfoID");
+                        .HasForeignKey("MembershipInfoMemberID");
 
                     b.HasOne("TornApi.Net.Models.User.PlayerStates", "States")
                         .WithMany()
-                        .HasForeignKey("StatesID");
+                        .HasForeignKey("StatesPlayerStatesID");
 
                     b.HasOne("TornApi.Net.Models.Common.Status", "Status")
                         .WithMany()
@@ -511,11 +609,19 @@ namespace DrunkSquad.Database.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("TornApi.Net.Models.Faction.CrimeParticipant", b =>
+            modelBuilder.Entity("FactionCrimeUser", b =>
                 {
-                    b.HasOne("TornApi.Net.Models.Faction.Crime", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("CrimeID");
+                    b.HasOne("DrunkSquad.Models.Faction.FactionCrime", null)
+                        .WithMany()
+                        .HasForeignKey("CrimesFactionCrimeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DrunkSquad.Models.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsProfileID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
@@ -533,9 +639,9 @@ namespace DrunkSquad.Database.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("TornApi.Net.Models.Faction.Crime", b =>
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
                 {
-                    b.Navigation("Participants");
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

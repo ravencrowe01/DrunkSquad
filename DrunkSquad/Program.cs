@@ -4,6 +4,7 @@ using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Users.Login;
 using DrunkSquad.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
+using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -141,7 +142,7 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
     services.AddScoped<IFactionCrimeAccess, FactionCrimeAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
-        var set = context.Set<Crime> ();
+        var set = context.Set<FactionCrime> ();
 
         return new FactionCrimeAccess (set, context);
     });

@@ -9,9 +9,7 @@ namespace DrunkSquad.Database {
     public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext (options), IDrunkSquadDBContext {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<CrimeParticipant> CrimeParticipants { get; set; }
-
-        public DbSet<Crime> Crimes { get; set; }
+        public DbSet<FactionCrime> Crimes { get; set; }
 
         public DbSet<Job> Jobs { get; set; }
 
@@ -31,26 +29,28 @@ namespace DrunkSquad.Database {
 
         public DbSet<Member> Members { get; set; }
 
+        public DbSet<FactionInfo> Factioninfo { get;set; }
+
         protected override void OnModelCreating (ModelBuilder builder) {
-            builder.Entity<Job> ().HasKey (job => job.ID);
+            builder.Entity<Job> ().HasKey (job => job.JobID).HasName ("JobID");
 
-            builder.Entity<LastAction> ().HasKey (action => action.ID);
+            builder.Entity<LastAction> ().HasKey (action => action.LastActionID).HasName ("LastActionID");
 
-            builder.Entity<Bar> ().HasKey (bar => bar.ID);
+            builder.Entity<Bar> ().HasKey (bar => bar.BarID).HasName ("BarID");
 
-            builder.Entity<Marriage> ().HasKey (marriage => marriage.ID);
+            builder.Entity<Marriage> ().HasKey (marriage => marriage.MarriageID).HasName ("MarriageID");
 
-            builder.Entity<PlayerStates> ().HasKey (states => states.ID);
+            builder.Entity<PlayerStates> ().HasKey (states => states.PlayerStatesID).HasName ("PlayerStatesID");
 
-            builder.Entity<Status> ().HasKey (status => status.ID);
+            builder.Entity<Status> ().HasKey (status => status.StatusID).HasName ("ProfiStatusIDleID");
 
-            builder.Entity<FactionStub> ().HasKey (stub => stub.FactionID);
+            builder.Entity<FactionStub> ().HasKey (stub => stub.FactionID).HasName ("FactionID");
 
             builder.Entity<LoginDetails> ().HasKey (details => details.ID);
 
-            builder.Entity<Member> ().HasKey (member => member.ID);
+            builder.Entity<Member> ().HasKey (member => member.MemberID).HasName ("MemberID");
 
-            builder.Entity<User> ().HasKey (user => user.ID);
+            builder.Entity<User> ().HasKey (user => user.ProfileID).HasName("ProfileID");
 
             builder.Entity<User> ().HasOne (user => user.Job);
             builder.Entity<User> ().HasOne (user => user.LastAction);
@@ -62,10 +62,9 @@ namespace DrunkSquad.Database {
             builder.Entity<User> ().Ignore (user => user.Competition);
             builder.Entity<User> ().Ignore (user => user.BasicIcons);
 
-            builder.Entity<Crime> ().HasKey (crime => crime.ID);
+            builder.Entity<FactionCrime> ().HasKey (crime => crime.FactionCrimeID).HasName ("FactionCrimeID");
 
-            builder.Entity<Crime> ().HasMany (Crime => Crime.Participants);
-
+            builder.Entity<FactionCrime> ().HasMany (crime => crime.Participants).WithMany(user => user.Crimes);
         }
     }
 }

@@ -1,12 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DrunkSquad.Models.Faction;
+using Microsoft.EntityFrameworkCore;
 using TornApi.Net.Models.Faction;
 
 namespace DrunkSquad.Database.Accessors {
-    public class FactionCrimeAccess (DbSet<Crime> set, DbContext context) : EntityAccess<Crime> (set, context), IFactionCrimeAccess {
-        public void AddRange (IEnumerable<Crime> crimes) {
-            _set.AddRange (crimes);
-
-            _context.SaveChanges ();
-        }
+    public class FactionCrimeAccess (DbSet<FactionCrime> set, DbContext context) : EntityAccess<FactionCrime> (set, context), IFactionCrimeAccess {
     }
 }

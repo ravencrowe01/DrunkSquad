@@ -1,7 +1,6 @@
-﻿using TornApi.Net.Models.Faction;
+﻿using DrunkSquad.Models.Faction;
 
 namespace DrunkSquad.Database.Accessors {
-    public interface IFactionCrimeAccess : IEntityAccess<Crime> {
-        void AddRange (IEnumerable<Crime> crimes);
+    public interface IFactionCrimeAccess : IEntityAccess<FactionCrime> {
     }
 }
