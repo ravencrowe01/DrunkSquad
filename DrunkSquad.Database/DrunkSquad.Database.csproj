@@ -19,8 +19,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Npgsql" Version="8.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="Raven.Util" Version="1.1.2" />
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="TornApi.Net.Models" Version="0.5.6" />
+    <PackageReference Include="TornApi.Net.Models" Version="0.5.7" />
   </ItemGroup>
 
   <ItemGroup>

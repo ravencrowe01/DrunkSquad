@@ -26,7 +26,7 @@ AddEntityAccessors (builder);
 builder.Services.AddDbContext<DrunkSquadDBContext> ((provider, options) => {
     WebsiteConfig websiteConfig = (WebsiteConfig) provider.GetRequiredService<IWebsiteConfig> ();
 
-    options.UseNpgsql (websiteConfig.GetConnectionString ("Local"));
+    options.UseNpgsql (websiteConfig.ApiConfig.DefaultConectionString);
 });
 
 var app = builder.Build ();
@@ -58,7 +58,7 @@ void AddServices (WebApplicationBuilder builder) {
     services.AddSingleton<IConfiguration> (builder.Configuration);
     services.AddSingleton<IWebsiteConfig, WebsiteConfig> ((services) => new WebsiteConfig (services.GetService<IConfiguration> ()));
 
-    services.AddSingleton<IHttpClientFactory> (DefaultApiRequestClientFactory.Instance);
+    services.AddSingleton<IApiRequestClient, ApiRequestClient> (services => new ApiRequestClient (DefaultApiRequestClientFactory.Instance, services.GetService<IWebsiteConfig> ().ApiConfig.ApiUrl));
 
     services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>> ();
 
@@ -68,9 +68,9 @@ void AddServices (WebApplicationBuilder builder) {
 
     services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie (options => {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes (20);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes (30);
                 options.SlidingExpiration = true;
-                options.AccessDeniedPath = "/Login/Login";
+                options.AccessDeniedPath = "/Login";
             });
 }
 
@@ -147,4 +147,10 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
         return new FactionCrimeAccess (set, context);
     });
 
+    services.AddScoped<IFactionInfoAcces, FactionInfoAccess> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<FactionInfo> ();
+
+        return new FactionInfoAccess (set, context);
+    });
 }

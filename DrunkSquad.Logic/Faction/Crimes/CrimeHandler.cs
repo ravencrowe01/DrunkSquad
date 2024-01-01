@@ -9,39 +9,46 @@ using TornApi.Net.Models.Faction;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Crimes {
-    public class CrimeHandler (IHttpClientFactory clientFactory, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IUserAccess userAccess) : ICrimeHandler {
+    public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IUserAccess userAccess) : ICrimeHandler {
+        // TODO Action result
         public async Task FetchMostRecentCrimesAsync (string key) {
-            var client = new ApiRequestClient (clientFactory, config.BaseURL);
-
-            var response = await client.GetAsync<CrimesCollection> (new RequestConfiguration {
+            RequestConfiguration reqConfig = new RequestConfiguration {
                 Key = key,
                 Section = "faction",
                 Selections = ["crimes"],
-                Comment = "Drunk Squad Crimes Fetch"
-            },
-            config.RequiredAccessLevel);
+                Comment = "Drunk Squad Crimes Fetch",
+                Limit = 10
+            };
 
-            if (!IsResponseValid (response)) {
+            var response = await apiClient.GetAsync<CrimesCollection> (reqConfig,
+            config.ApiConfig.RequiredAccessLevel);
+
+            if (!response.IsValid ()) {
                 return;
             }
 
             var crimesDictionary = response.Content.Crimes;
 
-            crimeAccess.AddRange (ConstructFactionCrimes (crimesDictionary).Crimes);
+            var factionCrimes = await ConstructFactionCrimesAsync (crimesDictionary, key);
+
+            crimeAccess.AddRange (factionCrimes.Crimes);
         }
 
-        private FactionCrimes ConstructFactionCrimes (IDictionary<string, Crime> crimes) {
+        private async Task<FactionCrimes> ConstructFactionCrimesAsync (IDictionary<string, Crime> crimes, string key) {
             var factionCrimes = new List<FactionCrime> ();
 
-            foreach (var key in crimes.Keys) {
-                var crime = crimes [key];
+            foreach (var crimeID in crimes.Keys) {
+                var crime = crimes [crimeID];
                 var participants = new List<User> ();
 
                 foreach (var participant in crime.Participants) {
-                    participants.Add (userAccess.FindByID (participant.CrimeParticipantID));
+                    if(!participants.Any(user => user.ProfileID == participant)) {
+                        var user = await ProcessParticipant (key, participant);
+                        participants.Add (user);
+                    }
                 }
 
-                factionCrimes.Add (crime.ToFactionCrime (participants, int.Parse(key)));
+                factionCrimes.Add (crime.ToFactionCrime (participants, int.Parse (crimeID)));
             }
 
             return new FactionCrimes {
@@ -49,14 +56,23 @@ namespace DrunkSquad.Logic.Faction.Crimes {
             };
         }
 
-        private bool IsResponseValid (ApiResponse<CrimesCollection> response) {
-            if (!response.KeyStatus.IsKeyUsable
-                || (response.HttpResponseMessage is null || !response.HttpResponseMessage.IsSuccessStatusCode)
-                || response.Content is null) {
-                return false;
-            }
+        private async Task<User> ProcessParticipant (string key, int participant) {
+            var found = userAccess.FindByID (participant);
 
-            return true;
+            if (found is null) {
+                var response = await apiClient.GetAsync<User> (new RequestConfiguration {
+                    ID = participant,
+                    Key = key,
+                    Section = "User",
+                    Selections = ["profile"],
+                    Comment = "Drunk Squad User Fetch"
+                }, config.ApiConfig.RequiredAccessLevel);
+
+                if (response.IsValid ()) {
+                    found = response.Content;
+                }
+            }
+            return found;
         }
 
         public FactionCrimes GetAllCrimes () => new FactionCrimes { Crimes = WithParticipants () };
@@ -80,8 +96,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         private IIncludableQueryable<FactionCrime, IEnumerable<User>> WithParticipants () {
             return crimeAccess.Set.Include (crime => crime.Participants);
         }
-
-
 
         private static long GetUnixTimestamp (DateTime dateTime) {
             DateTime unixEpoch = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);

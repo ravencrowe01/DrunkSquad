@@ -9,7 +9,6 @@ namespace DrunkSquad.Database {
     public interface IDrunkSquadDBContext {
         DbSet<Bar> Bars { get; }
         DbSet<FactionCrime> Crimes { get; }
-        DbSet<FactionStub> FactionStubs { get; }
         DbSet<Job> Jobs { get; }
         DbSet<LastAction> LastActions { get; }
         DbSet<LoginDetails> LoginDetails { get; }

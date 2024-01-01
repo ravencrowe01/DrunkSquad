@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users.Registration {
-    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IHttpClientFactory clientFactory, IWebsiteConfig config, IUserAccess userAccess) : IRegistrationHandler {
+    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IApiRequestClient apiClient, IWebsiteConfig config, IUserAccess userAccess) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
-        private readonly ApiRequestClient _client = new (clientFactory, config.BaseURL);
         private static readonly string [] selections = ["profile"];
 
         public async Task<RegistrationStatus> RegisterAsync (LoginDetails details) {
@@ -17,9 +16,9 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.KeyInUse;
             }
 
-            var requiredLevel = config.RequiredAccessLevel;
+            var requiredLevel = config.ApiConfig.RequiredAccessLevel;
 
-            ApiResponse<User> result = await _client.GetAsync<User> (new RequestConfiguration {
+            var result = await apiClient.GetAsync<User> (new RequestConfiguration {
                 Key = details.ApiKey,
                 Section = "user",
                 Selections = selections,
