@@ -1,13 +1,23 @@
-﻿using DrunkSquad.Models.Faction;
-using TornApi.Net.Models.Faction;
-using TornApi.Net.Models.User;
+﻿using TornApi.Net.Models.User;
 
-namespace DrunkSquad.Models.Users;
+namespace DrunkSquad.Models.Users {
+    public class User {
+        public int UserID {
+            get {
+                return Profile is null ? _id : Profile.ProfileID;
+            }
+            set {
+                _id = value;
+            }
+        }
 
-public class User : Profile {
-    public LoginDetails LoginDetails { get; set; } = new LoginDetails ();
+        private int _id;
 
-    public Member MembershipInfo { get; set; }
+        public Profile Profile { get; set; }
 
-    public UserRole WebsiteRole { get; set; }
+        public LoginDetails LoginDetails { get; set; } = new LoginDetails ();
+
+        public UserRole WebsiteRole { get; set; }
+
+    }
 }

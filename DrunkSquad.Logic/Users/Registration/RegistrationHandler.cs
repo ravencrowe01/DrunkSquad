@@ -2,6 +2,7 @@
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users.Registration {
@@ -18,7 +19,7 @@ namespace DrunkSquad.Logic.Users.Registration {
 
             var requiredLevel = config.ApiConfig.RequiredAccessLevel;
 
-            var result = await apiClient.GetAsync<User> (new RequestConfiguration {
+            var result = await apiClient.GetAsync<Profile> (new RequestConfiguration {
                 Key = details.ApiKey,
                 Section = "user",
                 Selections = selections,
@@ -44,12 +45,15 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.AlreadyRegistered;
             }
 
+            found = new User ();
+
             var profile = result.Content;
 
-            profile.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
-            profile.LoginDetails.ApiKey = details.ApiKey;
+            found.Profile = profile;
+            found.LoginDetails = details;
+            found.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
 
-            userAccess.Add (profile);
+            userAccess.Add (found);
 
             return RegistrationStatus.Registered;
         }

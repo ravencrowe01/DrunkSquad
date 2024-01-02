@@ -9,6 +9,8 @@ namespace DrunkSquad.Database {
     public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext (options), IDrunkSquadDBContext {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Profile> Profiles { get; set; }
+
         public DbSet<CrimeParticipant> CrimeParticipants { get; set; }
 
         public DbSet<FactionCrime> Crimes { get; set; }
@@ -16,8 +18,6 @@ namespace DrunkSquad.Database {
         public DbSet<Job> Jobs { get; set; }
 
         public DbSet<LastAction> LastActions { get; set; }
-
-        public DbSet<Bar> Bars { get; set; }
 
         public DbSet<Marriage> Marriages { get; set; }
 
@@ -36,8 +36,6 @@ namespace DrunkSquad.Database {
 
             builder.Entity<LastAction> ().HasKey (action => action.LastActionID).HasName ("LastActionID");
 
-            builder.Entity<Bar> ().HasKey (bar => bar.BarID).HasName ("BarID");
-
             builder.Entity<Marriage> ().HasKey (marriage => marriage.MarriageID).HasName ("MarriageID");
 
             builder.Entity<PlayerStates> ().HasKey (states => states.PlayerStatesID).HasName ("PlayerStatesID");
@@ -48,49 +46,64 @@ namespace DrunkSquad.Database {
 
             builder.Entity<Member> ().HasKey (member => member.MemberID).HasName ("MemberID");
 
-            BuildUser (builder);
+            builder.Entity<Member> ().Ignore (member => member.LastAction);
+            builder.Entity<Member> ().Ignore (member => member.Status);
 
-            BuildFactionCrime (builder);
 
-            BuildFactionInfo (builder);
+            BuildProfileModel (builder);
+
+            BuildUserModel (builder);
+
+            BuildFactionCrimeModel (builder);
+
+            BuildFactionInfoModel (builder);
         }
 
-        private static void BuildUser (ModelBuilder builder) {
-            builder.Entity<User> ().HasKey (user => user.ProfileID).HasName ("ProfileID");
+        private static void BuildProfileModel (ModelBuilder builder) {
+            builder.Entity<Profile> ().HasKey (user => user.ProfileID).HasName ("ProfileID");
 
-            builder.Entity<User> ().HasOne (user => user.Job);
-            builder.Entity<User> ().HasOne (user => user.LastAction);
-            builder.Entity<User> ().HasOne (user => user.Life);
-            builder.Entity<User> ().HasOne (user => user.States);
-            builder.Entity<User> ().HasOne (user => user.Status);
+            builder.Entity<Profile> ().HasOne (user => user.Job);
+            builder.Entity<Profile> ().HasOne (user => user.LastAction);
+
+
+            builder.Entity<Profile> ().HasOne (user => user.States);
+            builder.Entity<Profile> ().HasOne (user => user.Status);
+
+            builder.Entity<Profile> ().Ignore (user => user.Competition);
+            builder.Entity<Profile> ().Ignore (user => user.BasicIcons);
+            builder.Entity<Profile> ().Ignore (user => user.Faction);
+            builder.Entity<Profile> ().Ignore (user => user.Life);
+        }
+
+        private static void BuildUserModel (ModelBuilder builder) {
+            builder.Entity<User> ().HasKey (user => user.UserID);
+
+            builder.Entity<User> ().HasOne (user => user.Profile);
             builder.Entity<User> ().HasOne (user => user.LoginDetails);
-
-            builder.Entity<User> ().Ignore (user => user.Competition);
-            builder.Entity<User> ().Ignore (user => user.BasicIcons);
-            builder.Entity<User> ().Ignore (user => user.Faction);
         }
 
-        private static void BuildFactionCrime (ModelBuilder builder) {
+        private static void BuildFactionCrimeModel (ModelBuilder builder) {
             builder.Entity<CrimeParticipant> ().HasKey (participant => participant.ID).HasName("CrimeParticipantID");
 
             builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Crime);
 
             builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Participant);
 
-            builder.Entity<FactionCrime> ().HasKey (crime => crime.CrimeID).HasName ("FactionCrimeID");
+            builder.Entity<Crime> ().HasKey (crime => crime.CrimeID).HasName ("FactionCrimeID");
 
             builder.Entity<FactionCrime> ().HasMany (crime => crime.CrimeParticipants);
 
-            builder.Entity<FactionCrime> ().Ignore (crime => crime.Participants);
-            builder.Entity<FactionCrime> ().Ignore (crime => crime.FactionID);
+            builder.Entity<Crime> ().Ignore (crime => crime.Participants);
+            builder.Entity<Crime> ().Ignore (crime => crime.Faction);
         }
 
-        private static void BuildFactionInfo (ModelBuilder builder) {
-            builder.Entity<FactionInfo> ().HasKey (faction => faction.ID).HasName ("FactionID");
+        private static void BuildFactionInfoModel (ModelBuilder builder) {
+            builder.Entity<Basic> ().HasKey (faction => faction.FactionID).HasName ("FactionID");
 
             builder.Entity<FactionInfo> ().HasMany (faction => faction.MembersList);
 
-            builder.Entity<FactionInfo> ().Ignore (faction => faction.Members);
+            builder.Entity<Basic> ().Ignore (faction => faction.Members);
+            builder.Entity<Basic> ().Ignore (faction => faction.Rank);
         }
     }
 }

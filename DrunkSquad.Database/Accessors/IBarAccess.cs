@@ -1,6 +1,6 @@
-﻿using TornApi.Net.Models.Common;
+﻿using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Database.Accessors {
-    public interface IBarAccess : IEntityAccess<Bar> { 
+    public interface IBarAccess : IEntityAccess<Bar> {
     }
 }

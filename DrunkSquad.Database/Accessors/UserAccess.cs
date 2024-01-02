@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace DrunkSquad.Database.Accessors {
-    public class UserAccess : EntityAccess<User>, IUserAccess {
-        public UserAccess (DbSet<User> set, DbContext context) : base (set, context) { }
-
-        public User FindByApiKey (string key) => _set.Include (u => u.LoginDetails).FirstOrDefault (u => u.LoginDetails.ApiKey == key);
+    public class UserAccess (DbSet<User> set, DbContext context) : EntityAccess<User> (set, context), IUserAccess {
+        public User FindByApiKey (string key) => _set.FirstOrDefault (user => user.LoginDetails.ApiKey == key);
     }
 }

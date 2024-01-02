@@ -1,6 +1,6 @@
-﻿using TornApi.Net.Models.Common;
+﻿using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Database.Accessors {
-    public interface IMarriageAccess : IEntityAccess<Marriage> { 
+    public interface IMarriageAccess : IEntityAccess<Marriage> {
     }
 }

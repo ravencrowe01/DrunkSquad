@@ -1,13 +1,11 @@
 ﻿using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
-using TornApi.Net.Models.Common;
 using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Database {
     public interface IDrunkSquadDBContext {
-        DbSet<Bar> Bars { get; }
         DbSet<FactionCrime> Crimes { get; }
         DbSet<Job> Jobs { get; }
         DbSet<LastAction> LastActions { get; }
