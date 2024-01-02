@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrunkSquad.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class RedoInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,9 +34,8 @@ namespace DrunkSquad.Database.Migrations
                 name: "Crimes",
                 columns: table => new
                 {
-                    FactionCrimeID = table.Column<int>(type: "integer", nullable: false)
+                    CrimeID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FactionID = table.Column<int>(type: "integer", nullable: false),
                     CrimeType = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Initiated = table.Column<bool>(type: "boolean", nullable: false),
@@ -48,27 +47,11 @@ namespace DrunkSquad.Database.Migrations
                     TimeComplete = table.Column<long>(type: "bigint", nullable: false),
                     TimeLeft = table.Column<int>(type: "integer", nullable: false),
                     TimeReady = table.Column<long>(type: "bigint", nullable: false),
-                    TimeCreated = table.Column<long>(type: "bigint", nullable: false)
+                    TimeStarted = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("FactionCrimeID", x => x.FactionCrimeID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FactionStubs",
-                columns: table => new
-                {
-                    FactionID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DaysInFaction = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    FactionTag = table.Column<string>(type: "text", nullable: true),
-                    Position = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("FactionID", x => x.FactionID);
+                    table.PrimaryKey("FactionCrimeID", x => x.CrimeID);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,7 +188,7 @@ namespace DrunkSquad.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Factioninfo", x => x.ID);
+                    table.PrimaryKey("FactionID", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Factioninfo_Ranking_RankingID",
                         column: x => x.RankingID,
@@ -225,11 +208,17 @@ namespace DrunkSquad.Database.Migrations
                     Level = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Position = table.Column<string>(type: "text", nullable: true),
-                    StatusID = table.Column<int>(type: "integer", nullable: true)
+                    StatusID = table.Column<int>(type: "integer", nullable: true),
+                    FactionInfoID = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("MemberID", x => x.MemberID);
+                    table.ForeignKey(
+                        name: "FK_Members_Factioninfo_FactionInfoID",
+                        column: x => x.FactionInfoID,
+                        principalTable: "Factioninfo",
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Members_LastActions_LastActionID",
                         column: x => x.LastActionID,
@@ -243,6 +232,30 @@ namespace DrunkSquad.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CrimeParticipants",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CrimeID = table.Column<int>(type: "integer", nullable: true),
+                    ParticipantMemberID = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("CrimeParticipantID", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CrimeParticipants_Crimes_CrimeID",
+                        column: x => x.CrimeID,
+                        principalTable: "Crimes",
+                        principalColumn: "CrimeID");
+                    table.ForeignKey(
+                        name: "FK_CrimeParticipants_Members_ParticipantMemberID",
+                        column: x => x.ParticipantMemberID,
+                        principalTable: "Members",
+                        principalColumn: "MemberID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -251,12 +264,10 @@ namespace DrunkSquad.Database.Migrations
                     LoginDetailsID = table.Column<int>(type: "integer", nullable: true),
                     MembershipInfoMemberID = table.Column<int>(type: "integer", nullable: true),
                     WebsiteRole = table.Column<int>(type: "integer", nullable: false),
-                    FactionInfoID = table.Column<int>(type: "integer", nullable: true),
                     Age = table.Column<int>(type: "integer", nullable: false),
                     Awards = table.Column<int>(type: "integer", nullable: false),
                     Donator = table.Column<bool>(type: "boolean", nullable: false),
                     Enemies = table.Column<int>(type: "integer", nullable: false),
-                    FactionID = table.Column<int>(type: "integer", nullable: true),
                     ForumPosts = table.Column<int>(type: "integer", nullable: false),
                     Friends = table.Column<int>(type: "integer", nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
@@ -283,16 +294,6 @@ namespace DrunkSquad.Database.Migrations
                         column: x => x.LifeBarID,
                         principalTable: "Bars",
                         principalColumn: "BarID");
-                    table.ForeignKey(
-                        name: "FK_Users_FactionStubs_FactionID",
-                        column: x => x.FactionID,
-                        principalTable: "FactionStubs",
-                        principalColumn: "FactionID");
-                    table.ForeignKey(
-                        name: "FK_Users_Factioninfo_FactionInfoID",
-                        column: x => x.FactionInfoID,
-                        principalTable: "Factioninfo",
-                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Users_Jobs_JobID",
                         column: x => x.JobID,
@@ -330,39 +331,25 @@ namespace DrunkSquad.Database.Migrations
                         principalColumn: "StatusID");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "FactionCrimeUser",
-                columns: table => new
-                {
-                    CrimesFactionCrimeID = table.Column<int>(type: "integer", nullable: false),
-                    ParticipantsProfileID = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FactionCrimeUser", x => new { x.CrimesFactionCrimeID, x.ParticipantsProfileID });
-                    table.ForeignKey(
-                        name: "FK_FactionCrimeUser_Crimes_CrimesFactionCrimeID",
-                        column: x => x.CrimesFactionCrimeID,
-                        principalTable: "Crimes",
-                        principalColumn: "FactionCrimeID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FactionCrimeUser_Users_ParticipantsProfileID",
-                        column: x => x.ParticipantsProfileID,
-                        principalTable: "Users",
-                        principalColumn: "ProfileID",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_CrimeParticipants_CrimeID",
+                table: "CrimeParticipants",
+                column: "CrimeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FactionCrimeUser_ParticipantsProfileID",
-                table: "FactionCrimeUser",
-                column: "ParticipantsProfileID");
+                name: "IX_CrimeParticipants_ParticipantMemberID",
+                table: "CrimeParticipants",
+                column: "ParticipantMemberID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Factioninfo_RankingID",
                 table: "Factioninfo",
                 column: "RankingID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Members_FactionInfoID",
+                table: "Members",
+                column: "FactionInfoID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_LastActionID",
@@ -373,16 +360,6 @@ namespace DrunkSquad.Database.Migrations
                 name: "IX_Members_StatusID",
                 table: "Members",
                 column: "StatusID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_FactionID",
-                table: "Users",
-                column: "FactionID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_FactionInfoID",
-                table: "Users",
-                column: "FactionInfoID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_JobID",
@@ -429,22 +406,16 @@ namespace DrunkSquad.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FactionCrimeUser");
-
-            migrationBuilder.DropTable(
-                name: "Crimes");
+                name: "CrimeParticipants");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
+                name: "Crimes");
+
+            migrationBuilder.DropTable(
                 name: "Bars");
-
-            migrationBuilder.DropTable(
-                name: "FactionStubs");
-
-            migrationBuilder.DropTable(
-                name: "Factioninfo");
 
             migrationBuilder.DropTable(
                 name: "Jobs");
@@ -462,13 +433,16 @@ namespace DrunkSquad.Database.Migrations
                 name: "PlayerStates");
 
             migrationBuilder.DropTable(
-                name: "Ranking");
+                name: "Factioninfo");
 
             migrationBuilder.DropTable(
                 name: "LastActions");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Ranking");
         }
     }
 }

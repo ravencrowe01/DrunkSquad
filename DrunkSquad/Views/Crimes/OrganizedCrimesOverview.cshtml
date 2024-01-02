@@ -48,7 +48,7 @@
                         <p>@display</p>
                     }
                 </th>
-                <th>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeCreated).UtcDateTime.ToString()</th>
+                <th>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</th>
                 <th>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</th>
                 <th>@crime.ParticipantsToString()</th>
             </tr>

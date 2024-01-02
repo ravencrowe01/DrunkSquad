@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    [Migration("20231230102444_Initial")]
-    partial class Initial
+    [Migration("20240102023038_RedoInitial")]
+    partial class RedoInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,18 +25,39 @@ namespace DrunkSquad.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
+            modelBuilder.Entity("DrunkSquad.Models.Faction.CrimeParticipant", b =>
                 {
-                    b.Property<int>("FactionCrimeID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FactionCrimeID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("CrimeType")
+                    b.Property<int?>("CrimeID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FactionID")
+                    b.Property<int?>("ParticipantMemberID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID")
+                        .HasName("CrimeParticipantID");
+
+                    b.HasIndex("CrimeID");
+
+                    b.HasIndex("ParticipantMemberID");
+
+                    b.ToTable("CrimeParticipants");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
+                {
+                    b.Property<int>("CrimeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CrimeID"));
+
+                    b.Property<int>("CrimeType")
                         .HasColumnType("integer");
 
                     b.Property<bool>("Initiated")
@@ -63,16 +84,16 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<long>("TimeComplete")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TimeCreated")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("TimeLeft")
                         .HasColumnType("integer");
 
                     b.Property<long>("TimeReady")
                         .HasColumnType("bigint");
 
-                    b.HasKey("FactionCrimeID")
+                    b.Property<long>("TimeStarted")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CrimeID")
                         .HasName("FactionCrimeID");
 
                     b.ToTable("Crimes");
@@ -116,7 +137,8 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<string>("TagImage")
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasName("FactionID");
 
                     b.HasIndex("RankingID");
 
@@ -160,12 +182,6 @@ namespace DrunkSquad.Database.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<int>("Enemies")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FactionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FactionInfoID")
                         .HasColumnType("integer");
 
                     b.Property<int>("ForumPosts")
@@ -231,10 +247,6 @@ namespace DrunkSquad.Database.Migrations
                     b.HasKey("ProfileID")
                         .HasName("ProfileID");
 
-                    b.HasIndex("FactionID");
-
-                    b.HasIndex("FactionInfoID");
-
                     b.HasIndex("JobID");
 
                     b.HasIndex("LastActionID");
@@ -252,21 +264,6 @@ namespace DrunkSquad.Database.Migrations
                     b.HasIndex("StatusID");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("FactionCrimeUser", b =>
-                {
-                    b.Property<int>("CrimesFactionCrimeID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ParticipantsProfileID")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CrimesFactionCrimeID", "ParticipantsProfileID");
-
-                    b.HasIndex("ParticipantsProfileID");
-
-                    b.ToTable("FactionCrimeUser");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Common.Bar", b =>
@@ -402,6 +399,9 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("FactionID")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("FactionInfoID")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("LastActionID")
                         .HasColumnType("integer");
 
@@ -419,6 +419,8 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("MemberID")
                         .HasName("MemberID");
+
+                    b.HasIndex("FactionInfoID");
 
                     b.HasIndex("LastActionID");
 
@@ -456,32 +458,6 @@ namespace DrunkSquad.Database.Migrations
                     b.HasKey("RankingID");
 
                     b.ToTable("Ranking");
-                });
-
-            modelBuilder.Entity("TornApi.Net.Models.User.FactionStub", b =>
-                {
-                    b.Property<int>("FactionID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FactionID"));
-
-                    b.Property<int>("DaysInFaction")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FactionTag")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Position")
-                        .HasColumnType("text");
-
-                    b.HasKey("FactionID")
-                        .HasName("FactionID");
-
-                    b.ToTable("FactionStubs");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.Job", b =>
@@ -539,6 +515,21 @@ namespace DrunkSquad.Database.Migrations
                     b.ToTable("PlayerStates");
                 });
 
+            modelBuilder.Entity("DrunkSquad.Models.Faction.CrimeParticipant", b =>
+                {
+                    b.HasOne("DrunkSquad.Models.Faction.FactionCrime", "Crime")
+                        .WithMany("CrimeParticipants")
+                        .HasForeignKey("CrimeID");
+
+                    b.HasOne("TornApi.Net.Models.Faction.Member", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantMemberID");
+
+                    b.Navigation("Crime");
+
+                    b.Navigation("Participant");
+                });
+
             modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
                 {
                     b.HasOne("TornApi.Net.Models.Faction.Ranking", "Rank")
@@ -550,14 +541,6 @@ namespace DrunkSquad.Database.Migrations
 
             modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
                 {
-                    b.HasOne("TornApi.Net.Models.User.FactionStub", "Faction")
-                        .WithMany()
-                        .HasForeignKey("FactionID");
-
-                    b.HasOne("DrunkSquad.Models.Faction.FactionInfo", null)
-                        .WithMany("Members")
-                        .HasForeignKey("FactionInfoID");
-
                     b.HasOne("TornApi.Net.Models.User.Job", "Job")
                         .WithMany()
                         .HasForeignKey("JobID");
@@ -590,8 +573,6 @@ namespace DrunkSquad.Database.Migrations
                         .WithMany()
                         .HasForeignKey("StatusID");
 
-                    b.Navigation("Faction");
-
                     b.Navigation("Job");
 
                     b.Navigation("LastAction");
@@ -609,23 +590,12 @@ namespace DrunkSquad.Database.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("FactionCrimeUser", b =>
-                {
-                    b.HasOne("DrunkSquad.Models.Faction.FactionCrime", null)
-                        .WithMany()
-                        .HasForeignKey("CrimesFactionCrimeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DrunkSquad.Models.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsProfileID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
                 {
+                    b.HasOne("DrunkSquad.Models.Faction.FactionInfo", null)
+                        .WithMany("MembersList")
+                        .HasForeignKey("FactionInfoID");
+
                     b.HasOne("TornApi.Net.Models.Common.LastAction", "LastAction")
                         .WithMany()
                         .HasForeignKey("LastActionID");
@@ -639,9 +609,14 @@ namespace DrunkSquad.Database.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
+                {
+                    b.Navigation("CrimeParticipants");
+                });
+
             modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("MembersList");
                 });
 #pragma warning restore 612, 618
         }

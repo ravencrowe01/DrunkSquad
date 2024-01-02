@@ -1,28 +1,23 @@
-﻿using DrunkSquad.Models.Users;
-using TornApi.Net.Models.Faction;
+﻿using TornApi.Net.Models.Faction;
 
 namespace DrunkSquad.Models.Faction {
     public class FactionInfo : Basic {
-        public IEnumerable<User> MembersList { 
+        public IEnumerable<Member> MembersList {
             get {
-                if(_members is null || _members.Count < 1) {
-                    foreach(var key in Members.Keys) {
+                if (_members is null || _members.Count < 1) {
+                    foreach (var key in Members.Keys) {
                         Members [key].MemberID = int.Parse (key);
                     }
 
-                    _members = (List<User>) Members.Values;
+                    _members = Members.Values.ToList ();
                 }
 
                 return _members;
-            } 
+            }
             set {
-                _members = (List<User>) value;
+                _members = (List<Member>) value;
             }
         }
-        private List<User> _members = new List<User> ();
-
-        public IEnumerable<int> MemberIDs { get; set; }
-
-        public FactionInfo () { }
+        private List<Member> _members = new List<Member> ();
     }
 }

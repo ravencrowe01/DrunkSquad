@@ -12,13 +12,15 @@ namespace DrunkSquad.Database.Accessors {
         public void Update (T entity) => _set.Update (entity);
 
         public void Add (T entity) {
-            _set.Add (entity);
-            _context.SaveChanges ();
+            if (!_set.Contains (entity)) {
+                _set.Add (entity);
+                _context.SaveChanges ();
+            }
         }
 
         public void AddRange (IEnumerable<T> entites) {
             foreach (var entity in entites) {
-                _set.Add (entity);
+                Add (entity);
             }
 
             _context.SaveChanges ();

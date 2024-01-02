@@ -10,6 +10,4 @@ public class User : Profile {
     public Member MembershipInfo { get; set; }
 
     public UserRole WebsiteRole { get; set; }
-
-    public IEnumerable<FactionCrime> Crimes { get; set; }
 }
