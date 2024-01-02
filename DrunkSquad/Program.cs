@@ -52,8 +52,6 @@ app.MapControllerRoute (
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
 
-PopulateDatabase (app.Services);
-
 app.Run ();
 
 void AddServices (WebApplicationBuilder builder) {
@@ -169,8 +167,4 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
         return new CrimeParticipantAccess (set, context);
     });
-}
-
-void PopulateDatabase (IServiceProvider services) {
-
 }
