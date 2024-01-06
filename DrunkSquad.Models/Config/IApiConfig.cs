@@ -2,6 +2,7 @@
 
 namespace DrunkSquad.Models.Config {
     public interface IApiConfig {
+        string DefaultKey { get; }
         string ApiUrl { get; }
         string DefaultConectionString { get; }
         AccessLevel RequiredAccessLevel { get; }

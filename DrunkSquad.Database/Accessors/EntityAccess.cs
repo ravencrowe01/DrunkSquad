@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace DrunkSquad.Database.Accessors {
     public class EntityAccess<T> (DbSet<T> set, DbContext context) : IEntityAccess<T> where T : class {
@@ -20,7 +21,10 @@ namespace DrunkSquad.Database.Accessors {
 
         public void AddRange (IEnumerable<T> entites) {
             foreach (var entity in entites) {
-                Add (entity);
+                if (!_set.Contains (entity)) {
+                    _set.Add (entity);
+
+                }
             }
 
             _context.SaveChanges ();

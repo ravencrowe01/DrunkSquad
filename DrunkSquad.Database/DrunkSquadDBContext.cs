@@ -1,7 +1,7 @@
 ﻿using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
-using TornApi.Net.Models.Common;
+using System.Reflection.Emit;
 using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 
@@ -29,22 +29,24 @@ namespace DrunkSquad.Database {
 
         public DbSet<Member> Members { get; set; }
 
-        public DbSet<FactionInfo> Factioninfo { get;set; }
+        public DbSet<Basic> Basic { get; set; }
+
+        public DbSet<FactionInfo> Factioninfo { get; set; }
 
         protected override void OnModelCreating (ModelBuilder builder) {
-            builder.Entity<Job> ().HasKey (job => job.JobID).HasName ("JobID");
+            builder.Entity<Job> ().HasKey (job => job.ID);
 
-            builder.Entity<LastAction> ().HasKey (action => action.LastActionID).HasName ("LastActionID");
+            builder.Entity<LastAction> ().HasKey (action => action.ID);
 
-            builder.Entity<Marriage> ().HasKey (marriage => marriage.MarriageID).HasName ("MarriageID");
+            builder.Entity<Marriage> ().HasKey (marriage => marriage.ID);
 
-            builder.Entity<PlayerStates> ().HasKey (states => states.PlayerStatesID).HasName ("PlayerStatesID");
+            builder.Entity<PlayerStates> ().HasKey (states => states.ID);
 
-            builder.Entity<Status> ().HasKey (status => status.StatusID).HasName ("ProfiStatusIDleID");
+            builder.Entity<Status> ().HasKey (status => status.ID);
 
             builder.Entity<LoginDetails> ().HasKey (details => details.ID);
 
-            builder.Entity<Member> ().HasKey (member => member.MemberID).HasName ("MemberID");
+            builder.Entity<Member> ().HasKey (member => member.ID);
 
             builder.Entity<Member> ().Ignore (member => member.LastAction);
             builder.Entity<Member> ().Ignore (member => member.Status);
@@ -60,7 +62,7 @@ namespace DrunkSquad.Database {
         }
 
         private static void BuildProfileModel (ModelBuilder builder) {
-            builder.Entity<Profile> ().HasKey (user => user.ProfileID).HasName ("ProfileID");
+            builder.Entity<Profile> ().HasKey (user => user.ID);
 
             builder.Entity<Profile> ().HasOne (user => user.Job);
             builder.Entity<Profile> ().HasOne (user => user.LastAction);
@@ -76,20 +78,20 @@ namespace DrunkSquad.Database {
         }
 
         private static void BuildUserModel (ModelBuilder builder) {
-            builder.Entity<User> ().HasKey (user => user.UserID);
+            builder.Entity<User> ().HasKey (user => user.ID);
 
             builder.Entity<User> ().HasOne (user => user.Profile);
             builder.Entity<User> ().HasOne (user => user.LoginDetails);
         }
 
         private static void BuildFactionCrimeModel (ModelBuilder builder) {
-            builder.Entity<CrimeParticipant> ().HasKey (participant => participant.ID).HasName("CrimeParticipantID");
+            builder.Entity<CrimeParticipant> ().HasKey (participant => participant.ID);
 
             builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Crime);
 
             builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Participant);
 
-            builder.Entity<Crime> ().HasKey (crime => crime.CrimeID).HasName ("FactionCrimeID");
+            builder.Entity<Crime> ().HasKey (crime => crime.ID).HasName ("FactionCrimeID");
 
             builder.Entity<FactionCrime> ().HasMany (crime => crime.CrimeParticipants);
 
@@ -98,9 +100,13 @@ namespace DrunkSquad.Database {
         }
 
         private static void BuildFactionInfoModel (ModelBuilder builder) {
-            builder.Entity<Basic> ().HasKey (faction => faction.FactionID).HasName ("FactionID");
+            builder.Entity<FactionInfo> ().HasKey (faction => faction.ID);
+
+            builder.Entity<FactionInfo> ().HasOne (faction => faction.Basic);
 
             builder.Entity<FactionInfo> ().HasMany (faction => faction.MembersList);
+
+            builder.Entity<Basic> ().HasKey (basic => basic.ID);
 
             builder.Entity<Basic> ().Ignore (faction => faction.Members);
             builder.Entity<Basic> ().Ignore (faction => faction.Rank);

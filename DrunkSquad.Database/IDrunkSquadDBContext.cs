@@ -15,5 +15,6 @@ namespace DrunkSquad.Database {
         DbSet<PlayerStates> PlayerStates { get; }
         DbSet<Status> Statuses { get; }
         DbSet<User> Users { get; }
+        DbSet<Basic> Basic { get; set; }
     }
 }

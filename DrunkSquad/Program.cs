@@ -2,6 +2,7 @@ using DrunkSquad.Database;
 using DrunkSquad.Database.Accessors;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
+using DrunkSquad.Logic.Users;
 using DrunkSquad.Logic.Users.Login;
 using DrunkSquad.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
@@ -10,7 +11,6 @@ using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TornApi.Net.Models.Common;
 using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 using TornApi.Net.REST;
@@ -27,8 +27,7 @@ builder.Services.AddDbContext<DrunkSquadDBContext> ((provider, options) => {
     WebsiteConfig websiteConfig = (WebsiteConfig) provider.GetRequiredService<IWebsiteConfig> ();
 
     options.EnableDetailedErrors (true);
-
-    options.UseNpgsql (websiteConfig.ApiConfig.DefaultConectionString);
+    options.UseSqlServer (websiteConfig.ApiConfig.DefaultConectionString);
 });
 
 var app = builder.Build ();
@@ -51,8 +50,13 @@ app.UseAuthorization ();
 app.MapControllerRoute (
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
+using (var scope = app.Services.CreateScope ()) {
+    await InitializeDatabaseAsync (scope);
+}
 
 app.Run ();
+
+Console.WriteLine ("");
 
 void AddServices (WebApplicationBuilder builder) {
     IServiceCollection services = builder.Services;
@@ -60,7 +64,7 @@ void AddServices (WebApplicationBuilder builder) {
     services.AddSingleton<IConfiguration> (builder.Configuration);
     services.AddSingleton<IWebsiteConfig, WebsiteConfig> ((services) => new WebsiteConfig (services.GetService<IConfiguration> ()));
 
-    services.AddSingleton<IApiRequestClient, ApiRequestClient> (services => new ApiRequestClient (DefaultApiRequestClientFactory.Instance, services.GetService<IWebsiteConfig> ().ApiConfig.ApiUrl));
+    services.AddScoped<IApiRequestClient, ApiRequestClient> (services => new ApiRequestClient (DefaultApiRequestClientFactory.Instance, services.GetService<IWebsiteConfig> ().ApiConfig.ApiUrl));
 
     services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>> ();
 
@@ -78,6 +82,7 @@ void AddServices (WebApplicationBuilder builder) {
         services.AddScoped<IRegistrationHandler, RegistrationHandler> ();
         services.AddScoped<ICrimeHandler, CrimeHandler> ();
         services.AddScoped<IFactionInfoHandler, FactionInfoHandler> ();
+        services.AddScoped<IUserHandler, UserHandler> ();
     }
 }
 
@@ -154,7 +159,7 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
         return new FactionCrimeAccess (set, context);
     });
 
-    services.AddScoped<IFactionInfoAcces, FactionInfoAccess> (services => {
+    services.AddScoped<IFactionInfoAccess, FactionInfoAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<FactionInfo> ();
 
@@ -167,4 +172,43 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
         return new CrimeParticipantAccess (set, context);
     });
+}
+
+
+// TODO This needs to be moved into it's own, dedicated app.
+async Task InitializeDatabaseAsync (IServiceScope scope) {
+    var services = scope.ServiceProvider;
+
+    var config = services.GetRequiredService<IWebsiteConfig> ();
+
+    var factionInfoHandler = services.GetRequiredService<IFactionInfoHandler> ();
+
+    if (factionInfoHandler.GetFactionInfo (config.FactionConfig.ID) is not null) {
+        return;
+    }
+
+    var factionResponse = await factionInfoHandler.FetchFactionInfoAsync (config.ApiConfig.DefaultKey);
+
+    var info = factionResponse.Content;
+    var id = info.FactionID;
+    info.FactionID = 0;
+
+    factionInfoHandler.AddFactionInfo (new FactionInfo {
+        Basic = info,
+        FactionID = id
+    });
+
+    var userHandler = services.GetRequiredService<IUserHandler> ();
+
+    foreach (var member in info.Members.Values) {
+        var user = await userHandler.FetchUserAsync (config.ApiConfig.DefaultKey, member.MemberID);
+
+        if (user is not null) {
+            userHandler.AddUser (user.Content);
+        }
+    }
+
+    var crimeHandler = services.GetRequiredService<ICrimeHandler> ();
+
+    await crimeHandler.FetchMostRecentCrimesAsync (config.ApiConfig.DefaultKey);
 }

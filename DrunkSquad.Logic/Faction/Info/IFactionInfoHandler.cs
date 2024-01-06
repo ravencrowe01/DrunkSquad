@@ -1,8 +1,11 @@
 ﻿using DrunkSquad.Models.Faction;
+using TornApi.Net.Models.Faction;
+using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Info {
     public interface IFactionInfoHandler {
-        Task FetchFactionInfoAsync (string key);
+        void AddFactionInfo (FactionInfo info);
+        Task<IApiResponse<Basic>> FetchFactionInfoAsync (string key);
         FactionInfo GetFactionInfo (int id);
     }
 }

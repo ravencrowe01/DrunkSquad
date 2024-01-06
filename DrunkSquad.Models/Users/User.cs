@@ -2,6 +2,8 @@
 
 namespace DrunkSquad.Models.Users {
     public class User {
+        public int ID { get; set; }
+
         public int UserID {
             get {
                 return Profile is null ? _id : Profile.ProfileID;
@@ -18,6 +20,5 @@ namespace DrunkSquad.Models.Users {
         public LoginDetails LoginDetails { get; set; } = new LoginDetails ();
 
         public UserRole WebsiteRole { get; set; }
-
     }
 }

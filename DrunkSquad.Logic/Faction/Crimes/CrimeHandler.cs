@@ -35,8 +35,21 @@ namespace DrunkSquad.Logic.Faction.Crimes {
             foreach (var crime in crimes) {
                 if (!crimeAccess.Set.Any (c => c.CrimeID == crime.CrimeID)) {
                     crimeAccess.Add (crime);
+                }
 
-                    crimeParticipantAccess.AddRange (crime.CrimeParticipants);
+                foreach(var participant in crime.Participants) {
+                    var member = memberAccess.FindByID (participant);
+
+                    if(member is not null) {
+                        var part = new CrimeParticipant {
+                            Crime = crime,
+                            Participant = member
+                        };
+
+                        if(!crimeParticipantAccess.Set.Any(p => p.Participant.MemberID == part.Participant.MemberID && p.Crime.CrimeID == part.Crime.CrimeID)) {
+                            crimeParticipantAccess.Add (part);
+                        }
+                    }
                 }
             }
         }
@@ -80,7 +93,9 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         private IIncludableQueryable<FactionCrime, IEnumerable<CrimeParticipant>> WithParticipants () {
-            return crimeAccess.Set.Include (crime => crime.CrimeParticipants);
+            var found = crimeAccess.Set.Include (crime => crime.CrimeParticipants);
+
+            return found;
         }
 
         private static long GetUnixTimestamp (DateTime dateTime) {

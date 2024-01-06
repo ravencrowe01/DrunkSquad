@@ -1,6 +1,6 @@
 ﻿using DrunkSquad.Models.Faction;
 
 namespace DrunkSquad.Database.Accessors {
-    public interface IFactionInfoAcces : IEntityAccess<FactionInfo> {
+    public interface IFactionInfoAccess : IEntityAccess<FactionInfo> {
     }
 }
