@@ -173,7 +173,7 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
 
 // TODO This needs to be moved into it's own, dedicated app.
-// To anyone that views this code: I was aware of how hacky this was when I wrote.
+// To anyone that views this code: I was aware of how hacky this was when I wrote it.
 // Is very bad to include this *in* the website itself.
 //async Task InitializeDatabaseAsync (IServiceScope scope) {
 //    var services = scope.ServiceProvider;
