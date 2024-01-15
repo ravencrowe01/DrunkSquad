@@ -12,7 +12,7 @@ namespace DrunkSquad.Models.Common {
         public static readonly string Torn = "Torn";
         public static readonly string Key = "Key";
 
-        public static readonly string DefaultKey = Default + Key;
+        public static readonly string DefaultKey = "DefaultKey";
         public static readonly string Api = "Api";
         public static readonly string ApiUrl = "ApiUrl";
         public static readonly string RequiredApiLevel = "RequiredApiLevel";

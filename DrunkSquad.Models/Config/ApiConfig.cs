@@ -5,7 +5,7 @@ using TornApi.Net.Models.Key;
 
 namespace DrunkSquad.Models.Config {
     public class ApiConfig (IConfiguration config) : IApiConfig {
-        public string DefaultKey => config [$"{Constants.Api}:{Constants.Default}{Constants.Key}"];
+        public string DefaultKey => config [$"{Constants.Api}:{Constants.DefaultKey}"];
 
         public string ApiUrl => config [$"{Constants.Api}:{Constants.ApiUrl}"];
 

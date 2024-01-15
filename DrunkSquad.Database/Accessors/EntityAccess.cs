@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DrunkSquad.Database.Accessors {
     public class EntityAccess<T> (DbSet<T> set, DbContext context) : IEntityAccess<T> where T : class {

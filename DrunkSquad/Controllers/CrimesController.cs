@@ -12,8 +12,13 @@ namespace DrunkSquad.Controllers {
         }
 
         public IActionResult OrganizedCrimesOverview () {
+            var crimes = handler.GetAllCrimes ();
 
-            return View (handler.GetAllCrimes());
+            return View (crimes);
+        }
+
+        public IActionResult UserCrimeOverview () {
+            return View ();
         }
     }
 }

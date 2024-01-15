@@ -1,12 +1,11 @@
 ﻿using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Database {
-    public class DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : DbContext (options), IDrunkSquadDBContext {
+    public class DrunkSquadDBContext : DbContext, IDrunkSquadDBContext {
         public DbSet<User> Users { get; set; }
 
         public DbSet<Profile> Profiles { get; set; }
@@ -32,6 +31,10 @@ namespace DrunkSquad.Database {
         public DbSet<Basic> Basic { get; set; }
 
         public DbSet<FactionInfo> Factioninfo { get; set; }
+
+        public DrunkSquadDBContext () { }
+
+        public DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : base (options) { }
 
         protected override void OnModelCreating (ModelBuilder builder) {
             builder.Entity<Job> ().HasKey (job => job.ID);
@@ -102,14 +105,12 @@ namespace DrunkSquad.Database {
         private static void BuildFactionInfoModel (ModelBuilder builder) {
             builder.Entity<FactionInfo> ().HasKey (faction => faction.ID);
 
-            builder.Entity<FactionInfo> ().HasOne (faction => faction.Basic);
-
-            builder.Entity<FactionInfo> ().HasMany (faction => faction.MembersList);
+            builder.Entity<FactionInfo> ().HasMany (faction => faction.Members);
 
             builder.Entity<Basic> ().HasKey (basic => basic.ID);
 
-            builder.Entity<Basic> ().Ignore (faction => faction.Members);
-            builder.Entity<Basic> ().Ignore (faction => faction.Rank);
+            builder.Entity<Basic> ().Ignore (basic => basic.Members);
+            builder.Entity<Basic> ().Ignore (basic => basic.Rank);
         }
     }
 }

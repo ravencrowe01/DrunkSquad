@@ -26,8 +26,7 @@ AddEntityAccessors (builder);
 builder.Services.AddDbContext<DrunkSquadDBContext> ((provider, options) => {
     WebsiteConfig websiteConfig = (WebsiteConfig) provider.GetRequiredService<IWebsiteConfig> ();
 
-    options.EnableDetailedErrors (true);
-    options.UseSqlServer (websiteConfig.ApiConfig.DefaultConectionString);
+    options.UseSqlServer (websiteConfig.Api.DefaultConectionString);
 });
 
 var app = builder.Build ();
@@ -61,7 +60,7 @@ void AddServices (WebApplicationBuilder builder) {
     services.AddSingleton<IConfiguration> (builder.Configuration);
     services.AddSingleton<IWebsiteConfig, WebsiteConfig> ((services) => new WebsiteConfig (services.GetService<IConfiguration> ()));
 
-    services.AddScoped<IApiRequestClient, ApiRequestClient> (services => new ApiRequestClient (DefaultApiRequestClientFactory.Instance, services.GetService<IWebsiteConfig> ().ApiConfig.ApiUrl));
+    services.AddScoped<IApiRequestClient, ApiRequestClient> (services => new ApiRequestClient (DefaultApiRequestClientFactory.Instance, services.GetService<IWebsiteConfig> ().Api.ApiUrl));
 
     services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>> ();
 

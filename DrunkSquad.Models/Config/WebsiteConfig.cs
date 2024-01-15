@@ -2,8 +2,8 @@
 
 namespace DrunkSquad.Models.Config {
     public class WebsiteConfig (IConfiguration config) : IWebsiteConfig {
-        public IApiConfig ApiConfig { get; } = new ApiConfig (config);
+        public IApiConfig Api { get; } = new ApiConfig (config);
 
-        public IFactionConfig FactionConfig { get; } = new FactionConfig (config);
+        public IFactionConfig Faction { get; } = new FactionConfig (config);
     }
 }

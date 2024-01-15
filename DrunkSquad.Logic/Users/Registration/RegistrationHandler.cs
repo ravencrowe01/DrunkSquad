@@ -17,7 +17,7 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.KeyInUse;
             }
 
-            var requiredLevel = config.ApiConfig.RequiredAccessLevel;
+            var requiredLevel = config.Api.RequiredAccessLevel;
 
             var result = await apiClient.GetAsync<Profile> (new RequestConfiguration {
                 Key = details.ApiKey,

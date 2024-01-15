@@ -7,6 +7,11 @@
 }
 
 <div>
+    <div>
+        <div>Total Money Gained: @Model.TotalMoneyGained</div>
+        <div>Total Rep Gained: @Model.TotalRepGained</div>
+        <div>Success Rate: @Model.SuccessRate</div>
+    </div>
     <table>
         <tr>
             <th>Name</th>
@@ -17,7 +22,6 @@
             <th>Money Gained</th>
             <th>Respect Gained</th>
         </tr>
-
         @foreach(var crime in Model.Crimes) {
             <tr>
                 <th>@crime.Name</th>
@@ -57,7 +61,18 @@
                             participants.Add(participant.Participant.Name);
                         }
                         <p>@string.Join(',', participants)</p>
-                    }</th>
+                    }
+                </th>
+                @{
+                    if(crime.Initiated) {
+                        <th>@crime.MoneyGain</th>
+                        <th>@crime.RespectGain</th>
+                    }
+                    else {
+                        <th>Waiting...</th>
+                        <th>Waiting...</th>
+                    }
+                }
             </tr>
         }
     </table>

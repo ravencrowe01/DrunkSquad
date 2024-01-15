@@ -5,7 +5,7 @@ using TornApi.Net.REST;
 namespace DrunkSquad.Logic.Faction.Info {
     public interface IFactionInfoHandler {
         void AddFactionInfo (FactionInfo info);
-        Task<IApiResponse<Basic>> FetchFactionInfoAsync (string key);
-        FactionInfo GetFactionInfo (int id);
+        Task<IApiResponse<Basic>> FetchFactionInfoAsync ();
+        FactionInfo GetFactionInfo ();
     }
 }
