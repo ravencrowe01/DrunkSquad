@@ -2,5 +2,6 @@
 
 namespace DrunkSquad.Database.Accessors {
     public interface IProfileAccess : IEntityAccess<Profile> {
+        Profile FindByProfileID (int id);
     }
 }
