@@ -1,5 +1,4 @@
-﻿using TornApi.Net.Models.Faction;
-using TornApi.Net.Models.User;
+﻿using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Models.Users;
 
@@ -12,3 +11,4 @@ public class ProfileMetadata {
 
     public UserRole WebsiteRole { get; set; }
 }
+

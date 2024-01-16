@@ -2,23 +2,19 @@
 
 #nullable disable
 
-namespace DrunkSquad.Database.Migrations
-{
+namespace DrunkSquad.Database.Migrations {
     /// <inheritdoc />
-    public partial class Update3 : Migration
-    {
+    public partial class Update3 : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
+        protected override void Up (MigrationBuilder migrationBuilder) {
+            migrationBuilder.DropColumn (
                 name: "UserID",
                 table: "Users");
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<int>(
+        protected override void Down (MigrationBuilder migrationBuilder) {
+            migrationBuilder.AddColumn<int> (
                 name: "UserID",
                 table: "Users",
                 type: "int",

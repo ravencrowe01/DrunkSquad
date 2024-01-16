@@ -2,20 +2,16 @@
 
 #nullable disable
 
-namespace DrunkSquad.Database.Migrations
-{
+namespace DrunkSquad.Database.Migrations {
     /// <inheritdoc />
-    public partial class Update5 : Migration
-    {
+    public partial class Update5 : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up (MigrationBuilder migrationBuilder) {
 
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down (MigrationBuilder migrationBuilder) {
 
         }
     }

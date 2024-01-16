@@ -1,5 +1,4 @@
 ﻿using DrunkSquad.Models.Faction;
-using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Crimes {
     public interface ICrimeHandler {

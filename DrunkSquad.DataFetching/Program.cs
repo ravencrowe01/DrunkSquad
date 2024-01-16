@@ -83,13 +83,13 @@ namespace DrunkSquad.DateFetching {
 
         private static async Task StartCrimeFetcherAsync () {
             _factionInfoFetchTask.Wait (_cancelToken);
-            
+
             var fetcher = new CrimeFetcher (_crimeHandler, _cancelToken);
-            
+
             Console.WriteLine ("Starting crime fetcher...");
-            
+
             await fetcher.StartAsync ();
-            
+
             Console.WriteLine ("Crime fetcher started.");
         }
 

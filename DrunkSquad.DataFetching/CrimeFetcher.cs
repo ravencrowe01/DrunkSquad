@@ -7,31 +7,31 @@ namespace DrunkSquad.DateFetching {
 
             var now = DateTime.Now;
 
-            if(cancellationToken.IsCancellationRequested) {
+            if (cancellationToken.IsCancellationRequested) {
                 return;
             }
 
-            await Console.Out.WriteLineAsync("Fetching initial crimes...");
+            Console.WriteLine ("Fetching initial crimes...");
 
-            var crimesTask = crimeHandler.FetchCrimesInRangeAsync (new DateTime(2024, 1, 1), now);
+            var crimesTask = crimeHandler.FetchCrimesInRangeAsync (new DateTime (2024, 1, 1), now);
 
             crimesTask.Wait (cancellationToken);
 
             var crimes = crimesTask.Result;
 
-            await Console.Out.WriteLineAsync($"Fetched initial crimes, found {crimes.Count()}");
+            Console.WriteLine ($"Fetched initial crimes, found {crimes.Count ()}");
 
             if (cancellationToken.IsCancellationRequested) {
                 return;
             }
 
-            await Console.Out.WriteLineAsync("Add initial crimes to database...");
+            Console.WriteLine ("Add initial crimes to database...");
 
             crimeHandler.AddFactionCrimes (crimes);
 
-            await Console.Out.WriteLineAsync("Added initial crimes to database.");
+            Console.WriteLine ("Added initial crimes to database.");
 
-            await Console.Out.WriteLineAsync($"Delaying for {initialDelay} miliseconds...");
+            Console.WriteLine ($"Delaying for {initialDelay} miliseconds...");
 
             await Task.Delay (initialDelay, cancellationToken);
 
@@ -42,7 +42,7 @@ namespace DrunkSquad.DateFetching {
                     return;
                 }
 
-                await Console.Out.WriteLineAsync("Fetching crimes...");
+                Console.WriteLine ("Fetching crimes...");
 
                 crimesTask = crimeHandler.FetchCrimesInRangeAsync (now.AddDays (-1), now);
 
@@ -50,17 +50,17 @@ namespace DrunkSquad.DateFetching {
 
                 crimes = crimesTask.Result;
 
-                await Console.Out.WriteLineAsync ("Fetched crimes, found {crimes.Count()}");
+                Console.WriteLine ("Fetched crimes, found {crimes.Count()}");
 
                 if (cancellationToken.IsCancellationRequested) {
                     return;
                 }
 
-                await Console.Out.WriteLineAsync("Adding crimes to database...");
+                Console.WriteLine ("Adding crimes to database...");
 
                 crimeHandler.AddFactionCrimes (crimes);
 
-                await Console.Out.WriteLineAsync ("Added crimes to database.");
+                Console.WriteLine ("Added crimes to database.");
 
                 await Task.Delay (TimeSpan.FromDays (1), cancellationToken);
             } while (!cancellationToken.IsCancellationRequested);

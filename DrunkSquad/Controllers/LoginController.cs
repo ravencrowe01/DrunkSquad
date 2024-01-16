@@ -28,14 +28,14 @@ namespace DrunkSquad.Controllers {
 
                     var claimsIdentity = new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    var authProperties = new AuthenticationProperties { 
-                        ExpiresUtc = new DateTimeOffset(DateTime.UtcNow.AddMinutes(1440)),
+                    var authProperties = new AuthenticationProperties {
+                        ExpiresUtc = new DateTimeOffset (DateTime.UtcNow.AddMinutes (1440)),
                         IsPersistent = true
                     };
 
                     await HttpContext.SignInAsync (CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal (claimsIdentity), authProperties);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction ("Index", "Home");
                 case PasswordVerificationResult.Failed:
                     break;
                 default:
@@ -46,7 +46,7 @@ namespace DrunkSquad.Controllers {
         }
 
         public async Task<IActionResult> Logout () {
-            await HttpContext.SignOutAsync ( CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync (CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction ("Index", "Home");
         }
     }

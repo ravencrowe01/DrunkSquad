@@ -1,5 +1,4 @@
 ﻿using DrunkSquad.Models.Users;
-using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users {
     public interface IUserHandler {

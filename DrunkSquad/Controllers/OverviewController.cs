@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {
-    public class OverviewController(IFactionInfoHandler factionInfo) : Controller {
+    public class OverviewController (IFactionInfoHandler factionInfo) : Controller {
         public IActionResult Overview () {
             var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
 

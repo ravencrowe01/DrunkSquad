@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace DrunkSquad.Logic.Users.Login {
     public class LoginHandler (IPasswordHasher<LoginDetails> hasher, IUserAccess userAccess) : ILoginHandler {
         public PasswordVerificationResult AttemptLogin (LoginDetails login) {
-            var found = userAccess.Set.Include(user => user.LoginDetails).Include(user => user.Profile).FirstOrDefault(user => user.LoginDetails.ApiKey == login.ApiKey);
+            var found = userAccess.Set.Include (user => user.LoginDetails).Include (user => user.Profile).FirstOrDefault (user => user.LoginDetails.ApiKey == login.ApiKey);
 
             if (found is not null) {
                 var result = hasher.VerifyHashedPassword (login, found.LoginDetails.Password, login.Password);

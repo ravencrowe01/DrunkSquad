@@ -32,8 +32,9 @@
 
         public IEnumerable<string> ParticipantNames { get; set; }
 
-        public IEnumerable<int> ParticipantIDs { get {
-                if(_participantIDs is null || _participantIDs.Count() < 1) {
+        public IEnumerable<int> ParticipantIDs {
+            get {
+                if (_participantIDs is null || _participantIDs.Count () < 1) {
                     var participants = Participants.Split (',');
 
                     var _participantIDs = new List<int> ();
@@ -49,6 +50,6 @@
 
         private IEnumerable<int> _participantIDs;
 
-        public bool HasParticipant (int id) => Participants.Split (',').ToList().Contains (id.ToString());
+        public bool HasParticipant (int id) => Participants.Split (',').ToList ().Contains (id.ToString ());
     }
 }

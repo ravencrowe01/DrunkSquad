@@ -110,7 +110,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public FactionCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to) {
-            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()) && crime.HasParticipant(id));
+            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()) && crime.HasParticipant (id));
 
             return new FactionCrimes {
                 Crimes = found
