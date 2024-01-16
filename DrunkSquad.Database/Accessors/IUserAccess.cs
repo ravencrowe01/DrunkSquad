@@ -3,5 +3,6 @@
 namespace DrunkSquad.Database.Accessors {
     public interface IUserAccess : IEntityAccess<User> {
         User FindByApiKey (string key);
+        User FindByProfileID (int id);
     }
 }

@@ -34,7 +34,7 @@
 
         public IEnumerable<int> ParticipantIDs {
             get {
-                if (_participantIDs is null || _participantIDs.Count () < 1) {
+                if (_participantIDs is null || !_participantIDs.Any ()) {
                     var participants = Participants.Split (',');
 
                     var _participantIDs = new List<int> ();

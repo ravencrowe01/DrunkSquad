@@ -25,7 +25,7 @@ namespace DrunkSquad.DateFetching {
                 return;
             }
 
-            Console.WriteLine ("Add initial crimes to database...");
+            Console.WriteLine ("Adding initial crimes to database...");
 
             crimeHandler.AddFactionCrimes (crimes);
 

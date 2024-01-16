@@ -19,5 +19,7 @@ namespace DrunkSquad.Logic.Users {
         }
 
         public void AddProfile (Profile profile) => profileAccess.Add (profile);
+
+        public void AddProfiles (IEnumerable<Profile> profiles) => profileAccess.AddRange (profiles);
     }
 }

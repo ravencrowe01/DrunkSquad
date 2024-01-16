@@ -2,6 +2,7 @@
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;
 using DrunkSquad.Models.Users;
+using TornApi.Net.Models.User;
 
 namespace DrunkSquad.DateFetching {
     internal class FactionInfoFetcher (IFactionInfoHandler factionInfoHandler, IUserHandler userHandler, IProfileHandler profileHandler, CancellationToken cancellationToken) {
@@ -44,7 +45,8 @@ namespace DrunkSquad.DateFetching {
             if (factionFound.Members.Count () > userHandler.GetAllUsers ().Count ()) {
                 Console.WriteLine ("Missing profiles, fetching...");
 
-                var users = new List<User> ();
+                var profiles = new List<Profile> ();
+
 
                 foreach (var member in factionFound.Members) {
                     var profileResponse = await profileHandler.FetchProfileAsync (member.MemberID);
@@ -52,17 +54,13 @@ namespace DrunkSquad.DateFetching {
                     if (profileResponse is not null && profileResponse.Content is not null) {
                         var profile = profileResponse.Content;
 
-                        var user = new User {
-                            Profile = profile
-                        };
-
-                        users.Add (user);
+                        profiles.Add (profile);
                     }
                 }
 
                 Console.WriteLine ("Adding user profiles to the database...");
 
-                userHandler.AddUsers (users);
+                profileHandler.AddProfiles (profiles);
 
                 Console.WriteLine ("Added user profiles to the database");
             }
