@@ -10,8 +10,6 @@ namespace DrunkSquad.Database {
 
         public DbSet<Profile> Profiles { get; set; }
 
-        public DbSet<CrimeParticipant> CrimeParticipants { get; set; }
-
         public DbSet<FactionCrime> Crimes { get; set; }
 
         public DbSet<Job> Jobs { get; set; }
@@ -52,7 +50,6 @@ namespace DrunkSquad.Database {
             builder.Entity<Member> ().Ignore (member => member.LastAction);
             builder.Entity<Member> ().Ignore (member => member.Status);
 
-
             BuildProfileModel (builder);
 
             BuildUserModel (builder);
@@ -86,18 +83,10 @@ namespace DrunkSquad.Database {
         }
 
         private static void BuildFactionCrimeModel (ModelBuilder builder) {
-            builder.Entity<CrimeParticipant> ().HasKey (participant => participant.ID);
+            builder.Entity<FactionCrime> ().HasKey (crime => crime.ID);
 
-            builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Crime);
-
-            builder.Entity<CrimeParticipant> ().HasOne (participant => participant.Participant);
-
-            builder.Entity<Crime> ().HasKey (crime => crime.ID).HasName ("FactionCrimeID");
-
-            builder.Entity<FactionCrime> ().HasMany (crime => crime.CrimeParticipants);
-
-            builder.Entity<Crime> ().Ignore (crime => crime.Participants);
-            builder.Entity<Crime> ().Ignore (crime => crime.Faction);
+            builder.Entity<FactionCrime> ().Ignore (crime => crime.ParticipantNames);
+            builder.Entity<FactionCrime> ().Ignore (crime => crime.ParticipantIDs);
         }
 
         private static void BuildFactionInfoModel (ModelBuilder builder) {

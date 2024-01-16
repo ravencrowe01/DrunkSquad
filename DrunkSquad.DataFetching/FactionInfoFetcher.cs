@@ -41,7 +41,7 @@ namespace DrunkSquad.DateFetching {
 
             Console.WriteLine ("Checking for user profiles...");
 
-            if (factionFound.Members.Count () < userHandler.GetAllUsers ().Count ()) {
+            if (factionFound.Members.Count () > userHandler.GetAllUsers ().Count ()) {
                 Console.WriteLine ("Missing profiles, fetching...");
 
                 var users = new List<User> ();

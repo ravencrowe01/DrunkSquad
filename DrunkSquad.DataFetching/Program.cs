@@ -22,7 +22,6 @@ namespace DrunkSquad.DateFetching {
         private static IProfileAccess _profileAccess;
         private static IUserAccess _userAccess;
         private static IFactionCrimeAccess _crimeAccess;
-        private static IMemberAccess _memberAcces;
 
         private static IFactionInfoHandler _factionInfoHandler;
         private static IUserHandler _userHandler;
@@ -42,8 +41,7 @@ namespace DrunkSquad.DateFetching {
         private static void Start () {
             _factionInfoFetchTask = StartFactionInfoFetcherAsync ();
 
-            Console.WriteLine ("Starting crime fetcher...");
-            Task.Run (() => StartCrimeFetcherAsync());
+            Task.Run (() => StartCrimeFetcherAsync ());
         }
 
         private static void Setup (string [] args) {
@@ -70,33 +68,29 @@ namespace DrunkSquad.DateFetching {
             _profileAccess = new ProfileAccess (_context.Profiles, _context);
             _userAccess = new UserAccess (_context.Users, _context);
             _crimeAccess = new FactionCrimeAccess (_context.Crimes, _context);
-            _memberAcces = new MemberAccess (_context.Members, _context);
 
             _factionInfoHandler = new FactionInfoHandler (_client, _config, _factionInfoAccess);
             _userHandler = new UserHandler (_client, _config, _userAccess);
             _profileHandler = new ProfileHandler (_client, _config, _profileAccess);
-            _crimeHandler = new CrimeHandler (_client, _config, _crimeAccess, _memberAcces);
+            _crimeHandler = new CrimeHandler (_client, _config, _crimeAccess);
         }
 
         private static async Task StartFactionInfoFetcherAsync () {
             var fetcher = new FactionInfoFetcher (_factionInfoHandler, _userHandler, _profileHandler, _cancelToken);
 
-            try {
-                await fetcher.StartAsync ();
-            }
-            catch (Exception e) {
-                await Console.Out.WriteLineAsync(e.Message);
-            }
+            await fetcher.StartAsync ();
         }
 
         private static async Task StartCrimeFetcherAsync () {
             _factionInfoFetchTask.Wait (_cancelToken);
-
-            Console.WriteLine ("Crime fetcher started.");
-
+            
             var fetcher = new CrimeFetcher (_crimeHandler, _cancelToken);
-
+            
+            Console.WriteLine ("Starting crime fetcher...");
+            
             await fetcher.StartAsync ();
+            
+            Console.WriteLine ("Crime fetcher started.");
         }
 
         private class Config : IWebsiteConfig {
@@ -117,7 +111,6 @@ namespace DrunkSquad.DateFetching {
             public string ConnectionString { get; set; }
 
             public string GetConnectionString (string name = "Default") => ConnectionString;
-
         }
 
         private class FactionConfig : IFactionConfig {

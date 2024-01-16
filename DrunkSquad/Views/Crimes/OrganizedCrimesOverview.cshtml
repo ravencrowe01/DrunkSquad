@@ -24,8 +24,8 @@
         </tr>
         @foreach(var crime in Model.Crimes) {
             <tr>
-                <th>@crime.Name</th>
-                <th>
+                <td>@crime.Name</td>
+                <td>
                     @{
                         var display = string.Empty;
 
@@ -51,26 +51,18 @@
 
                         <p>@display</p>
                     }
-                </th>
-                <th>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</th>
-                <th>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</th>
-                <th>@{
-                        var participants = new List<string>();
-
-                        foreach(var participant in crime.CrimeParticipants) {
-                            participants.Add(participant.Participant.Name);
-                        }
-                        <p>@string.Join(',', participants)</p>
-                    }
-                </th>
+                </td>
+                <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</td>
+                <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</td>
+                <td>@string.Join(',', crime.ParticipantNames)</td>
                 @{
                     if(crime.Initiated) {
-                        <th>@crime.MoneyGain</th>
+                        <td>@crime.MoneyGain</td>
                         <th>@crime.RespectGain</th>
                     }
                     else {
-                        <th>Waiting...</th>
-                        <th>Waiting...</th>
+                        <td>Waiting...</td>
+                        <td>Waiting...</td>
                     }
                 }
             </tr>

@@ -163,13 +163,6 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
         return new FactionInfoAccess (set, context);
     });
 
-    services.AddScoped<ICrimeParticipantAccess, CrimeParticipantAccess> (services => {
-        var context = services.GetService<DrunkSquadDBContext> ();
-        var set = context.Set<CrimeParticipant> ();
-
-        return new CrimeParticipantAccess (set, context);
-    });
-
     services.AddScoped<IProfileAccess, ProfileAccess> (services => {
         var context = services.GetService<DrunkSquadDBContext> ();
         var set = context.Set<Profile> ();

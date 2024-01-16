@@ -10,7 +10,7 @@ namespace DrunkSquad.Logic.Extensions {
             Initiated = crime.Initiated,
             InitiatedBy = crime.InitiatedBy,
             MoneyGain = crime.MoneyGain,
-            Participants = crime.Participants,
+            Participants = string.Join(',', crime.Participants),
             PlannedBy = crime.PlannedBy,
             RespectGain = crime.RespectGain,
             Success = crime.Success,

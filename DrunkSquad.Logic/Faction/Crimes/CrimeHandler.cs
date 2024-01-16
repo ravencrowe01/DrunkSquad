@@ -2,14 +2,11 @@
 using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Faction;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Raven.Util;
 using TornApi.Net.Models.Faction;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Crimes {
-    public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IMemberAccess memberAccess) : ICrimeHandler {
+    public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess) : ICrimeHandler {
         public async Task<IEnumerable<FactionCrime>> FetchCrimesInRangeAsync (DateTime from, DateTime to) {
             var fromCurrent = from;
             var toCurrent = fromCurrent.AddDays (7) > to ? fromCurrent.AddDays (7) : to;
@@ -53,18 +50,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
 
                 fetchedCrimes.ForEach (crime => {
                     if (!factionCrimes.Any (c => c.CrimeID == crime.CrimeID)) {
-                        var temp = new List<CrimeParticipant> ();
-
-                        foreach (var participant in crime.Participants) {
-                            temp.Add (new CrimeParticipant {
-                                Crime = crime,
-                                Participant = memberAccess.Set.FirstOrDefault(member => member.MemberID == participant)
-
-                            });
-                        };
-
-                        crime.CrimeParticipants = temp;
-
                         factionCrimes.Add (crime);
                     }
                 });
@@ -94,11 +79,9 @@ namespace DrunkSquad.Logic.Faction.Crimes {
             foreach (var crimeID in crimes.Keys) {
                 var crime = crimes [crimeID];
 
-                var factionCrime = Cloner.Clone<Crime, FactionCrime> (crime);
+                var factionCrime = crime.ToFactionCrime ();
 
                 factionCrime.CrimeID = int.Parse (crimeID);
-
-                factionCrime.SetParticipants (memberAccess);
 
                 factionCrimes.Add (factionCrime);
             }
@@ -108,10 +91,10 @@ namespace DrunkSquad.Logic.Faction.Crimes {
 
         public void AddFactionCrimes (IEnumerable<FactionCrime> crimes) => crimeAccess.AddRange (crimes);
 
-        public FactionCrimes GetAllCrimes () => new FactionCrimes { Crimes = WithParticipants () };
+        public FactionCrimes GetAllCrimes () => new FactionCrimes { Crimes = crimeAccess.Set };
 
         public FactionCrimes GetAllCrimes (DateTime from, DateTime to) {
-            var found = WithParticipants ().Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()));
+            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()));
 
             return new FactionCrimes {
                 Crimes = found
@@ -119,7 +102,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public FactionCrimes GetAllCrimes (long from, long to) {
-            var found = WithParticipants ().Where (crime => crime.TimeStarted >= from && crime.TimeStarted <= to);
+            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= from && crime.TimeStarted <= to);
 
             return new FactionCrimes {
                 Crimes = found
@@ -127,7 +110,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public FactionCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to) {
-            var found = WithParticipants ().Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()) && crime.CrimeParticipants.Any (participant => participant.Participant.MemberID == id));
+            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()) && crime.HasParticipant(id));
 
             return new FactionCrimes {
                 Crimes = found
@@ -135,17 +118,11 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public FactionCrimes GetAllCrimesForUser (int id, long from, long to) {
-            var found = WithParticipants ().Where (crime => crime.TimeStarted >= from && crime.TimeStarted <= to);
+            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= from && crime.TimeStarted <= to);
 
             return new FactionCrimes {
                 Crimes = found
             };
-        }
-
-        private IIncludableQueryable<FactionCrime, IEnumerable<CrimeParticipant>> WithParticipants () {
-            var found = crimeAccess.Set.Include (crime => crime.CrimeParticipants);
-
-            return found;
         }
 
         private static long GetUnixTimestamp (DateTime dateTime) {
