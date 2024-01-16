@@ -21,7 +21,7 @@ namespace DrunkSquad.Logic.Faction.Info {
             return response;
         }
 
-        public FactionInfo GetFactionInfo () => factionInfoAcces.FindByID (config.Faction.ID);
+        public FactionInfo GetFactionInfo () => factionInfoAcces.Set.Include(faction => faction.Members).FirstOrDefault (faction => faction.FactionID == config.Faction.ID);
 
         public void AddFactionInfo (FactionInfo info) => factionInfoAcces.Add (info);
     }

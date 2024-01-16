@@ -3,7 +3,6 @@ using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users {
     public interface IUserHandler {
-        Task<IApiResponse<User>> FetchUserAsync (int id);
         void AddUser (User user);
         void AddUsers (IEnumerable<User> users);
         IEnumerable<User> GetAllUsers ();

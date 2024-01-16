@@ -28,8 +28,6 @@ namespace DrunkSquad.Database {
 
         public DbSet<Member> Members { get; set; }
 
-        public DbSet<Basic> Basic { get; set; }
-
         public DbSet<FactionInfo> Factioninfo { get; set; }
 
         public DrunkSquadDBContext () { }
@@ -106,11 +104,6 @@ namespace DrunkSquad.Database {
             builder.Entity<FactionInfo> ().HasKey (faction => faction.ID);
 
             builder.Entity<FactionInfo> ().HasMany (faction => faction.Members);
-
-            builder.Entity<Basic> ().HasKey (basic => basic.ID);
-
-            builder.Entity<Basic> ().Ignore (basic => basic.Members);
-            builder.Entity<Basic> ().Ignore (basic => basic.Rank);
         }
     }
 }

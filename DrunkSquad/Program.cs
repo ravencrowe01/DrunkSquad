@@ -79,6 +79,7 @@ void AddServices (WebApplicationBuilder builder) {
         services.AddScoped<ICrimeHandler, CrimeHandler> ();
         services.AddScoped<IFactionInfoHandler, FactionInfoHandler> ();
         services.AddScoped<IUserHandler, UserHandler> ();
+        services.AddScoped<IProfileHandler, ProfileHandler> ();
     }
 }
 
@@ -168,45 +169,11 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
         return new CrimeParticipantAccess (set, context);
     });
+
+    services.AddScoped<IProfileAccess, ProfileAccess> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<Profile> ();
+
+        return new ProfileAccess (set, context);
+    });
 }
-
-
-// TODO This needs to be moved into it's own, dedicated app.
-// To anyone that views this code: I was aware of how hacky this was when I wrote it.
-// Is very bad to include this *in* the website itself.
-//async Task InitializeDatabaseAsync (IServiceScope scope) {
-//    var services = scope.ServiceProvider;
-
-//    var config = services.GetRequiredService<IWebsiteConfig> ();
-
-//    var factionInfoHandler = services.GetRequiredService<IFactionInfoHandler> ();
-
-//    if (factionInfoHandler.GetFactionInfo (config.FactionConfig.ID) is not null) {
-//        return;
-//    }
-
-//    var factionResponse = await factionInfoHandler.FetchFactionInfoAsync (config.ApiConfig.DefaultKey);
-
-//    var info = factionResponse.Content;
-//    var id = info.FactionID;
-//    info.FactionID = 0;
-
-//    factionInfoHandler.AddFactionInfo (new FactionInfo {
-//        Basic = info,
-//        FactionID = id
-//    });
-
-//    var userHandler = services.GetRequiredService<IUserHandler> ();
-
-//    foreach (var member in info.Members.Values) {
-//        var user = await userHandler.FetchUserAsync (config.ApiConfig.DefaultKey, member.MemberID);
-
-//        if (user is not null) {
-//            userHandler.AddUser (user.Content);
-//        }
-//    }
-
-//    var crimeHandler = services.GetRequiredService<ICrimeHandler> ();
-
-//    await crimeHandler.FetchMostRecentCrimesAsync (config.ApiConfig.DefaultKey);
-//}

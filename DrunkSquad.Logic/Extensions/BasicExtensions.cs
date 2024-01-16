@@ -11,9 +11,8 @@ namespace DrunkSquad.Logic.Extensions {
             ColeaderID = original.ColeaderID,
             FactionID = original.FactionID,
             LeaderID = original.LeaderID,
-            Members = original.Members.Values,
+            Members = original.Members,
             Name = original.Name,
-            Rank = original.Rank,
             Respect = original.Respect,
             Tag = original.Tag,
             TagImage = original.TagImage

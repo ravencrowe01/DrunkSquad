@@ -20,8 +20,6 @@ namespace DrunkSquad.Models.Faction {
 
         public string Name { get; set; }
 
-        public Ranking Rank { get; set; }
-
         public int Respect { get; set; }
 
         public string Tag { get; set; }
