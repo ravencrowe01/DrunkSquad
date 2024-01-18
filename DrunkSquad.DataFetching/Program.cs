@@ -72,11 +72,11 @@ namespace DrunkSquad.DateFetching {
             _factionInfoHandler = new FactionInfoHandler (_client, _config, _factionInfoAccess);
             _userHandler = new UserHandler (_client, _config, _userAccess);
             _profileHandler = new ProfileHandler (_client, _config, _profileAccess);
-            _crimeHandler = new CrimeHandler (_client, _config, _crimeAccess);
+            _crimeHandler = new CrimeHandler (_client, _config, _crimeAccess, _profileAccess);
         }
 
         private static async Task StartFactionInfoFetcherAsync () {
-            var fetcher = new FactionInfoFetcher (_factionInfoHandler, _userHandler, _profileHandler, _cancelToken);
+            var fetcher = new FactionInfoFetcher (_factionInfoHandler, _profileHandler, _cancelToken);
 
             await fetcher.StartAsync ();
         }

@@ -6,5 +6,7 @@ namespace DrunkSquad.Logic.Users {
         void AddProfile (Profile profile);
         void AddProfiles (IEnumerable<Profile> profiles);
         Task<IApiResponse<Profile>> FetchProfileAsync (int id);
+        Profile GetProfile (int id);
+        IEnumerable<Profile> GetAllProfiles ();
     }
 }

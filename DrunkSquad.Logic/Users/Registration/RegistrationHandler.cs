@@ -6,7 +6,7 @@ using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users.Registration {
-    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IApiRequestClient apiClient, IWebsiteConfig config, IUserAccess userAccess) : IRegistrationHandler {
+    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IApiRequestClient apiClient, IWebsiteConfig config, IUserAccess userAccess, IProfileAccess profileAccess) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
         private static readonly string [] selections = ["profile"];
 
@@ -45,15 +45,14 @@ namespace DrunkSquad.Logic.Users.Registration {
                 return RegistrationStatus.AlreadyRegistered;
             }
 
-            found = new User ();
+            var newUser = new User ();
+            var profile = profileAccess.FindByProfileID (result.Content.ProfileID);
 
-            var profile = result.Content;
+            newUser.Profile = profile is not null ? profile : result.Content;
+            newUser.LoginDetails = details;
+            newUser.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
 
-            found.Profile = profile;
-            found.LoginDetails = details;
-            found.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
-
-            userAccess.Add (found);
+            userAccess.Add (newUser);
 
             return RegistrationStatus.Registered;
         }

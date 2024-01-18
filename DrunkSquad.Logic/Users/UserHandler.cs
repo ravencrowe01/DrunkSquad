@@ -1,6 +1,7 @@
 ﻿using DrunkSquad.Database.Accessors;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Users;
+using Microsoft.EntityFrameworkCore;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users {
@@ -11,6 +12,6 @@ namespace DrunkSquad.Logic.Users {
 
         public void AddUsers (IEnumerable<User> users) => userAccess.AddRange (users);
 
-        public IEnumerable<User> GetAllUsers () => userAccess.Set.ToList ();
+        public IEnumerable<User> GetAllUsers () => userAccess.Set.Include (user => user.Profile);
     }
 }

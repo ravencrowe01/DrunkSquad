@@ -8,12 +8,12 @@
 
 <div>
     <div>
-        <div>Total Money Gained: @Model.TotalMoneyGained</div>
+        <div>Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
         <div>Total Rep Gained: @Model.TotalRepGained</div>
-        <div>Success Rate: @Model.SuccessRate</div>
+        <div>Success Rate: @Model.SuccessRate.ToString("P") </div>
     </div>
-    <table>
-        <tr>
+    <table class="table">
+        <tr >
             <th>Name</th>
             <th>Status</th>
             <th>Time Started</th>
@@ -25,40 +25,14 @@
         @foreach(var crime in Model.Crimes) {
             <tr>
                 <td>@crime.Name</td>
-                <td>
-                    @{
-                        var display = string.Empty;
-
-                        if(crime.Initiated) {
-                            if(crime.Success) {
-                                display = "Success";
-                            }
-                            else {
-                                display = "Failed";
-                            }
-                        }
-                        else {
-                            var readyTimeOffset = DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady);
-                            var readyTime = readyTimeOffset.UtcDateTime;
-
-                            if(DateTime.UtcNow < readyTime) {
-                                display = "Not Ready";
-                            }
-                            else {
-                                display = "Ready";
-                            }
-                        }
-
-                        <p>@display</p>
-                    }
-                </td>
+                <td>@crime.CurrentStateString</td>
                 <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</td>
                 <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</td>
-                <td>@string.Join(',', crime.ParticipantNames)</td>
+                <td>@string.Join(", ", crime.ParticipantNames)</td>
                 @{
                     if(crime.Initiated) {
                         <td>@crime.MoneyGain</td>
-                        <th>@crime.RespectGain</th>
+                        <td>@crime.RespectGain</td>
                     }
                     else {
                         <td>Waiting...</td>

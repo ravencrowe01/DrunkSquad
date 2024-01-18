@@ -34,21 +34,41 @@
 
         public IEnumerable<int> ParticipantIDs {
             get {
-                if (_participantIDs is null || !_participantIDs.Any ()) {
                     var participants = Participants.Split (',');
 
-                    var _participantIDs = new List<int> ();
+                    var participantIDs = new List<int> ();
 
                     foreach (var particpant in participants) {
-                        _participantIDs.Add (int.Parse (particpant));
+                        participantIDs.Add (int.Parse (particpant));
                     }
-                }
 
-                return _participantIDs;
+                    return participantIDs;
             }
         }
 
-        private IEnumerable<int> _participantIDs;
+        public string CurrentStateString {
+            get {
+                if (Initiated) {
+                    if (Success) {
+                        return "Success";
+                    }
+                    else {
+                        return "Failed";
+                    }
+                }
+                else {
+                    var readyTimeOffset = DateTimeOffset.FromUnixTimeSeconds (TimeReady);
+                    var readyTime = readyTimeOffset.UtcDateTime;
+
+                    if (DateTime.UtcNow < readyTime) {
+                        return "Not Ready";
+                    }
+                    else {
+                        return "Ready";
+                    }
+                }
+            }
+        }
 
         public bool HasParticipant (int id) => Participants.Split (',').ToList ().Contains (id.ToString ());
     }

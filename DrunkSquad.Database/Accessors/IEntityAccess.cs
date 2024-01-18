@@ -2,6 +2,7 @@
 
 namespace DrunkSquad.Database.Accessors {
     public interface IEntityAccess<T> where T : class {
+        // Need to hide this
         DbSet<T> Set { get; }
 
         void Add (T entity);

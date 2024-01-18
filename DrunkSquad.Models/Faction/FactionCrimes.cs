@@ -2,10 +2,47 @@
     public class FactionCrimes {
         public IEnumerable<FactionCrime> Crimes { get; set; }
 
-        public int TotalMoneyGained { get; set; }
+        public int TotalMoneyGained {
+            get {
+                var total = 0;
 
-        public int TotalRepGained { get; set; }
+                foreach (var crime in Crimes) {
+                    if (crime.Initiated) {
+                        total += crime.MoneyGain;
+                    }
+                }
 
-        public float SuccessRate { get; set; }
+                return total;
+            }
+        }
+
+        public int TotalRepGained {
+            get {
+                var total = 0;
+
+                foreach (var crime in Crimes) {
+                    if (crime.Initiated) {
+                        total += crime.RespectGain;
+                    }
+
+                }
+
+                return total;
+            }
+        }
+
+        public float SuccessRate {
+            get {
+                var total = 0f;
+
+                foreach (var crime in Crimes) {
+                    if (crime.Initiated) {
+                        total += crime.Success ? 1f : 0f;
+                    };
+                }
+
+                return total / Crimes.Count();
+            }
+        }
     }
 }

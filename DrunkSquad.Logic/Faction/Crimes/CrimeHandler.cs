@@ -6,7 +6,7 @@ using TornApi.Net.Models.Faction;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Crimes {
-    public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess) : ICrimeHandler {
+    public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IProfileAccess profileAccess) : ICrimeHandler {
         public async Task<IEnumerable<FactionCrime>> FetchCrimesInRangeAsync (DateTime from, DateTime to) {
             var fromCurrent = from;
             var toCurrent = fromCurrent.AddDays (7) > to ? fromCurrent.AddDays (7) : to;
@@ -89,9 +89,47 @@ namespace DrunkSquad.Logic.Faction.Crimes {
             return factionCrimes;
         }
 
-        public void AddFactionCrimes (IEnumerable<FactionCrime> crimes) => crimeAccess.AddRange (crimes);
+        public void AddFactionCrime (FactionCrime crime) {
+            if(crimeAccess.FindByCrimeID(crime.CrimeID) is null) {
+                crimeAccess.Add (crime);
+            }
+            else {
+                crimeAccess.Update (crime);
+            }
+        }
 
-        public FactionCrimes GetAllCrimes () => new FactionCrimes { Crimes = crimeAccess.Set };
+        public void AddFactionCrimes (IEnumerable<FactionCrime> crimes) => crimes.ToList ().ForEach (AddFactionCrime);
+
+        public FactionCrimes GetAllCrimes () {
+            var crimes = crimeAccess.Set.ToList ();
+
+            foreach (var crime in crimes) {
+                var participantIDs = crime.ParticipantIDs;
+
+                var participantNames = new List<string> ();
+
+                foreach (var participantID in participantIDs) {
+                    var profile = profileAccess.FindByProfileID (participantID);
+
+                    if(profile is not null) {
+                        var name = profile.Name;
+
+                        participantNames.Add (name);
+                    }
+                    else {
+                        participantNames.Add ("<unavailable>");
+                    }
+                }
+
+                crime.ParticipantNames = participantNames;
+            }
+
+            var factionCrimes = new FactionCrimes {
+                Crimes = crimes
+            };
+
+            return factionCrimes;
+        }
 
         public FactionCrimes GetAllCrimes (DateTime from, DateTime to) {
             var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ()) && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()));
