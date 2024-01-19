@@ -78,7 +78,7 @@ namespace DrunkSquad.DateFetching {
         private static async Task StartFactionInfoFetcherAsync () {
             var fetcher = new FactionInfoFetcher (_factionInfoHandler, _profileHandler, _cancelToken);
 
-            await fetcher.StartAsync ();
+            await fetcher.StartAsync ().ConfigureAwait (false);
         }
 
         private static async Task StartCrimeFetcherAsync () {
@@ -88,7 +88,7 @@ namespace DrunkSquad.DateFetching {
 
             Console.WriteLine ("Starting crime fetcher...");
 
-            await fetcher.StartAsync ();
+            await fetcher.StartAsync ().ConfigureAwait (false);
 
             Console.WriteLine ("Crime fetcher started.");
         }

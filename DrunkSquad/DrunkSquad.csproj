@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DrunkSquad.DataFetching\DrunkSquad.DataFetching.csproj" />
     <ProjectReference Include="..\DrunkSquad.Logic\DrunkSquad.Logic.csproj" />
     <ProjectReference Include="..\DrunkSquad.Models\DrunkSquad.Models.csproj" />
   </ItemGroup>

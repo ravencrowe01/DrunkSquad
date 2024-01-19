@@ -1,5 +1,6 @@
 using DrunkSquad.Database;
 using DrunkSquad.Database.Accessors;
+using DrunkSquad.DateFetching;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;
@@ -52,8 +53,6 @@ app.MapControllerRoute (
 
 app.Run ();
 
-Console.WriteLine ("");
-
 void AddServices (WebApplicationBuilder builder) {
     IServiceCollection services = builder.Services;
 
@@ -72,6 +71,9 @@ void AddServices (WebApplicationBuilder builder) {
                 options.SlidingExpiration = true;
                 options.AccessDeniedPath = "/Login";
             });
+
+    services.AddHostedService<FactionInfoFetcherHostedService> ();
+    services.AddHostedService<CrimeFetcherHostedService> ();
 
     void AddModelHandlers (IServiceCollection services) {
         services.AddScoped<ILoginHandler, LoginHandler> ();

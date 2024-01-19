@@ -21,7 +21,7 @@ namespace DrunkSquad.DateFetching {
             if (factionFound is null) {
                 Console.WriteLine ("Faction not found in database, requesting from api...");
 
-                var factionResponse = await _factionInfoHandler.FetchFactionInfoAsync ();
+                var factionResponse = await _factionInfoHandler.FetchFactionInfoAsync ().ConfigureAwait (false);
 
                 var info = factionResponse.Content ?? throw new Exception ("Couldn't fetch faction info.");
 
@@ -51,7 +51,7 @@ namespace DrunkSquad.DateFetching {
             while (memCount > profCount) {
                 Console.WriteLine ($"Missing { memCount - profCount } profiles, fetching...");
 
-                await FetchProfiles (factionFound);
+                await FetchProfiles (factionFound).ConfigureAwait (false);
 
                 memCount = factionFound.Members.Count ();
                 profCount = _profileHandler.GetAllProfiles ().Count ();
@@ -64,7 +64,7 @@ namespace DrunkSquad.DateFetching {
             var profiles = new List<Profile> ();
 
             foreach (var id in missing) {
-                var profileResponse = await _profileHandler.FetchProfileAsync (id);
+                var profileResponse = await _profileHandler.FetchProfileAsync (id).ConfigureAwait (false);
 
                 if (profileResponse is not null && profileResponse.Content is not null) {
                     var profile = profileResponse.Content;
