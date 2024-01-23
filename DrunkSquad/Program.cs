@@ -72,9 +72,6 @@ void AddServices (WebApplicationBuilder builder) {
                 options.AccessDeniedPath = "/Login";
             });
 
-    services.AddHostedService<FactionInfoFetcherHostedService> ();
-    services.AddHostedService<CrimeFetcherHostedService> ();
-
     void AddModelHandlers (IServiceCollection services) {
         services.AddScoped<ILoginHandler, LoginHandler> ();
         services.AddScoped<IRegistrationHandler, RegistrationHandler> ();

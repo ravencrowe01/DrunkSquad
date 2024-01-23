@@ -29,9 +29,7 @@ namespace DrunkSquad.DateFetching {
 
             Console.WriteLine ($"Delaying for {initialDelay} miliseconds...");
 
-            await Task.Run (async () => {
-                await Task.Delay (initialDelay, cancellationToken).ConfigureAwait (false);
-            });
+            await Task.Delay (initialDelay, cancellationToken).ConfigureAwait (false);
 
             do {
                 now = DateTime.Now;
@@ -44,7 +42,7 @@ namespace DrunkSquad.DateFetching {
 
                 crimes = await crimeHandler.FetchCrimesInRangeAsync (now.AddDays (-1), now);
 
-                Console.WriteLine ($"Fetched crimes, found {crimes.Count()}");
+                Console.WriteLine ($"Fetched crimes, found {crimes.Count ()}");
 
                 if (cancellationToken.IsCancellationRequested) {
                     return;
@@ -56,9 +54,7 @@ namespace DrunkSquad.DateFetching {
 
                 Console.WriteLine ("Added crimes to database.");
 
-                await Task.Run (async () => {
-                    await Task.Delay (TimeSpan.FromDays (1), cancellationToken).ConfigureAwait (false);
-                }, cancellationToken);
+                await Task.Delay (TimeSpan.FromDays (1), cancellationToken).ConfigureAwait (false);
 
             } while (!cancellationToken.IsCancellationRequested);
         }
