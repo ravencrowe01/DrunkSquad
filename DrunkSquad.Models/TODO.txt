@@ -1,0 +1,1 @@
+﻿Create interfaces for models to be placed in DrunkSquad.Framework
