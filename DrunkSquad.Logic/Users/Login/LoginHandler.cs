@@ -1,4 +1,5 @@
 ﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Users.Login;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

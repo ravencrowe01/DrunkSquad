@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Logic.Users.Login;
+﻿using DrunkSquad.Framework.Logic.Users.Login;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

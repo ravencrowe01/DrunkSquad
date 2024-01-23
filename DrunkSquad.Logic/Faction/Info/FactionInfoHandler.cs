@@ -1,4 +1,5 @@
 ﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Faction;
 using Microsoft.EntityFrameworkCore;

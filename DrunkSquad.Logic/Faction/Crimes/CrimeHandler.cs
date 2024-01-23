@@ -1,4 +1,5 @@
 ﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Faction;
@@ -90,7 +91,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public void AddFactionCrime (FactionCrime crime) {
-            if(crimeAccess.FindByCrimeID(crime.CrimeID) is null) {
+            if (crimeAccess.FindByCrimeID (crime.CrimeID) is null) {
                 crimeAccess.Add (crime);
             }
             else {
@@ -111,7 +112,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
                 foreach (var participantID in participantIDs) {
                     var profile = profileAccess.FindByProfileID (participantID);
 
-                    if(profile is not null) {
+                    if (profile is not null) {
                         var name = profile.Name;
 
                         participantNames.Add (name);

@@ -1,5 +1,5 @@
-﻿using DrunkSquad.Logic.Faction.Info;
-using DrunkSquad.Logic.Users;
+﻿using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Faction.Info;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

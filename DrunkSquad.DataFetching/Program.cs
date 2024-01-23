@@ -1,4 +1,5 @@
 ﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;

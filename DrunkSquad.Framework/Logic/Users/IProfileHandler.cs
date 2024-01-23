@@ -1,7 +1,7 @@
 ﻿using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
-namespace DrunkSquad.Logic.Users {
+namespace DrunkSquad.Framework.Logic.Users {
     public interface IProfileHandler {
         void AddProfile (Profile profile);
         void AddProfiles (IEnumerable<Profile> profiles);

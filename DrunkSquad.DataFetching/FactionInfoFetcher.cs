@@ -1,6 +1,6 @@
-﻿using DrunkSquad.Logic.Extensions;
+﻿using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Logic.Faction.Info;
-using DrunkSquad.Logic.Users;
 using DrunkSquad.Models.Faction;
 using TornApi.Net.Models.User;
 
