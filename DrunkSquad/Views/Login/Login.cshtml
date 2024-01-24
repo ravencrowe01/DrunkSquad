@@ -18,26 +18,33 @@
     .submit {
         margin-top: 10px;
     }
+
+    .error {
+        color: red;
+    }
+
+    .errorBox {
+        height: 23px;
+    }
 </style>
 
 <div id="login">
-    <form asp-controller="Login" asp-action="Attempt" id="login-form" method="post">
+    @using (Html.BeginForm("Register", "Registration", FormMethod.Post)) {
         <h1>Login</h1>
 
         <div class="form-group">
             <label asp-for="ApiKey">API Key</label>
-            <input asp-for="ApiKey" class="form-control input-sm" id="key" />
+            <div>@Html.TextBox("ApiKey", null, new { @class = "form-control input-sm"})</div>
+            <div class="errorBox">@Html.ValidationMessageFor(m => m.ApiKey, "", new { @class = "error" })</div>
         </div>
 
         <div class="form-group">
             <label asp-for="Password">Password</label>
-            <input asp-for="Password" class="form-control input-sm" id="password" type="password"/>
+            <div>@Html.PasswordFor(m => m.Password, new { @class = "form-control input-sm"})</div>
+            <div class="errorBox">@Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })</div>
         </div>
 
         <input type="submit" value="Login" class="submit" />
-    </form>
-
-    @if (Model.AttemptFailed) {
-        <p style="color: forestgreen">Logged in!</p>
     }
+
 </div>

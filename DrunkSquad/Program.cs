@@ -1,8 +1,11 @@
 using DrunkSquad.Database;
 using DrunkSquad.Database.Accessors;
 using DrunkSquad.DateFetching;
+using DrunkSquad.Framework.Logic.Faction.Crimes;
+using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Framework.Logic.Users.Login;
+using DrunkSquad.Framework.Logic.Users.Registration;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;

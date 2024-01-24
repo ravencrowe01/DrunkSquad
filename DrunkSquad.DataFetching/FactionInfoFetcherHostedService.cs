@@ -1,5 +1,5 @@
-﻿using DrunkSquad.Framework.Logic.Users;
-using DrunkSquad.Logic.Faction.Info;
+﻿using DrunkSquad.Framework.Logic.Faction.Info;
+using DrunkSquad.Framework.Logic.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,7 +12,7 @@ namespace DrunkSquad.DateFetching {
 
             var services = scope.ServiceProvider;
 
-            var factionInfoFetcher = new FactionInfoFetcher (services.GetRequiredService<IFactionInfoHandler>(), services.GetRequiredService<IProfileHandler> (), cancellationToken);
+            var factionInfoFetcher = new FactionInfoFetcher (services.GetRequiredService<IFactionInfoHandler> (), services.GetRequiredService<IProfileHandler> (), cancellationToken);
 
             await factionInfoFetcher.StartAsync ().ConfigureAwait (false);
         }

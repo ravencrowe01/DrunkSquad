@@ -21,10 +21,15 @@ namespace DrunkSquad.Controllers {
                 return View ();
             }
 
-            switch (handler.AttemptLogin (login)) {
+            var details = new LoginDetails {
+                ApiKey = login.ApiKey,
+                Password = login.Password
+            };
+
+            switch (handler.AttemptLogin (details)) {
                 case PasswordVerificationResult.Success:
                 case PasswordVerificationResult.SuccessRehashNeeded:
-                    var claims = handler.BuildUserClaims (login);
+                    var claims = handler.BuildUserClaims (details);
 
                     var claimsIdentity = new ClaimsIdentity (claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Logic.Users.Registration;
+﻿using DrunkSquad.Framework.Logic.Users.Registration;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,13 @@ namespace DrunkSquad.Controllers {
         }
 
         public async Task<IActionResult> Register (RegistrationAttempt attempt) {
-            await handler.RegisterAsync (attempt);
+            var details = new LoginDetails {
+                ApiKey = attempt.ApiKey,
+                Password = attempt.Password
+            };
+
+            await handler.RegisterAsync (details);
+
             return View ("../Home/Index");
         }
     }

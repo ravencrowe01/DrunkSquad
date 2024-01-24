@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Logic.Faction.Info;
+﻿using DrunkSquad.Framework.Logic.Faction.Info;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {

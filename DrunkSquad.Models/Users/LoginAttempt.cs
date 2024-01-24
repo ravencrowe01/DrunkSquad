@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DrunkSquad.Models.Users {
-    public class LoginAttempt : LoginDetails {
-        public PasswordVerificationResult Result { get; set; }
+    public class LoginAttempt {
+        [Required (ErrorMessage = "Api Key required")]
+        public string ApiKey { get; set; }
 
-        public bool AttemptFailed { get; set; }
+        [Required (ErrorMessage = "Password required")]
+        public string Password { get; set; }
     }
 }

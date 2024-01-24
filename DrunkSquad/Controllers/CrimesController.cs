@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Logic.Faction.Crimes;
+﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {

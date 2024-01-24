@@ -1,4 +1,4 @@
-﻿using DrunkSquad.Logic.Faction.Crimes;
+﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
 
 namespace DrunkSquad.DateFetching {
     internal class CrimeFetcher (ICrimeHandler crimeHandler, CancellationToken cancellationToken) {

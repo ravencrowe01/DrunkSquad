@@ -1,9 +1,9 @@
-﻿using DrunkSquad.Logic.Faction.Crimes;
+﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace DrunkSquad.DateFetching {
-    public class CrimeFetcherHostedService(IServiceProvider services) : IHostedService {
+    public class CrimeFetcherHostedService (IServiceProvider services) : IHostedService {
         private IServiceProvider _services = services;
 
         public async Task StartAsync (CancellationToken cancellationToken) {
@@ -11,7 +11,7 @@ namespace DrunkSquad.DateFetching {
 
             var services = scope.ServiceProvider;
 
-            var fetcher = new CrimeFetcher (services.GetRequiredService<ICrimeHandler>(), cancellationToken);
+            var fetcher = new CrimeFetcher (services.GetRequiredService<ICrimeHandler> (), cancellationToken);
 
             // One day, I will get someone to look at this and tell me what I'm doing wrong.
             // For now, we shall not await this, as doing so blocks the main thread.
