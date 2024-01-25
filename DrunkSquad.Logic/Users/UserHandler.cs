@@ -14,5 +14,7 @@ namespace DrunkSquad.Logic.Users {
         public void AddUsers (IEnumerable<User> users) => userAccess.AddRange (users);
 
         public IEnumerable<User> GetAllUsers () => userAccess.Set.Include (user => user.Profile);
+
+        public User FindUserbyID (int id) => userAccess.FindByProfileID (id);
     }
 }

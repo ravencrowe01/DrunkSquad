@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using DrunkSquad.Logic.Extensions
+@using DrunkSquad.Models.Users
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -49,14 +52,22 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>
-                                <div class="dropdown-menu">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="CrimesOverview">Overview</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="OrganizedCrimesOverview">Organized Crimes</a>
 
-                                </div>
-                            </li>
+                            if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole() == UserRole.Admin) {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>
+                                    <div class="dropdown-menu">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="CrimesOverview">Overview</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="OrganizedCrimesOverview">Organized Crimes</a>
+
+                                    </div>
+                                </li>
+                            }
+                            else {
+                                <li>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="CrimesOverview">Crime Stats</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

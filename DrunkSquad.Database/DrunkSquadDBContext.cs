@@ -28,6 +28,10 @@ namespace DrunkSquad.Database {
 
         public DbSet<FactionInfo> Factioninfo { get; set; }
 
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<PositionMeta> PositionMetas { get; set; }
+
         public DrunkSquadDBContext () { }
 
         public DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : base (options) { }
@@ -57,6 +61,11 @@ namespace DrunkSquad.Database {
             BuildFactionCrimeModel (builder);
 
             BuildFactionInfoModel (builder);
+
+            builder.Entity<Position> ().HasKey (position => position.ID);
+
+            builder.Entity<PositionMeta> ().HasKey (meta => meta.ID);
+            builder.Entity<PositionMeta> ().HasOne (meta => meta.Position);
         }
 
         private static void BuildProfileModel (ModelBuilder builder) {
@@ -73,6 +82,7 @@ namespace DrunkSquad.Database {
             builder.Entity<Profile> ().Ignore (user => user.BasicIcons);
             builder.Entity<Profile> ().Ignore (user => user.Faction);
             builder.Entity<Profile> ().Ignore (user => user.Life);
+            builder.Entity<Profile> ().Ignore (user => user.Marriage);
         }
 
         private static void BuildUserModel (ModelBuilder builder) {
@@ -80,6 +90,8 @@ namespace DrunkSquad.Database {
 
             builder.Entity<User> ().HasOne (user => user.Profile);
             builder.Entity<User> ().HasOne (user => user.LoginDetails);
+
+            builder.Entity<User> ().Ignore (user => user.Crimes);
         }
 
         private static void BuildFactionCrimeModel (ModelBuilder builder) {

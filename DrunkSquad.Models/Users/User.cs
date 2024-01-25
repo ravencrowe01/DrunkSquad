@@ -1,4 +1,6 @@
-﻿using TornApi.Net.Models.User;
+﻿using DrunkSquad.Models.Faction;
+using TornApi.Net.Models.Faction;
+using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Models.Users {
     public class User {
@@ -9,5 +11,9 @@ namespace DrunkSquad.Models.Users {
         public LoginDetails LoginDetails { get; set; } = new LoginDetails ();
 
         public UserRole WebsiteRole { get; set; }
+
+        public Position Position { get; set; }
+
+        public FactionCrimes Crimes { get; set; }
     }
 }

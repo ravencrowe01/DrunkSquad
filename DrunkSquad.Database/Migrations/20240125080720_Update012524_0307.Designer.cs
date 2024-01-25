@@ -4,6 +4,7 @@ using DrunkSquad.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    partial class DrunkSquadDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240125080720_Update012524_0307")]
+    partial class Update012524_0307
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

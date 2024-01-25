@@ -1,11 +1,13 @@
 using DrunkSquad.Database;
 using DrunkSquad.Database.Accessors;
 using DrunkSquad.DateFetching;
+using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Framework.Logic.Users.Login;
 using DrunkSquad.Framework.Logic.Users.Registration;
+using DrunkSquad.Logic.Faction;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;
@@ -84,6 +86,8 @@ void AddServices (WebApplicationBuilder builder) {
         services.AddScoped<IFactionInfoHandler, FactionInfoHandler> ();
         services.AddScoped<IUserHandler, UserHandler> ();
         services.AddScoped<IProfileHandler, ProfileHandler> ();
+        services.AddScoped<IPositionHandler, PositionHandler> ();
+        services.AddScoped<IPositionMetaHandler, PositionMetaHandler> ();
     }
 }
 
@@ -172,5 +176,19 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
         var set = context.Set<Profile> ();
 
         return new ProfileAccess (set, context);
+    });
+
+    services.AddScoped<IPositionAccess, PositionAccess> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<Position> ();
+
+        return new PositionAccess (set, context);
+    });
+
+    services.AddScoped<IPositionMetaAccess, PositionMetaAccess> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<PositionMeta> ();
+
+        return new PositionMetaAccess (set, context);
     });
 }

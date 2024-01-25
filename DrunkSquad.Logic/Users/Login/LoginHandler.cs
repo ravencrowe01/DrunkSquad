@@ -31,7 +31,7 @@ namespace DrunkSquad.Logic.Users.Login {
             return new List<Claim> {
                 new Claim(ClaimTypes.Name, user.Profile.Name),
                 new Claim(ClaimTypes.Role, Enum.GetName(user.WebsiteRole)),
-                new Claim("ApiKey", user.LoginDetails.ApiKey)
+                new Claim("TornID", user.Profile.ProfileID.ToString()),
             };
         }
     }
