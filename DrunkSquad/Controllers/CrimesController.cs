@@ -19,11 +19,11 @@ namespace DrunkSquad.Controllers {
                 return AllCrimesOverview ();
             }
             else {
-                return PersonalCrimeOverview ();
+                return PersonalCrimesOverview ();
             }
         }
 
-        private IActionResult PersonalCrimeOverview () {
+        public IActionResult PersonalCrimesOverview () {
             var tornID = int.Parse (HttpContext.User.Claims.First (claim => claim.Type == "TornID").Value);
 
             var user = userHandler.FindUserbyID (tornID);
@@ -35,7 +35,7 @@ namespace DrunkSquad.Controllers {
             return View ("PersonalCrimesOverview", user);
         }
 
-        private IActionResult AllCrimesOverview () {
+        public IActionResult AllCrimesOverview () {
             var crimes = crimesHandler.GetAllCrimes ();
 
             return View ("CrimesOverview", crimes);
