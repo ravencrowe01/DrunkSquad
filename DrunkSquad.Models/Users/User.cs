@@ -14,6 +14,6 @@ namespace DrunkSquad.Models.Users {
 
         public Position Position { get; set; }
 
-        public FactionCrimes Crimes { get; set; }
+        public UserCrimes Crimes { get; set; }
     }
 }

@@ -1,5 +1,53 @@
-﻿@model DrunkSquad.Models.Users.User
+﻿@model DrunkSquad.Models.Faction.UserCrimes
 
 @{
-    ViewData ["Title"] = $"{Model.Profile.Name}'s Crime Stats";
+    ViewData ["Title"] = $"{Model.Username}'s Crime Stats";
 }
+
+<style>
+    .currentOCDisplay {
+        text-align: center;
+    }
+</style>
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col">Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
+            <div class="col">Total Rep Gained: @Model.TotalRepGained</div>
+            <div class="col">Success Rate: @Model.SuccessRate.ToString("P") </div>
+        </div>
+
+        <div class="row">
+            <div class="col currentOCDisplay">
+                <h3>Current OC</h3>
+                <p><em>@Model.CurrentOC.Name</em></p>
+                <p><b>Status</d>: @Model.CurrentOC.CurrentStateString</p>
+                @{
+                    var moneyString = "";
+                    var repString = "";
+
+                    if(Model.CurrentOC.Initiated) {
+                        if(Model.CurrentOC.Success) {
+                            moneyString = Model.CurrentOC.MoneyGain.ToString();
+                            repString = Model.CurrentOC.RespectGain.ToString();
+                        }
+                        else {
+                            moneyString = "Failed...";
+                            repString = "Failed..."
+                        }
+                    }
+                    else {
+                        moneyString = "Waiting...";
+                        repString = "Waiting...";
+                    }
+                    <div><b>Money Gained</b>: @moneyString</div>
+                    <div><b>Rep Gained</b>: @repString</div>
+                }
+            </div>
+            <div class="col">
+                
+            </div>
+        </div>
+    </div>
+ </div>

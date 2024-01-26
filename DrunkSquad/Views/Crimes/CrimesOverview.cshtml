@@ -1,7 +1,39 @@
-﻿@{
+﻿@model DrunkSquad.Models.Faction.FactionCrimesOverview
+
+@{
     ViewData ["Title"] = "Crimes Overview";
 }
 
 <div>
+    <div class="container">
+        <div class="row">
+            <div class="col">Total Money Gained: @Model.Crimes.TotalMoneyGained.ToString("C")</div>
+            <div class="col">Total Rep Gained: @Model.Crimes.TotalRepGained</div>
+            <div class="col">Success Rate: @Model.Crimes.SuccessRate.ToString("P") </div>
+        </div>
 
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Total Money Gained</th>
+                    <th>Total Rep Gained</th>
+                    <th>Success Rate</th>
+                </tr>
+
+                @foreach(var member in Model.Members) {
+                    var crimes = Model.GetCrimesForUser(Member.MemberID);
+
+                    <tr>
+                        <td>@Model.CERanks[member.MemberID]</td>
+                        <td>@member.Name</td>
+                        <td>@crimes.TotalMoneyGained.ToString("C")</td>
+                        <td>@crimes.TotalRepGained</td>
+                        <td>@crimes.SuccessRate.ToString("P")</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    <div>
 </div>

@@ -1,17 +1,10 @@
-﻿namespace DrunkSquad.Models.Faction {
-    public class UserCrimes {
-        public int UserID { get; set; }
+﻿namespace DrunkSquad.Models.Faction;
 
-        public string Username { get; set; }
+public class UserCrimes : FactionCrimes {
+    public int UserID { get; set; }
 
-        public IEnumerable<FactionCrime> Crimes { get; set; }
+    public string Username { get; set; }
 
-        public int TotalCrimes { get; set; }
-
-        public int TotalMoneyGained { get; set; }
-
-        public int TotalRespectGained { get; set; }
-
-        public float SuccessRate { get; set; }
-    }
+    public FactionCrime CurrentOC => Crimes.OrderBy (crime => crime.TimeStarted)[0];
 }
+
