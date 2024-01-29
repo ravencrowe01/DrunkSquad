@@ -30,9 +30,7 @@ namespace DrunkSquad.Controllers {
 
             var crimes = crimesHandler.GetAllCrimesForUser (tornID, DateTime.UtcNow.AddMonths (-3), DateTime.UtcNow);
 
-            user.Crimes = crimes;
-
-            return View ("PersonalCrimesOverview", user);
+            return View ("PersonalCrimesOverview", crimes);
         }
 
         public IActionResult AllCrimesOverview () {

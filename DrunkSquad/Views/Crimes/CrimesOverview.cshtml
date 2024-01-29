@@ -22,11 +22,11 @@
                     <th>Success Rate</th>
                 </tr>
 
-                @foreach(var member in Model.Members) {
-                    var crimes = Model.GetCrimesForUser(Member.MemberID);
+                @foreach (var member in Model.Members) {
+                    var crimes = Model.GetCrimesForUser (member.MemberID);
 
                     <tr>
-                        <td>@Model.CERanks[member.MemberID]</td>
+                        <td>@Model.CERanks [member.MemberID]</td>
                         <td>@member.Name</td>
                         <td>@crimes.TotalMoneyGained.ToString("C")</td>
                         <td>@crimes.TotalRepGained</td>
@@ -35,5 +35,5 @@
                 }
             </table>
         </div>
-    <div>
+    </div>
 </div>

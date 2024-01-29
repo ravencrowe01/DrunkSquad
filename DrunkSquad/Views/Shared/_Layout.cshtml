@@ -48,11 +48,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
+                        </li>
                         @if(User.Identity.IsAuthenticated) {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
-                            </li>
-
                             if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole() == UserRole.Admin) {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>

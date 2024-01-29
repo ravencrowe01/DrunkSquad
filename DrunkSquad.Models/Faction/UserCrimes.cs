@@ -5,6 +5,6 @@ public class UserCrimes : FactionCrimes {
 
     public string Username { get; set; }
 
-    public FactionCrime CurrentOC => Crimes.OrderBy (crime => crime.TimeStarted)[0];
+    public FactionCrime CurrentOC => Crimes.OrderBy (crime => crime.TimeStarted).ToList()[0];
 }
 

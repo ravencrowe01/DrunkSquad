@@ -8,7 +8,7 @@ public interface ICrimeHandler {
 
     FactionCrimes GetAllCrimes (DateTime from, DateTime to);
 
-    FactionCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to);
+    UserCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to);
 
     Task<IEnumerable<FactionCrime>> FetchCrimesInRangeAsync (DateTime from, DateTime to);
 }
