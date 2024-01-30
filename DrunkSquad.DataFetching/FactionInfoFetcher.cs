@@ -1,13 +1,18 @@
-﻿using DrunkSquad.Framework.Logic.Faction.Info;
+﻿using DrunkSquad.Framework.Logic.Faction;
+using DrunkSquad.Framework.Logic.Faction.Crimes;
+using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Logic.Extensions;
+using DrunkSquad.Logic.Faction;
 using DrunkSquad.Models.Faction;
 using TornApi.Net.Models.User;
 
 namespace DrunkSquad.DateFetching {
-    internal class FactionInfoFetcher (IFactionInfoHandler factionInfoHandler,IProfileHandler profileHandler, CancellationToken cancellationToken) {
+    internal class FactionInfoFetcher (IFactionInfoHandler factionInfoHandler, IProfileHandler profileHandler, IPositionHandler positionHandler, ICrimeExperienceHandler crimeExperienceHandler, CancellationToken cancellationToken) {
         private IFactionInfoHandler _factionInfoHandler = factionInfoHandler;
         private IProfileHandler _profileHandler = profileHandler;
+        private IPositionHandler _positionHandler = positionHandler;
+        private ICrimeExperienceHandler _crimeExperienceHandler = crimeExperienceHandler;
 
         public async Task StartAsync () {
             Console.WriteLine ("Starting faction info fetching.\nSearching database for faction...");
@@ -43,11 +48,49 @@ namespace DrunkSquad.DateFetching {
                 return;
             }
 
+            Console.WriteLine ("Fetching positions...");
+            var positions = await _positionHandler.FetchPositionsAsync ();
+
+            if (positions is not null) {
+                foreach (var position in positions.Positions) {
+                    _positionHandler.AddPositon (position);
+                }
+            }
+            Console.WriteLine ("Added positions");
+
+            if (cancellationToken.IsCancellationRequested) {
+                return;
+            }
+
+            Console.WriteLine ("Fetching crime experience...");
+            try {
+                var crimeExp = await _crimeExperienceHandler.FetchCrimeExperience ();
+
+                if (crimeExp is not null) {
+                    foreach (var exp in crimeExp) {
+                        _crimeExperienceHandler.AddCrimeExperience (exp);
+                    }
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine (e.Message);
+            }
+            Console.WriteLine ("Added crime experience.");
+
+            if (cancellationToken.IsCancellationRequested) {
+                return;
+            }
+
             Console.WriteLine ("Checking for user profiles...");
 
             var memCount = factionFound.Members.Count ();
             var profCount = _profileHandler.GetAllProfiles ().Count ();
 
+            // Users can be in a weird state of being fetched from the api but not
+            // getting added to the db. It theoretically only adds a single loop, but it's having
+            // to call the API again, so it is a little slow. That being said, it's for a db
+            // seeder, so it doesn't need to be fast, just needs to work.
+            // I actually haven't dug into why it does this, but idc.
             while (memCount > profCount) {
                 Console.WriteLine ($"Missing { memCount - profCount } profiles, fetching...");
 

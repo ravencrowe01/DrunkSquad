@@ -22,7 +22,6 @@ namespace DrunkSquad.Database.Accessors {
             foreach (var entity in entites) {
                 if (!_set.Contains (entity)) {
                     _set.Add (entity);
-
                 }
             }
 

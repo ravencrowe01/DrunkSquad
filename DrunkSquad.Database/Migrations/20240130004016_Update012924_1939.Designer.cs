@@ -4,6 +4,7 @@ using DrunkSquad.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    partial class DrunkSquadDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240130004016_Update012924_1939")]
+    partial class Update012924_1939
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("MemberID");
 
-                    b.ToTable("CrimeExperience");
+                    b.ToTable("CrimeExperence");
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
@@ -389,6 +392,31 @@ namespace DrunkSquad.Database.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("LastActions");
+                });
+
+            modelBuilder.Entity("TornApi.Net.Models.User.Marriage", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MarriageID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpouseID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpouseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Marriages");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.PlayerStates", b =>

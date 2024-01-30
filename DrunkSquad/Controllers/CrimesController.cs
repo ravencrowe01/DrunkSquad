@@ -1,11 +1,12 @@
-﻿using DrunkSquad.Framework.Logic.Faction;
+﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Models.Faction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {
-    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, IPositionMetaHandler positionMetaHandler) : Controller {
+    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, IPositionMetaHandler positionMetaHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler) : Controller {
         public IActionResult CrimesOverview () {
             var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
 
@@ -35,8 +36,16 @@ namespace DrunkSquad.Controllers {
 
         public IActionResult AllCrimesOverview () {
             var crimes = crimesHandler.GetAllCrimes ();
+            var ce = ceHandler.GetCrimeExperience ();
+            var members = memberHandler.GetAllMembers ();
 
-            return View ("CrimesOverview", crimes);
+            var overview = new FactionCrimesOverview {
+                CERanks = ce,
+                Crimes = crimes,
+                Members = members
+            };
+
+            return View ("CrimesOverview", overview);
         }
 
         public IActionResult OrganizedCrimesOverview () {

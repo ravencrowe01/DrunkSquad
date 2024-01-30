@@ -5,7 +5,7 @@ namespace DrunkSquad.Models.Faction;
 public class FactionCrimesOverview {
     public FactionCrimes Crimes { get; set; }
 
-    public IDictionary<int, int> CERanks { get; set; }
+    public IEnumerable<CrimeExperienceEntry> CERanks { get; set; }
 
     public IEnumerable<Member> Members { get; set; }
 

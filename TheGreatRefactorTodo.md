@@ -1,0 +1,8 @@
+- [] Move all interfaces into DrunkSquad.Framework
+- [] Rename base namespace to FactionSite
+	- Excluding DrunkSquad
+- [] Move as much logic as possible out of DrunkSquad
+- [] File level namespaces
+- [] Remove DrunkSquad from non-Startup projects
+- [] Accessors -> Registries
+- [] DrunkSquad.DataFetching -> FactionSite.Seeding

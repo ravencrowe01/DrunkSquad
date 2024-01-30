@@ -16,8 +16,6 @@ namespace DrunkSquad.Database {
 
         public DbSet<LastAction> LastActions { get; set; }
 
-        public DbSet<Marriage> Marriages { get; set; }
-
         public DbSet<PlayerStates> PlayerStates { get; set; }
 
         public DbSet<Status> Statuses { get; set; }
@@ -32,6 +30,8 @@ namespace DrunkSquad.Database {
 
         public DbSet<PositionMeta> PositionMetas { get; set; }
 
+        public DbSet<CrimeExperienceEntry> CrimeExperience { get; set; }
+
         public DrunkSquadDBContext () { }
 
         public DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : base (options) { }
@@ -40,8 +40,6 @@ namespace DrunkSquad.Database {
             builder.Entity<Job> ().HasKey (job => job.ID);
 
             builder.Entity<LastAction> ().HasKey (action => action.ID);
-
-            builder.Entity<Marriage> ().HasKey (marriage => marriage.ID);
 
             builder.Entity<PlayerStates> ().HasKey (states => states.ID);
 
@@ -66,6 +64,10 @@ namespace DrunkSquad.Database {
 
             builder.Entity<PositionMeta> ().HasKey (meta => meta.ID);
             builder.Entity<PositionMeta> ().HasOne (meta => meta.Position);
+
+            builder.Entity<CrimeExperienceEntry> ().HasKey (entry => entry.ID);
+
+            builder.Entity<CrimeExperienceEntry> ().HasOne (entry => entry.Member);
         }
 
         private static void BuildProfileModel (ModelBuilder builder) {
@@ -82,6 +84,7 @@ namespace DrunkSquad.Database {
             builder.Entity<Profile> ().Ignore (user => user.BasicIcons);
             builder.Entity<Profile> ().Ignore (user => user.Faction);
             builder.Entity<Profile> ().Ignore (user => user.Life);
+            builder.Entity<Profile> ().Ignore (user => user.Faction);
             builder.Entity<Profile> ().Ignore (user => user.Marriage);
         }
 

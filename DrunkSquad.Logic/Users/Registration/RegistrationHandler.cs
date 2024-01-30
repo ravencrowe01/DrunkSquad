@@ -3,6 +3,7 @@ using DrunkSquad.Framework.Logic.Users.Registration;
 using DrunkSquad.Models.Config;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using TornApi.Net.Models.Faction;
 using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
@@ -52,10 +53,26 @@ namespace DrunkSquad.Logic.Users.Registration {
             newUser.Profile = profile is not null ? profile : result.Content;
             newUser.LoginDetails = details;
             newUser.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
+            //newUser.WebsiteRole = DetermineUserRole (result.Content);
 
             userAccess.Add (newUser);
 
             return RegistrationStatus.Registered;
+        }
+
+        private UserRole DetermineUserRole (int id, Position position) {
+            //var test = profile.ProfileID == config.Faction.Leader || profile.ProfileID == config.Faction.CoLeader ?0
+            var role = UserRole.User;
+
+            if(id == config.Faction.Leader || id == config.Faction.CoLeader) {
+                return UserRole.Admin;
+            }
+
+            if(position.CanKickMembers == 1 || position.CanAdjustMemberBalance == 1 || position.CanManageWars == 1 || position.CanManageUpgrades == 1) {
+
+            }
+
+            return role;
         }
     }
 }

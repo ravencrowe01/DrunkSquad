@@ -1,7 +1,9 @@
 ﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Faction;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Logic.Faction.Info;
 using DrunkSquad.Logic.Users;
@@ -23,13 +25,17 @@ namespace DrunkSquad.DateFetching {
 
         private static IFactionInfoAccess _factionInfoAccess;
         private static IProfileAccess _profileAccess;
-        private static IUserAccess _userAccess;
+        private static IPositionAccess _positionAccess;
+        private static IMemberAccess _memberAccess;
         private static IFactionCrimeAccess _crimeAccess;
+        private static ICrimeExperienceEntryAccess _crimeExperienceAccess;
 
         private static IFactionInfoHandler _factionInfoHandler;
-        private static IUserHandler _userHandler;
         private static IProfileHandler _profileHandler;
+        private static IPositionHandler _positionHandler;
+        private static IMemberHandler _memberHandler;
         private static ICrimeHandler _crimeHandler;
+        private static ICrimeExperienceHandler _crimeExperienceHandler;
 
         private static Task _factionInfoFetchTask;
 
@@ -69,17 +75,21 @@ namespace DrunkSquad.DateFetching {
 
             _factionInfoAccess = new FactionInfoAccess (_context.Factioninfo, _context);
             _profileAccess = new ProfileAccess (_context.Profiles, _context);
-            _userAccess = new UserAccess (_context.Users, _context);
+            _positionAccess = new PositionAccess (_context.Positions, _context);
+            _memberAccess = new MemberAccess (_context.Members, _context);
             _crimeAccess = new FactionCrimeAccess (_context.Crimes, _context);
+            _crimeExperienceAccess = new CrimeExperienceEntryAccess (_context.CrimeExperience, _context);
 
             _factionInfoHandler = new FactionInfoHandler (_client, _config, _factionInfoAccess);
-            _userHandler = new UserHandler (_client, _config, _userAccess);
             _profileHandler = new ProfileHandler (_client, _config, _profileAccess);
+            _positionHandler = new PositionHandler(_client, _config, _positionAccess);
+            _memberHandler = new MemberHandler (_client, _config, _memberAccess);
             _crimeHandler = new CrimeHandler (_client, _config, _crimeAccess, _profileAccess);
+            _crimeExperienceHandler = new CrimeExperienceHandler (_client, _config, _crimeExperienceAccess, _memberAccess);
         }
 
         private static async Task StartFactionInfoFetcherAsync () {
-            var fetcher = new FactionInfoFetcher (_factionInfoHandler, _profileHandler, _cancelToken);
+            var fetcher = new FactionInfoFetcher (_factionInfoHandler, _profileHandler, _positionHandler, _crimeExperienceHandler, _cancelToken);
 
             await fetcher.StartAsync ().ConfigureAwait (false);
         }

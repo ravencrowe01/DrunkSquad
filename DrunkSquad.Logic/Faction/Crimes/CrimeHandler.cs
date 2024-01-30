@@ -26,7 +26,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
 
                 var fetchedCrimes = new List<FactionCrime> ();
 
-                var response = await apiClient.GetAsync<CrimesCollection> (requestConfig, TornApi.Net.Models.Key.AccessLevel.LimitedAccess);
+                var response = await apiClient.GetAsync<CrimesCollection> (requestConfig, config.Api.RequiredAccessLevel);
 
                 if (response is not null && response.IsValid ()) {
                     var crimes = response.Content;
@@ -155,14 +155,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
                 .Where (crime => crime.HasParticipant (id)) 
                 .ToList ();
             return new UserCrimes {
-                Crimes = found
-            };
-        }
-
-        public FactionCrimes GetAllCrimesForUser (int id, long from, long to) {
-            var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= from && crime.TimeStarted <= to);
-
-            return new FactionCrimes {
                 Crimes = found
             };
         }

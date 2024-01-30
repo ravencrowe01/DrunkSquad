@@ -88,6 +88,8 @@ void AddServices (WebApplicationBuilder builder) {
         services.AddScoped<IProfileHandler, ProfileHandler> ();
         services.AddScoped<IPositionHandler, PositionHandler> ();
         services.AddScoped<IPositionMetaHandler, PositionMetaHandler> ();
+        services.AddScoped<IMemberHandler, MemberHandler> ();
+        services.AddScoped<ICrimeExperienceHandler, CrimeExperienceHandler> ();
     }
 }
 
@@ -190,5 +192,12 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
         var set = context.Set<PositionMeta> ();
 
         return new PositionMetaAccess (set, context);
+    });
+
+    services.AddScoped<ICrimeExperienceEntryAccess, CrimeExperienceEntryAccess> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<CrimeExperienceEntry> ();
+
+        return new CrimeExperienceEntryAccess (set, context);
     });
 }

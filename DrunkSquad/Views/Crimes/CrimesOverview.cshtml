@@ -21,13 +21,12 @@
                     <th>Total Rep Gained</th>
                     <th>Success Rate</th>
                 </tr>
-
-                @foreach (var member in Model.Members) {
-                    var crimes = Model.GetCrimesForUser (member.MemberID);
+                @foreach(var rank in Model.CERanks) {
+                    var crimes = Model.GetCrimesForUser(rank.Member.MemberID);
 
                     <tr>
-                        <td>@Model.CERanks [member.MemberID]</td>
-                        <td>@member.Name</td>
+                        <td>@rank.Rank</td>
+                        <td>@rank.Member.Name</td>
                         <td>@crimes.TotalMoneyGained.ToString("C")</td>
                         <td>@crimes.TotalRepGained</td>
                         <td>@crimes.SuccessRate.ToString("P")</td>
