@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace DrunkSquad.Controllers {
     public class OverviewController (IFactionInfoHandler factionInfo) : Controller {
         public IActionResult Overview () {
-            var claims = HttpContext.User.Claims;
+            var info = factionInfo.GetFactionInfo ();
 
-            var key = claims.First (c => c.Type == "ApiKey");
-            return View ();
+            return View (info);
         }
     }
 }

@@ -1,2 +1,45 @@
-﻿@{
+﻿@model DrunkSquad.Models.Faction.FactionInfo
+
+@{
 }
+
+<style>
+    .user-table {
+        overflow: auto;
+        padding-left: calc(var(--bs-gutter-x) * .5);
+        padding-right: calc(var(--bs-gutter-x) * .5);
+    }
+</style>
+
+<div>
+    <div class="container">
+        <div class="row">
+            <h1><b>Faction Overview</b></h1>
+        </div>
+        <div class="row">
+            <div class="row">
+                <h3><b>Members</b></h3>
+            </div>
+
+            <div class="row">
+                <table class="user-table">
+                    <tr>
+                        <th><b>Username [Torn ID]</b></th>
+                        <th><b>Level</b></th>
+                        <th><b>Position</b></th>
+                        <th><b>Days in Faction</b></th>
+                    </tr>
+
+                    @foreach(var member in Model.Members) {
+                        <tr>
+                            <td><a href="https://www.torn.com/profiles.php?XID=@member.MemberID">@member.Name [@member.MemberID]</a></td>
+                            <td>@member.Level</td>
+                            <td>@member.Position</td>
+                            <td>@member.DaysInFaction</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
