@@ -52,7 +52,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
                         </li>
                         @if(User.Identity.IsAuthenticated) {
-                            @* if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole() == UserRole.Admin) { *@
+                            if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole() == UserRole.Admin) {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>
                                     <div class="dropdown-menu">
@@ -61,12 +61,12 @@
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="PersonalCrimesOverview">Personal Crime Stats</a>
                                     </div>
                                 </li>
-                            @*}
-                        else {
+                            }
+                            else {
                                 <li>
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="PersonalCrimesOverview">Personal Crime Stats</a>
                                 </li>
-                            } *@
+                            }
                         }
                     </ul>
                 </div>

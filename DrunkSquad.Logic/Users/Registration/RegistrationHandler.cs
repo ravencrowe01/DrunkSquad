@@ -8,7 +8,7 @@ using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users.Registration {
-    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IApiRequestClient apiClient, IWebsiteConfig config, IUserAccess userAccess, IProfileAccess profileAccess) : IRegistrationHandler {
+    public class RegistrationHandler (IPasswordHasher<LoginDetails> hasher, IApiRequestClient apiClient, IWebsiteConfig config, IUserAccess userAccess, IProfileAccess profileAccess, IMemberAccess memberAccess, IPositionAccess positionAccess) : IRegistrationHandler {
         private IPasswordHasher<LoginDetails> _hasher = hasher;
         private static readonly string [] selections = ["profile"];
 
@@ -49,11 +49,14 @@ namespace DrunkSquad.Logic.Users.Registration {
 
             var newUser = new User ();
             var profile = profileAccess.FindByProfileID (result.Content.ProfileID);
+            var member = memberAccess.FindMemberByProfileID (result.Content.ProfileID);
+            var position = positionAccess.FindPositionByName (member.Position);
 
             newUser.Profile = profile is not null ? profile : result.Content;
             newUser.LoginDetails = details;
             newUser.LoginDetails.Password = _hasher.HashPassword (details, details.Password);
-            //newUser.WebsiteRole = DetermineUserRole (result.Content);
+            newUser.WebsiteRole = DetermineUserRole (result.Content.ProfileID, position);
+            newUser.Position = position;
 
             userAccess.Add (newUser);
 
@@ -61,18 +64,15 @@ namespace DrunkSquad.Logic.Users.Registration {
         }
 
         private UserRole DetermineUserRole (int id, Position position) {
-            //var test = profile.ProfileID == config.Faction.Leader || profile.ProfileID == config.Faction.CoLeader ?0
-            var role = UserRole.User;
-
             if(id == config.Faction.Leader || id == config.Faction.CoLeader) {
-                return UserRole.Admin;
+                return UserRole.Owner;
             }
 
             if(position.CanKickMembers == 1 || position.CanAdjustMemberBalance == 1 || position.CanManageWars == 1 || position.CanManageUpgrades == 1) {
-
+                return UserRole.Admin;
             }
 
-            return role;
+            return UserRole.User;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TornApi.Net.Models.User;
+﻿using DrunkSquad.Models.Users;
+using TornApi.Net.Models.User;
 using TornApi.Net.REST;
 
 namespace DrunkSquad.Framework.Logic.Users;
@@ -9,4 +10,5 @@ public interface IProfileHandler {
     Task<IApiResponse<Profile>> FetchProfileAsync (int id);
     Profile GetProfile (int id);
     IEnumerable<Profile> GetAllProfiles ();
+    Task<UserCrimesStats> FetchProfileCrimeStatsAsync (int id);
 }

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TornApi.Net.Models" Version="0.8.2" />
+    <PackageReference Include="TornApi.Net.Models" Version="0.8.3" />
     <PackageReference Include="TornApi.Net.REST" Version="0.5.6.5" />
   </ItemGroup>
 

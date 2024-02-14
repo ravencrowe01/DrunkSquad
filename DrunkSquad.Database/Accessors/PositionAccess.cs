@@ -9,5 +9,7 @@ public class PositionAccess (DbSet<Position> set, DbContext context) : EntityAcc
             Add (position);
         }
     }
+
+    public Position FindPositionByName (string name) => _set.FirstOrDefault (position => position.Name == name);
 }
 

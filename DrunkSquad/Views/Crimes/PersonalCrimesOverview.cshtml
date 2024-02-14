@@ -8,18 +8,22 @@
     .currentOCDisplay {
         text-align: center;
     }
+
+    .textAlignCenter {
+        text-align: center;
+    }
 </style>
 
 <div>
     <div class="container">
         <div class="row">
-            <div class="col">Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
-            <div class="col">Total Rep Gained: @Model.TotalRepGained</div>
-            <div class="col">Success Rate: @Model.SuccessRate.ToString("P") </div>
-        </div>
-
-        <div class="row">
-            <div class="col currentOCDisplay">
+            <div class="col">
+                <h3>Faction Stats</h3>
+                <div><b>Total Money Gained</b>: @Model.TotalMoneyGained.ToString("C")</div>
+                <div><b>Total Rep Gained</b>: @Model.TotalRepGained</div>
+                <div><b>Success Rate</b>: @Model.SuccessRate.ToString("P") </div>
+            </div>
+            <div class="col textAlignCenter">
                 <h3>Current OC</h3>
                 <div><em>@Model.CurrentOC.Name</em></div>
                 <div><b>Status</b>: @Model.CurrentOC.CurrentStateString</div>
@@ -45,8 +49,34 @@
                     <div><b>Rep Gained</b>: @repString</div>
                 }
             </div>
-            <div class="col">
-                
+
+            <div class="col textAlignCenter">
+                <h3>Crime Stats</h3>
+                @{
+                    var stats = Model.CrimeStats;
+
+                    if(stats.CrimesVersion == 1) {
+                        <div>Auto Theft: @stats.Crimes.AutoTheft</div>
+                        <div>Computer Crimes: @stats.Crimes.ComputerCrimes</div>
+                        <div>Drug Deals: @stats.Crimes.DrugDeals</div>
+                        <div>Fraud Crimes: @stats.Crimes.FraudCrimes</div>
+                        <div>Murder: @stats.Crimes.Murder</div>
+                        <div>Theft: @stats.Crimes.Theft</div>
+                        <div>Other: @stats.Crimes.Other</div>
+                        <div><b>Total</b>: @stats.Crimes.Total</div>
+                    }
+                    else {
+                        <div>Counterfeiting: @stats.Crimes.Counterfeiting</div>
+                        <div>Cybercrime: @stats.Crimes.Cybercrime</div>
+                        <div>Extortion: @stats.Crimes.Extortion</div>
+                        <div>Fraud: @stats.Crimes.Fraud</div>
+                        <div>Illegal Production: @stats.Crimes.IllegalProduction</div>
+                        <div>Illicit Services: @stats.Crimes.IllicitServices</div>
+                        <div>Theft: @stats.Crimes.Theft</div>
+                        <div>Vandalism: @stats.Crimes.Vandalism</div>
+                        <div><b>Total</b>: @stats.Crimes.Total</div>
+                    }
+                }
             </div>
         </div>
     </div>

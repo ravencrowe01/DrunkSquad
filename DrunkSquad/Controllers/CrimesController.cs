@@ -1,14 +1,16 @@
-﻿using DrunkSquad.Database.Accessors;
-using DrunkSquad.Framework.Logic.Faction;
+﻿using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Models.Faction;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {
-    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, IPositionMetaHandler positionMetaHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler) : Controller {
-        public IActionResult CrimesOverview () {
+    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, IPositionMetaHandler positionMetaHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler, IProfileHandler profileHandler) : Controller {
+        public async Task<IActionResult> CrimesOverview () {
             var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
+
+            var principle = await HttpContext.AuthenticateAsync (authCookie);
 
             var tornID = int.Parse (HttpContext.User.Claims.First (claim => claim.Type == "TornID").Value);
 
@@ -16,20 +18,32 @@ namespace DrunkSquad.Controllers {
 
             var positionMeta = positionMetaHandler.FindByID (user.Position.ID);
 
-            if(positionMeta.IsAdmin) {
+            if (positionMeta.IsAdmin) {
                 return AllCrimesOverview ();
             }
             else {
-                return PersonalCrimesOverview ();
+                return await PersonalCrimesOverview ();
             }
         }
 
-        public IActionResult PersonalCrimesOverview () {
-            var tornID = int.Parse (HttpContext.User.Claims.First (claim => claim.Type == "TornID").Value);
+        public async Task<IActionResult> PersonalCrimesOverview () {
+            var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
+
+            var principle = await HttpContext.AuthenticateAsync ();
+
+            var idClaim = principle.Principal.Claims.First (claim => claim.Type == "TornID");
+
+            var tornID = int.Parse (idClaim.Value);
 
             var user = userHandler.FindUserbyID (tornID);
 
+            var crimeStats = await profileHandler.FetchProfileCrimeStatsAsync (tornID);
+
             var crimes = crimesHandler.GetAllCrimesForUser (tornID, DateTime.UtcNow.AddMonths (-3), DateTime.UtcNow);
+
+            crimes.CrimeStats = crimeStats;
+            crimes.Username = user.Profile.Name;
+            crimes.UserID = tornID;
 
             return View ("PersonalCrimesOverview", crimes);
         }

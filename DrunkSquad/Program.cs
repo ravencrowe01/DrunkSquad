@@ -39,6 +39,7 @@ builder.Services.AddDbContext<DrunkSquadDBContext> ((provider, options) => {
 
 var app = builder.Build ();
 
+app.UseAuthorization ();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment ()) {
@@ -51,8 +52,6 @@ app.UseHttpsRedirection ();
 app.UseStaticFiles ();
 
 app.UseRouting ();
-
-app.UseAuthorization ();
 
 app.MapControllerRoute (
     name: "default",
