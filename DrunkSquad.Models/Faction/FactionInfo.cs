@@ -25,7 +25,5 @@ namespace DrunkSquad.Models.Faction {
         public string Tag { get; set; }
 
         public string TagImage { get; set; }
-
-        public DateTime LastDataPull { get; set; }
     }
 }

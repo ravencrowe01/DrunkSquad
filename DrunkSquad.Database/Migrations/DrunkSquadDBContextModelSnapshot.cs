@@ -40,7 +40,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("MemberID");
 
-                    b.ToTable("CrimeExperience");
+                    b.ToTable("CrimeExperience", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Faction.FactionCrime", b =>
@@ -95,7 +95,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Crimes");
+                    b.ToTable("Crimes", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Faction.FactionInfo", b =>
@@ -121,9 +121,6 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("FactionID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastCrimePull")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("LeaderID")
                         .HasColumnType("int");
 
@@ -141,7 +138,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Factioninfo");
+                    b.ToTable("Factioninfo", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Faction.PositionMeta", b =>
@@ -162,7 +159,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("PositionID");
 
-                    b.ToTable("PositionMetas");
+                    b.ToTable("PositionMetas", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Users.LoginDetails", b =>
@@ -183,7 +180,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("LoginDetails");
+                    b.ToTable("LoginDetails", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
@@ -214,7 +211,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("ProfileID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
@@ -250,7 +247,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("FactionInfoID");
 
-                    b.ToTable("Members");
+                    b.ToTable("Members", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Position", b =>
@@ -335,7 +332,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Positions");
+                    b.ToTable("Positions", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.Job", b =>
@@ -366,7 +363,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.LastAction", b =>
@@ -391,7 +388,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("LastActions");
+                    b.ToTable("LastActions", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.PlayerStates", b =>
@@ -413,7 +410,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PlayerStates");
+                    b.ToTable("PlayerStates", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.Profile", b =>
@@ -494,7 +491,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("StatusID");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.User.Status", b =>
@@ -525,7 +522,7 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
                 });
 
             modelBuilder.Entity("DrunkSquad.Models.Faction.CrimeExperienceEntry", b =>

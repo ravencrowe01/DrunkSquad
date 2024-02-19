@@ -91,11 +91,14 @@ namespace DrunkSquad.Logic.Faction.Crimes {
         }
 
         public void AddFactionCrime (FactionCrime crime) {
-            if (crimeAccess.FindByCrimeID (crime.CrimeID) is null) {
+            var found = crimeAccess.FindByCrimeID (crime.CrimeID);
+            if (found is null) {
                 crimeAccess.Add (crime);
             }
             else {
-                crimeAccess.Update (crime);
+                crime.ID = found.ID;
+
+                crimeAccess.UpdateCrime (crime);
             }
         }
 
@@ -150,9 +153,9 @@ namespace DrunkSquad.Logic.Faction.Crimes {
 
         public UserCrimes GetAllCrimesForUser (int id, DateTime from, DateTime to) {
             var found = crimeAccess.Set.Where (crime => crime.TimeStarted >= GetUnixTimestamp (from.ToUniversalTime ())
-                                        && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ())) 
-                .AsEnumerable () 
-                .Where (crime => crime.HasParticipant (id)) 
+                                        && crime.TimeStarted <= GetUnixTimestamp (to.ToUniversalTime ()))
+                .AsEnumerable ()
+                .Where (crime => crime.HasParticipant (id))
                 .ToList ();
             return new UserCrimes {
                 Crimes = found

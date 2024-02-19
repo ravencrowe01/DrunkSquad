@@ -5,7 +5,7 @@ namespace DrunkSquad.DateFetching {
         public async Task StartAsync () {
             var initialDelay = CalculateInitialDelayMilliseconds ();
 
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
 
             if (cancellationToken.IsCancellationRequested) {
                 return;
@@ -32,7 +32,7 @@ namespace DrunkSquad.DateFetching {
             await Task.Delay (initialDelay, cancellationToken).ConfigureAwait (false);
 
             do {
-                now = DateTime.Now;
+                now = DateTime.UtcNow;
 
                 if (cancellationToken.IsCancellationRequested) {
                     return;
@@ -60,7 +60,7 @@ namespace DrunkSquad.DateFetching {
         }
 
         private static int CalculateInitialDelayMilliseconds () {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var nextMidnight = new DateTime (now.Year, now.Month, now.Day).AddDays (1);
 
             var delay = nextMidnight - now;

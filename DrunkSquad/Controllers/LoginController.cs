@@ -1,4 +1,5 @@
-﻿using DrunkSquad.Framework.Logic.Users.Login;
+﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
+using DrunkSquad.Framework.Logic.Users.Login;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace DrunkSquad.Controllers {
-    public class LoginController (ILoginHandler handler) : Controller {
+    public class LoginController (ILoginHandler handler, ICrimeHandler crimeHandler) : Controller {
+        private ICrimeHandler _crimeHandler = crimeHandler;
+
         [Route ("login")]
         public IActionResult Login () {
             return View (new LoginAttempt ());

@@ -23,23 +23,23 @@
             <th>Money Gained</th>
             <th>Respect Gained</th>
         </tr>
-        @foreach(var crime in Model.Crimes) {
+        @foreach (var crime in Model.Crimes.OrderByDescending(crime => crime.TimeStarted)) {
             <tr>
                 <td>@crime.Name</td>
                 <td>@crime.CurrentStateString</td>
                 <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</td>
                 <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</td>
                 <td>@string.Join(", ", crime.ParticipantNames)</td>
-                @{
-                    if(crime.Initiated) {
+                    @if (crime.Initiated)
+                    {
                         <td>@crime.MoneyGain</td>
                         <td>@crime.RespectGain</td>
                     }
-                    else {
+                    else
+                    {
                         <td>Waiting...</td>
                         <td>Waiting...</td>
                     }
-                }
             </tr>
         }
     </table>

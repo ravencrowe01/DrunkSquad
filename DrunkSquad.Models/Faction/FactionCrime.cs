@@ -71,5 +71,23 @@
         }
 
         public bool HasParticipant (int id) => Participants.Split (',').ToList ().Contains (id.ToString ());
+
+        public void Update (FactionCrime factionCrime) {
+            CrimeID = factionCrime.CrimeID;
+            CrimeType = factionCrime.CrimeType;
+            Name = factionCrime.Name;
+            Initiated = factionCrime.Initiated;
+            InitiatedBy = factionCrime.InitiatedBy;
+            MoneyGain = factionCrime.MoneyGain;
+            Participants = factionCrime.Participants;
+            PlannedBy = factionCrime.PlannedBy;
+            RespectGain = factionCrime.RespectGain;
+            Success = factionCrime.Success;
+            TimeComplete = factionCrime.TimeComplete;
+            TimeLeft = factionCrime.TimeLeft;
+            TimeReady = factionCrime.TimeReady;
+            TimeStarted = factionCrime.TimeStarted;
+            ParticipantNames = factionCrime.ParticipantNames;
+        }
     }
 }

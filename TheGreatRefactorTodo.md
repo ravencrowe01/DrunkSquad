@@ -6,3 +6,5 @@
 - [] Remove DrunkSquad from non-Startup projects
 - [] Accessors -> Registries
 - [] DrunkSquad.DataFetching -> FactionSite.Seeding
+- [] Normalize DateTime usage, perhaps with a class
+- [] Ensure all primary constructor args are being assigned to fields

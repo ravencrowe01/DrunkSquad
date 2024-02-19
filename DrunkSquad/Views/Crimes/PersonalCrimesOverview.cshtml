@@ -4,16 +4,6 @@
     ViewData ["Title"] = $"{Model.Username}'s Crime Stats";
 }
 
-<style>
-    .currentOCDisplay {
-        text-align: center;
-    }
-
-    .textAlignCenter {
-        text-align: center;
-    }
-</style>
-
 <div>
     <div class="container">
         <div class="row">
@@ -23,7 +13,7 @@
                 <div><b>Total Rep Gained</b>: @Model.TotalRepGained</div>
                 <div><b>Success Rate</b>: @Model.SuccessRate.ToString("P") </div>
             </div>
-            <div class="col textAlignCenter">
+            <div class="col align-text-center">
                 <h3>Current OC</h3>
                 <div><em>@Model.CurrentOC.Name</em></div>
                 <div><b>Status</b>: @Model.CurrentOC.CurrentStateString</div>
@@ -48,9 +38,19 @@
                     <div><b>Money Gained</b>: @moneyString</div>
                     <div><b>Rep Gained</b>: @repString</div>
                 }
+                @{
+                    var timeStarted = Model.CurrentOC.TimeStarted;
+                    var timeReady = Model.CurrentOC.TimeReady;
+
+                    var startDateTime = DateTimeOffset.FromUnixTimeSeconds(timeStarted).UtcDateTime;
+                    var readyDateTime = DateTimeOffset.FromUnixTimeSeconds(timeReady).UtcDateTime;
+
+                    <div><b>Started at:</b> @startDateTime.ToString()</div>
+                    <div><b>Ready at:</b> @readyDateTime.ToString()</div>
+                }
             </div>
 
-            <div class="col textAlignCenter">
+            <div class="col align-text-center">
                 <h3>Crime Stats</h3>
                 @{
                     var stats = Model.CrimeStats;

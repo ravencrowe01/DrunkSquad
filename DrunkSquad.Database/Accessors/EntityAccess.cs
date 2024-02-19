@@ -9,7 +9,11 @@ namespace DrunkSquad.Database.Accessors {
 
         public T FindByID (int id) => _set.Find (id);
 
-        public void Update (T entity) => _set.Update (entity);
+        public void Update (T entity) {
+            _set.Update (entity);
+
+            _context.SaveChanges ();
+        }
 
         public void Add (T entity) {
             if (!_set.Contains (entity)) {

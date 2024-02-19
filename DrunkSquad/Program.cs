@@ -69,7 +69,7 @@ void AddServices (WebApplicationBuilder builder) {
 
     services.AddScoped<IPasswordHasher<LoginDetails>, PasswordHasher<LoginDetails>> ();
 
-    AddModelHandlers (services);
+    AddHandlers (services);
 
     services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie (options => {
@@ -78,7 +78,7 @@ void AddServices (WebApplicationBuilder builder) {
                 options.AccessDeniedPath = "/Login";
             });
 
-    void AddModelHandlers (IServiceCollection services) {
+    void AddHandlers (IServiceCollection services) {
         services.AddScoped<ILoginHandler, LoginHandler> ();
         services.AddScoped<IRegistrationHandler, RegistrationHandler> ();
         services.AddScoped<ICrimeHandler, CrimeHandler> ();

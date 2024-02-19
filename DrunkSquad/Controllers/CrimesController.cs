@@ -1,32 +1,16 @@
 ﻿using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Models.Faction;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrunkSquad.Controllers {
-    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, IPositionMetaHandler positionMetaHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler, IProfileHandler profileHandler) : Controller {
-        public async Task<IActionResult> CrimesOverview () {
-            var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
-
-            var principle = await HttpContext.AuthenticateAsync (authCookie);
-
-            var tornID = int.Parse (HttpContext.User.Claims.First (claim => claim.Type == "TornID").Value);
-
-            var user = userHandler.FindUserbyID (tornID);
-
-            var positionMeta = positionMetaHandler.FindByID (user.Position.ID);
-
-            if (positionMeta.IsAdmin) {
-                return AllCrimesOverview ();
-            }
-            else {
-                return await PersonalCrimesOverview ();
-            }
-        }
-
+    public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler, IProfileHandler profileHandler) : Controller {
         public async Task<IActionResult> PersonalCrimesOverview () {
+            await FetchRecentCrimesAsync ();
+
             var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
 
             var principle = await HttpContext.AuthenticateAsync ();
@@ -48,28 +32,47 @@ namespace DrunkSquad.Controllers {
             return View ("PersonalCrimesOverview", crimes);
         }
 
-        public IActionResult AllCrimesOverview () {
-            var crimes = crimesHandler.GetAllCrimes ();
-            var ce = ceHandler.GetCrimeExperience ();
-            var members = memberHandler.GetAllMembers ();
+        public async Task<IActionResult> MembersOverview () {
+            await FetchRecentCrimesAsync ();
 
-            var overview = new FactionCrimesOverview {
-                CERanks = ce,
-                Crimes = crimes,
-                Members = members
-            };
-
-            return View ("CrimesOverview", overview);
+            return View ("CrimesOverview", await BuildFactionCrimesOverviewAsync ());
         }
 
-        public IActionResult OrganizedCrimesOverview () {
+        private async Task<FactionCrimesOverview> BuildFactionCrimesOverviewAsync () {
+            return await Task.Run (() => {
+                var crimes = crimesHandler.GetAllCrimes ();
+                var ce = ceHandler.GetCrimeExperience ();
+                var members = memberHandler.GetAllMembers ();
+
+                var overview = new FactionCrimesOverview {
+                    CERanks = ce,
+                    Crimes = crimes,
+                    Members = members
+                };
+
+                return overview;
+            });
+        }
+
+        public async Task<IActionResult> OrganizedCrimesOverview () {
+            await FetchRecentCrimesAsync ();
+
             var crimes = crimesHandler.GetAllCrimes ();
 
             return View (crimes);
         }
 
-        public IActionResult UserCrimeOverview () {
-            return View ();
+        private async Task FetchRecentCrimesAsync () {
+            var factionCrimes = crimesHandler.GetAllCrimes ();
+
+            factionCrimes.Crimes = factionCrimes.Crimes.OrderByDescending (crime => crime.TimeStarted);
+
+            var from = DateTime.UtcNow.AddDays (-9);
+            //var from = new DateTime (2024, 1, 1);
+
+            var crimes = await crimesHandler.FetchCrimesInRangeAsync (from, DateTime.UtcNow);
+
+            crimesHandler.AddFactionCrimes (crimes);
         }
     }
 }
