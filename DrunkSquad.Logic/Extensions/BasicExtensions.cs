@@ -1,4 +1,5 @@
-﻿using DrunkSquad.Models.Faction;
+﻿using DrunkSquad.Database.Migrations;
+using DrunkSquad.Models.Faction;
 using TornApi.Net.Models.Faction;
 
 namespace DrunkSquad.Logic.Extensions;

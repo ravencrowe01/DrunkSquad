@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DrunkSquad.Database.Accessors {
     public class EntityAccess<T> (DbSet<T> set, DbContext context) : IEntityAccess<T> where T : class {

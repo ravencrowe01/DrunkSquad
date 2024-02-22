@@ -63,12 +63,7 @@ namespace DrunkSquad.Controllers {
         }
 
         private async Task FetchRecentCrimesAsync () {
-            var factionCrimes = crimesHandler.GetAllCrimes ();
-
-            factionCrimes.Crimes = factionCrimes.Crimes.OrderByDescending (crime => crime.TimeStarted);
-
             var from = DateTime.UtcNow.AddDays (-9);
-            //var from = new DateTime (2024, 1, 1);
 
             var crimes = await crimesHandler.FetchCrimesInRangeAsync (from, DateTime.UtcNow);
 

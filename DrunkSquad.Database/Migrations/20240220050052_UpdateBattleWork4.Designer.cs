@@ -4,6 +4,7 @@ using DrunkSquad.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    partial class DrunkSquadDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240220050052_UpdateBattleWork4")]
+    partial class UpdateBattleWork4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,9 +194,6 @@ namespace DrunkSquad.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("BattleStatsID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("LoginDetailsID")
                         .HasColumnType("int");
 
@@ -203,15 +203,13 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int?>("ProfileID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StatsID")
+                        .HasColumnType("int");
+
                     b.Property<int>("WebsiteRole")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkingStatsID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("BattleStatsID");
 
                     b.HasIndex("LoginDetailsID");
 
@@ -219,9 +217,48 @@ namespace DrunkSquad.Database.Migrations
 
                     b.HasIndex("ProfileID");
 
-                    b.HasIndex("WorkingStatsID");
+                    b.HasIndex("StatsID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Users.UserStats", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("Defense")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Endurance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ManualLabor")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProfileID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Speed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProfileID");
+
+                    b.ToTable("UserStats");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>
@@ -359,11 +396,17 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Defense")
                         .HasColumnType("int");
 
+                    b.Property<string>("DefenseInfo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DefenseModifier")
                         .HasColumnType("int");
 
                     b.Property<int>("Dexterity")
                         .HasColumnType("int");
+
+                    b.Property<string>("DexterityInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DexterityModifier")
                         .HasColumnType("int");
@@ -371,11 +414,17 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Speed")
                         .HasColumnType("int");
 
+                    b.Property<string>("SpeedInfo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SpeedModifier")
                         .HasColumnType("int");
 
                     b.Property<int>("Strength")
                         .HasColumnType("int");
+
+                    b.Property<string>("StrengthInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StrengthModifier")
                         .HasColumnType("int");
@@ -623,10 +672,6 @@ namespace DrunkSquad.Database.Migrations
 
             modelBuilder.Entity("DrunkSquad.Models.Users.User", b =>
                 {
-                    b.HasOne("TornApi.Net.Models.User.BattleStats", "BattleStats")
-                        .WithMany()
-                        .HasForeignKey("BattleStatsID");
-
                     b.HasOne("DrunkSquad.Models.Users.LoginDetails", "LoginDetails")
                         .WithMany()
                         .HasForeignKey("LoginDetailsID");
@@ -639,11 +684,9 @@ namespace DrunkSquad.Database.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileID");
 
-                    b.HasOne("TornApi.Net.Models.User.WorkingStats", "WorkingStats")
+                    b.HasOne("DrunkSquad.Models.Users.UserStats", "Stats")
                         .WithMany()
-                        .HasForeignKey("WorkingStatsID");
-
-                    b.Navigation("BattleStats");
+                        .HasForeignKey("StatsID");
 
                     b.Navigation("LoginDetails");
 
@@ -651,7 +694,16 @@ namespace DrunkSquad.Database.Migrations
 
                     b.Navigation("Profile");
 
-                    b.Navigation("WorkingStats");
+                    b.Navigation("Stats");
+                });
+
+            modelBuilder.Entity("DrunkSquad.Models.Users.UserStats", b =>
+                {
+                    b.HasOne("TornApi.Net.Models.User.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileID");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("TornApi.Net.Models.Faction.Member", b =>

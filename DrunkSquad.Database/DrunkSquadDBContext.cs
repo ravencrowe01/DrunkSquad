@@ -32,6 +32,10 @@ namespace DrunkSquad.Database {
 
         public DbSet<CrimeExperienceEntry> CrimeExperience { get; set; }
 
+        public DbSet<WorkingStats> WorkingStats { get; set; }
+
+        public DbSet<BattleStats> BattleStats { get; set; }
+
         public DrunkSquadDBContext () { }
 
         public DrunkSquadDBContext (DbContextOptions<DrunkSquadDBContext> options) : base (options) { }
@@ -68,6 +72,15 @@ namespace DrunkSquad.Database {
             builder.Entity<CrimeExperienceEntry> ().HasKey (entry => entry.ID);
 
             builder.Entity<CrimeExperienceEntry> ().HasOne (entry => entry.Member);
+
+            builder.Entity<WorkingStats> ().HasKey (stats => stats.ID);
+
+            builder.Entity<BattleStats> ().HasKey (stats => stats.ID);
+
+            builder.Entity<BattleStats> ().Ignore (stats => stats.StrengthInfo);
+            builder.Entity<BattleStats> ().Ignore (stats => stats.DefenseInfo);
+            builder.Entity<BattleStats> ().Ignore (stats => stats.DexterityInfo);
+            builder.Entity<BattleStats> ().Ignore (stats => stats.SpeedInfo);
         }
 
         private static void BuildProfileModel (ModelBuilder builder) {
@@ -93,6 +106,8 @@ namespace DrunkSquad.Database {
 
             builder.Entity<User> ().HasOne (user => user.Profile);
             builder.Entity<User> ().HasOne (user => user.LoginDetails);
+            builder.Entity<User> ().HasOne (user => user.BattleStats);
+            builder.Entity<User> ().HasOne (user => user.WorkingStats);
 
             builder.Entity<User> ().Ignore (user => user.Crimes);
         }

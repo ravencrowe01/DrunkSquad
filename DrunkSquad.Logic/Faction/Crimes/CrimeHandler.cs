@@ -35,6 +35,9 @@ namespace DrunkSquad.Logic.Faction.Crimes {
                         fetchedCrimes = ProcessCrimes (crimes);
                     }
                 }
+                else {
+                    continue;
+                }
 
                 if (fetchedCrimes.Count > 0) {
                     fetchedCrimes = fetchedCrimes.OrderByDescending (crime => crime.TimeStarted).ToList ();

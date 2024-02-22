@@ -1,15 +1,20 @@
-﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
+﻿using DrunkSquad.Database.Accessors;
+using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Framework.Logic.Users.Login;
+using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TornApi.Net.Models.User;
 
 namespace DrunkSquad.Controllers {
-    public class LoginController (ILoginHandler handler, ICrimeHandler crimeHandler) : Controller {
-        private ICrimeHandler _crimeHandler = crimeHandler;
+    public class LoginController (ILoginHandler handler, IUserHandler userHandler, IBattleStatsRegistry battleStatsRegistry, IWorkingStatsRegistry workingStatsRegistry) : Controller {
+        private IUserHandler _userHandler = userHandler;
+        private IBattleStatsRegistry _battleStatsRegistry = battleStatsRegistry;
+        private IWorkingStatsRegistry _workingStatsRegistry = workingStatsRegistry;
 
         [Route ("login")]
         public IActionResult Login () {
@@ -43,19 +48,49 @@ namespace DrunkSquad.Controllers {
 
                     await HttpContext.SignInAsync (CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal (claimsIdentity), authProperties);
 
+                    var authResult = await HttpContext.AuthenticateAsync ();
+
+                    var idClaim = claims.FirstOrDefault (claims => claims.Type == "TornID");
+
+                    if (idClaim is not null) {
+                        var id = int.Parse (idClaim.Value);
+                        var user = _userHandler.FindUserbyID (id);
+
+                        var battleStats = await _userHandler.FetchBattleStats (details.ApiKey);
+
+                        if (battleStats.IsValid ()) {
+                            user.BattleStats ??= new BattleStats ();
+
+                            user.BattleStats.Update (battleStats.Content);
+                            _battleStatsRegistry.Update (user.BattleStats);
+                        }
+
+                        var workingStats = await _userHandler.FetchWorkingStats (details.ApiKey);
+
+                        if (battleStats.IsValid ()) {
+                            user.WorkingStats ??= new WorkingStats ();
+
+                            user.WorkingStats.Update (workingStats.Content);
+                            _workingStatsRegistry.Update (user.WorkingStats);
+                        }
+                    }
+
                     return RedirectToAction ("Index", "Home");
                 case PasswordVerificationResult.Failed:
-                    break;
+                    return View ("Login", login);
                 default:
-                    break;
+                    return RedirectToAction ("Index", "Home");
             }
-
-            return View ("Login", login);
         }
 
         public async Task<IActionResult> Logout () {
             await HttpContext.SignOutAsync (CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction ("Index", "Home");
+        }
+
+        private async Task FetchUserStats (string key) {
+            var battleStats = await _userHandler.FetchBattleStats (key);
+            var workingStats = await _userHandler.FetchWorkingStats (key);
         }
     }
 }

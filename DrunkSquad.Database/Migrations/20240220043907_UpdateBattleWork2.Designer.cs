@@ -4,6 +4,7 @@ using DrunkSquad.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DrunkSquad.Database.Migrations
 {
     [DbContext(typeof(DrunkSquadDBContext))]
-    partial class DrunkSquadDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240220043907_UpdateBattleWork2")]
+    partial class UpdateBattleWork2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,11 +362,17 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Defense")
                         .HasColumnType("int");
 
+                    b.Property<string>("DefenseInfo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DefenseModifier")
                         .HasColumnType("int");
 
                     b.Property<int>("Dexterity")
                         .HasColumnType("int");
+
+                    b.Property<string>("DexterityInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DexterityModifier")
                         .HasColumnType("int");
@@ -371,11 +380,17 @@ namespace DrunkSquad.Database.Migrations
                     b.Property<int>("Speed")
                         .HasColumnType("int");
 
+                    b.Property<string>("SpeedInfo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SpeedModifier")
                         .HasColumnType("int");
 
                     b.Property<int>("Strength")
                         .HasColumnType("int");
+
+                    b.Property<string>("StrengthInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StrengthModifier")
                         .HasColumnType("int");

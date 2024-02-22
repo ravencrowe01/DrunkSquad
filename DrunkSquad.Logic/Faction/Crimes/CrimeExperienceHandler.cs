@@ -20,7 +20,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
             var entries = new List<CrimeExperienceEntry> ();
 
             if (response is not null && response.IsValid ()) {
-
                 var members = response.Content.Members.ToList ();
 
                 for (int i = 0; i < members.Count (); i++) {

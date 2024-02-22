@@ -199,4 +199,18 @@ void AddEntityAccessors (WebApplicationBuilder builder) {
 
         return new CrimeExperienceEntryAccess (set, context);
     });
+
+    services.AddScoped<IWorkingStatsRegistry, WorkingStatsRegistry> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<WorkingStats> ();
+
+        return new WorkingStatsRegistry (set, context);
+    });
+
+    services.AddScoped<IBattleStatsRegistry, BattleStatsRegistry> (services => {
+        var context = services.GetService<DrunkSquadDBContext> ();
+        var set = context.Set<BattleStats> ();
+
+        return new BattleStatsRegistry (set, context);
+    });
 }
