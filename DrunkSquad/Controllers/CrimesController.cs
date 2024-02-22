@@ -32,7 +32,7 @@ namespace DrunkSquad.Controllers {
             return View ("PersonalCrimesOverview", crimes);
         }
 
-        public async Task<IActionResult> MembersOverview () {
+        public async Task<IActionResult> MembersCrimeOverview () {
             await FetchRecentCrimesAsync ();
 
             return View (await BuildFactionCrimesOverviewAsync ());

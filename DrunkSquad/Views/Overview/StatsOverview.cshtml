@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DrunkSquad.Models.Faction.FactionStatsOverview
+
 @{
+    ViewData["Title"] = "Stats Oveview";
 }
+
+<div>
+    <div class="container">
+        <div class="row">
+            <h1><b>Stats Overview</b></h1>
+        </div>
+
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>Username</th>
+                    <th>Strength</th>
+                    <th>Defense</th>
+                    <th>Speed</th>
+                    <th>Dexterity</th>
+                    <th>Manual Labor</th>
+                    <th>Intelligence</th>
+                    <th>Endurance</th>
+                </tr>
+                @{
+                    foreach(var stat in Model.Stats) {
+                        var battle = stat.BattleStats;
+                        var working = stat.WorkingStats;
+
+                        <tr>
+                            <td>@stat.Member</td>
+                            <td>@(battle is not null ? battle.Strength : "Unavailable")</td>
+                            <td>@(battle is not null ? battle.Defense : "Unavailable")</td>
+                            <td>@(battle is not null ? battle.Speed : "Unavailable")</td>
+                            <td>@(battle is not null ? battle.Dexterity : "Unavailable")</td>
+                            <td>@(working is not null ? working.ManualLabor : "Unavailable")</td>
+                            <td>@(working is not null ? working.Intelligence : "Unavailable")</td>
+                            <td>@(working is not null ? working.Endurance : "Unavailable")</td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>

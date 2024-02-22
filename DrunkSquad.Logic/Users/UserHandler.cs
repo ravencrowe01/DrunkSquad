@@ -9,22 +9,28 @@ using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Users;
 #pragma warning disable CS9113 // Parameter is unread.
-public class UserHandler (IApiRequestClient client, IWebsiteConfig config, IUserAccess userAccess) : IUserHandler {
+public class UserHandler (IApiRequestClient client, IWebsiteConfig config, IUserAccess userAccess, IBattleStatsRegistry battleStats, IWorkingStatsRegistry workingStats) : IUserHandler {
     private IApiRequestClient _client = client;
+
+    private IBattleStatsRegistry _battleStats = battleStats;
+
+    private IWorkingStatsRegistry _workingStats = workingStats;
 
     public void AddUser (User user) => userAccess.Add (user);
 
     public void AddUsers (IEnumerable<User> users) => userAccess.AddRange (users);
 
-    public IEnumerable<User> GetAllUsers () => userAccess.Set.Include (user => user.Profile);
+    public IEnumerable<User> GetAllUsers () => userAccess.Set.Include (user => user.Profile)
+        .Include (user => user.BattleStats)
+        .Include (user => user.WorkingStats);
 
     public User FindUserbyID (int id) => userAccess.FindByProfileID (id);
 
-    public void UpdateUser(User user) {
+    public void UpdateUser (User user) {
         userAccess.Update (user);
     }
 
-    public async Task<IApiResponse<BattleStats>> FetchBattleStats(string key) {
+    public async Task<IApiResponse<BattleStats>> FetchBattleStats (string key) {
         var requestConfig = new RequestConfiguration {
             Key = key,
             Section = "user",
