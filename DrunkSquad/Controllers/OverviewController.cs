@@ -1,20 +1,56 @@
 ﻿using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Models.Faction;
+using DrunkSquad.Models.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DrunkSquad.Controllers {
     public class OverviewController (IFactionInfoHandler factionInfo, IUserHandler userHandler, IMemberHandler memberHandler) : Controller {
         private IUserHandler _userHandler = userHandler;
         private IMemberHandler _memberHandler = memberHandler;
 
-        public IActionResult Overview () {
+        public async Task<IActionResult> Overview () {
+            var authResult = await HttpContext.AuthenticateAsync ();
+
+            if (!authResult.Succeeded) {
+                return RedirectToAction ("Login", "Login");
+            }
+
+            var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
+
+            var principle = await HttpContext.AuthenticateAsync ();
+
+            var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
+
+            if (roleClaim.Value.ToUserRole () != UserRole.Admin) {
+                return RedirectToAction ("Login", "Login");
+            }
+
             var info = factionInfo.GetFactionInfo ();
 
             return View (info);
         }
 
-        public IActionResult StatsOverview () {
+        public async Task<IActionResult> StatsOverview () {
+            var authResult = await HttpContext.AuthenticateAsync ();
+
+            if (!authResult.Succeeded) {
+                return RedirectToAction ("Login", "Login");
+            }
+
+            var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
+
+            var principle = await HttpContext.AuthenticateAsync ();
+
+            var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
+
+            if (roleClaim.Value.ToUserRole () != UserRole.Admin) {
+                return RedirectToAction ("Login", "Login");
+            }
+
             var overview = new FactionStatsOverview ();
 
             var members = _memberHandler.GetAllMembers ();

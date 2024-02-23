@@ -1,14 +1,24 @@
 ﻿using DrunkSquad.Framework.Logic.Faction;
 using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Users;
+using DrunkSquad.Logic.Extensions;
 using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Models.Faction;
+using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 
 namespace DrunkSquad.Controllers {
     public class CrimesController (ICrimeHandler crimesHandler, IUserHandler userHandler, ICrimeExperienceHandler ceHandler, IMemberHandler memberHandler, IProfileHandler profileHandler) : Controller {
         public async Task<IActionResult> PersonalCrimesOverview () {
+            var authResult = await HttpContext.AuthenticateAsync ();
+
+            if (!authResult.Succeeded) {
+                return RedirectToAction ("Login", "Login");
+            }
+
             await FetchRecentCrimesAsync ();
 
             var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
@@ -33,6 +43,22 @@ namespace DrunkSquad.Controllers {
         }
 
         public async Task<IActionResult> MembersCrimeOverview () {
+            var authResult = await HttpContext.AuthenticateAsync ();
+
+            if (!authResult.Succeeded) {
+                return RedirectToAction ("Login", "Login");
+            }
+
+            var authCookie = HttpContext.Request.Cookies [".AspNetCore.Cookies"];
+
+            var principle = await HttpContext.AuthenticateAsync ();
+
+            var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
+
+            if(roleClaim.Value.ToUserRole () != UserRole.Admin) {
+                return RedirectToAction ("Login", "Login");
+            }
+
             await FetchRecentCrimesAsync ();
 
             return View (await BuildFactionCrimesOverviewAsync ());
@@ -55,6 +81,12 @@ namespace DrunkSquad.Controllers {
         }
 
         public async Task<IActionResult> OrganizedCrimesOverview () {
+            var authResult = await HttpContext.AuthenticateAsync ();
+
+            if (!authResult.Succeeded) {
+                return RedirectToAction ("Login", "Login");
+            }
+
             await FetchRecentCrimesAsync ();
 
             var crimes = crimesHandler.GetAllCrimes ();
