@@ -56,7 +56,7 @@ namespace DrunkSquad.Controllers {
             var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
 
             if(roleClaim.Value.ToUserRole () != UserRole.Admin) {
-                return RedirectToAction ("Login", "Login");
+                return RedirectToAction ("Index");
             }
 
             await FetchRecentCrimesAsync ();
