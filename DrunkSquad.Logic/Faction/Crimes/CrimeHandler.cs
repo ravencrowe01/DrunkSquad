@@ -8,6 +8,10 @@ using TornApi.Net.REST;
 
 namespace DrunkSquad.Logic.Faction.Crimes {
     public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IProfileAccess profileAccess) : ICrimeHandler {
+        private IApiRequestClient _apiClient = apiClient;
+
+        private int _requestDelay = 600;
+
         public async Task<IEnumerable<FactionCrime>> FetchCrimesInRangeAsync (DateTime from, DateTime to) {
             var fromCurrent = from;
             var toCurrent = fromCurrent.AddDays (7) > to ? fromCurrent.AddDays (7) : to;
@@ -26,7 +30,7 @@ namespace DrunkSquad.Logic.Faction.Crimes {
 
                 var fetchedCrimes = new List<FactionCrime> ();
 
-                var response = await apiClient.GetAsync<CrimesCollection> (requestConfig, config.Api.RequiredAccessLevel);
+                var response = await _apiClient.GetAsync<CrimesCollection> (requestConfig, config.Api.RequiredAccessLevel);
 
                 if (response is not null && response.IsValid ()) {
                     var crimes = response.Content;
@@ -34,9 +38,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
                     if (crimes is not null) {
                         fetchedCrimes = ProcessCrimes (crimes);
                     }
-                }
-                else {
-                    continue;
                 }
 
                 if (fetchedCrimes.Count > 0) {
@@ -47,7 +48,9 @@ namespace DrunkSquad.Logic.Faction.Crimes {
                     fromCurrent = lastDate.UtcDateTime.AddSeconds (10);
                 }
                 else {
-                    fromCurrent = fromCurrent.AddDays (1) < to ? fromCurrent.AddDays (1) : to;
+                    var fromTemp = fromCurrent.AddDays (1);
+
+                    fromCurrent = fromTemp < to ? fromTemp : to;
                 }
 
                 toCurrent = fromCurrent.AddDays (1) < to ? fromCurrent.AddDays (1) : to;
