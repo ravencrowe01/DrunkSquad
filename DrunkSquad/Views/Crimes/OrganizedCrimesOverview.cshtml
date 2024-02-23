@@ -10,6 +10,12 @@
     <div>
         <h1><b>Organized Crimes Overview</b></h1>
     </div>
+
+    <div class="row">
+        <div class="col">Total Money Gained: @Model.Crimes.TotalMoneyGained.ToString ("C")</div>
+        <div class="col">Total Rep Gained: @Model.Crimes.TotalRepGained.ToString ("N0")</div>
+        <div class="col">Success Rate: @Model.Crimes.SuccessRate.ToString ("P") </div>
+    </div>
     
     <table class="table">
         <tr>
