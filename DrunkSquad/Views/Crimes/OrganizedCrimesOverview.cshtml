@@ -8,9 +8,7 @@
 
 <div>
     <div>
-        <div>Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
-        <div>Total Rep Gained: @Model.TotalRepGained</div>
-        <div>Success Rate: @Model.SuccessRate.ToString("P") </div>
+        <h1><b>Organized Crimes Overview</b></h1>
     </div>
     
     <table class="table">
@@ -32,8 +30,8 @@
                 <td>@string.Join(", ", crime.ParticipantNames)</td>
                     @if (crime.Initiated)
                     {
-                        <td>@crime.MoneyGain</td>
-                        <td>@crime.RespectGain</td>
+                        <td>@crime.MoneyGain.ToString("C")</td>
+                        <td>@crime.RespectGain.ToString("N0")</td>
                     }
                     else
                     {

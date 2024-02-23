@@ -34,9 +34,9 @@
                     @foreach(var member in Model.Members) {
                         <tr>
                             <td><a href="https://www.torn.com/profiles.php?XID=@member.MemberID">@member.Name [@member.MemberID]</a></td>
-                            <td>@member.Level</td>
+                            <td>@member.Level.ToString("N0")</td>
                             <td>@member.Position</td>
-                            <td>@member.DaysInFaction</td>
+                            <td>@member.DaysInFaction.ToString("N0")</td>
                         </tr>
                     }
                 </table>
