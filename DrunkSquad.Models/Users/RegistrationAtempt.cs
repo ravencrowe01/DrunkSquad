@@ -11,5 +11,7 @@ namespace DrunkSquad.Models.Users {
         [Required (ErrorMessage = "Confirmation required")]
         [Compare ("Password", ErrorMessage = "Doesn't match password")]
         public string ConfirmPassword { get; set; }
+
+        public RegistrationStatus PreviousAttempt { get; set; } = RegistrationStatus.Registered;
     }
 }

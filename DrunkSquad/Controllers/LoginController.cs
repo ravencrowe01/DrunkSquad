@@ -77,7 +77,10 @@ namespace DrunkSquad.Controllers {
 
                     return RedirectToAction ("Index", "Home");
                 case PasswordVerificationResult.Failed:
-                    return View ("Login", login);
+                    return View ("Login", new LoginAttempt {
+                        ApiKey = login.ApiKey,
+                        PreviousAttempt = PasswordVerificationResult.Failed
+                    });
                 default:
                     return RedirectToAction ("Index", "Home");
             }

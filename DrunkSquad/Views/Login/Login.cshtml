@@ -1,4 +1,5 @@
-﻿@model DrunkSquad.Models.Users.LoginAttempt
+﻿@using Microsoft.AspNetCore.Identity
+@model DrunkSquad.Models.Users.LoginAttempt
 
 @{
     ViewData ["Title"] = "Login";
@@ -31,6 +32,10 @@
 <div id="login">
     @using (Html.BeginForm("Attempt", "Login", FormMethod.Post)) {
         <h1>Login</h1>
+
+        if(Model.PreviousAttempt != PasswordVerificationResult.Success) {
+            <div class="error"><h4>Invalid API key or password</h4></div>
+        }
 
         <div class="form-group">
             <label asp-for="ApiKey">API Key</label>

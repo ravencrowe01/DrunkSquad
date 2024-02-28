@@ -10,8 +10,6 @@ namespace DrunkSquad.Logic.Faction.Crimes {
     public class CrimeHandler (IApiRequestClient apiClient, IWebsiteConfig config, IFactionCrimeAccess crimeAccess, IProfileAccess profileAccess) : ICrimeHandler {
         private IApiRequestClient _apiClient = apiClient;
 
-        private int _requestDelay = 600;
-
         public async Task<IEnumerable<FactionCrime>> FetchCrimesInRangeAsync (DateTime from, DateTime to) {
             var fromCurrent = from;
             var toCurrent = fromCurrent.AddDays (7) > to ? fromCurrent.AddDays (7) : to;

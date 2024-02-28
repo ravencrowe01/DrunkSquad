@@ -1,4 +1,5 @@
-﻿@model DrunkSquad.Models.Users.RegistrationAttempt
+﻿@using DrunkSquad.Models.Users
+@model DrunkSquad.Models.Users.RegistrationAttempt
 
 @{
     ViewData ["Title"] = "Register";
@@ -32,6 +33,29 @@
     @using (Html.BeginForm("Register", "Registration", FormMethod.Post)) {
         <h1>Register</h1>
 
+        if(Model.PreviousAttempt != RegistrationStatus.Registered) {
+            var errorText = "";
+            switch (Model.PreviousAttempt) {
+                case RegistrationStatus.InvalidApiResponse:
+                    errorText = "Received an invalid response from the api.";
+                    break;
+                case RegistrationStatus.InvalidKey:
+                    errorText = "Key supplied was either invalid or incorrect access level.";
+                    break;
+                case RegistrationStatus.KeyInUse:
+                    errorText = "Key is already in use.";
+                    break;
+                case RegistrationStatus.NoResponse:
+                    errorText = "No reponse from API, try again later.";
+                    break;
+                case RegistrationStatus.AlreadyRegistered:
+                    errorText = "User already registered";
+                    break;
+            }
+
+            <div class="error"><h4>@errorText</h4></div>
+        }
+
         <div class="form-group">
             <label asp-for="ApiKey">API Key</label>
             <div>@Html.TextBox("ApiKey", null, new { @class = "form-control input-sm"})</div>
@@ -49,6 +73,7 @@
             <div>@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control input-sm"})</div>
             <div class="errorBox">@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "error" })</div>
         </div>
+
 
         <input type="submit" value="Submit" class="submit" />
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace DrunkSquad.Models.Users {
     public class LoginAttempt {
@@ -7,5 +8,7 @@ namespace DrunkSquad.Models.Users {
 
         [Required (ErrorMessage = "Password required")]
         public string Password { get; set; }
+
+        public PasswordVerificationResult PreviousAttempt { get; set; } = PasswordVerificationResult.Success;
     }
 }
