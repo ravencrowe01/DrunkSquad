@@ -1,13 +1,9 @@
-﻿using DrunkSquad.Framework.Logic.Faction;
-using DrunkSquad.Framework.Logic.Faction.Crimes;
+﻿using DrunkSquad.Framework.Logic.Faction.Crimes;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Logic.Extensions;
-using DrunkSquad.Logic.Faction.Crimes;
 using DrunkSquad.Models.Faction;
-using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
 
 namespace DrunkSquad.Controllers {
@@ -55,7 +51,7 @@ namespace DrunkSquad.Controllers {
 
             var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
 
-            if(roleClaim.Value.ToUserRole () != UserRole.Admin) {
+            if ((int) roleClaim.Value.ToUserRole () >= 1) {
                 return RedirectToAction ("Index");
             }
 
