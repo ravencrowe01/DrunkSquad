@@ -55,12 +55,13 @@
                                     <div class="dropdown-menu">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="StatsOverview">Stats Overview</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
                                     </div>
                                 </li>
                             }
                             else {
                                 <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="StatsOverview">Stats Overview</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
 
                                 </li>
                             }
@@ -72,15 +73,14 @@
                                     <div class="dropdown-menu">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="MembersCrimeOverview">Members Overview</a>
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="OrganizedCrimesOverview">Organized Crimes History</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="PersonalCrimesOverview">Personal Crime Stats</a>
                                     </div>
                                 </li>
                             }
-                            else {
+@*                             else {
                                 <li>
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="PersonalCrimesOverview">Personal Crime Stats</a>
                                 </li>
-                            }
+                            } *@
                         }
                     </ul>
                 </div>

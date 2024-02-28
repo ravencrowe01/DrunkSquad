@@ -51,7 +51,7 @@ namespace DrunkSquad.Controllers {
 
             var roleClaim = principle.Principal.Claims.FirstOrDefault (claim => claim.Type == ClaimTypes.Role);
 
-            if ((int) roleClaim.Value.ToUserRole () >= 1) {
+            if ((int) roleClaim.Value.ToUserRole () < 1) {
                 return RedirectToAction ("Index");
             }
 

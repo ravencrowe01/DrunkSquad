@@ -20,4 +20,10 @@ namespace DrunkSquad.Models.Users {
 
         public WorkingStats WorkingStats { get; set; }
     }
+
+    public class UserOverview {
+        public UserCrimes Crimes { get; set; }
+
+        public StatsOverview Stats { get; set; }
+    }
 }
