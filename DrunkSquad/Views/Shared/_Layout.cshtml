@@ -10,10 +10,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DrunkSquad.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css">
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
 </head>
 <body>
     <style>
@@ -38,7 +42,7 @@
         }
     </style>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
             <div id="banner">
                 <img id="banner-image" src="@Url.Content("~/Images/banner.png")" />
             </div>
@@ -46,41 +50,37 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (User.Identity.IsAuthenticated) {
-                            if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole () == UserRole.Admin) {
+                            if ((int) (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole ()) >= 1) {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Overview</a>
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Overview</a>
                                     <div class="dropdown-menu">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="Overview">Overview</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="StatsOverview">Stats Overview</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
+                                        <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="MemberOverview">Member Overview</a>
+                                        <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="StatsOverview">Stats Overview</a>
+                                        <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
                                     </div>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>
+                                    <div class="dropdown-menu">
+                                        <a class="nav-link" asp-area="" asp-controller="Crimes" asp-action="MembersCrimeOverview">Member Overview</a>
+                                        <a class="nav-link" asp-area="" asp-controller="Crimes" asp-action="OrganizedCrimesOverview">Organized Crimes History</a>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AdminOverview">Admin</a>
                                 </li>
                             }
                             else {
                                 <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="PersonalStatsOverview">Personal Stats Overview</a>
 
                                 </li>
                             }
-                        }
-                        @if(User.Identity.IsAuthenticated) {
-                            if (User.Claims.First (claim => claim.Type == ClaimTypes.Role).Value.ToUserRole() == UserRole.Admin) {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Crimes</a>
-                                    <div class="dropdown-menu">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="MembersCrimeOverview">Members Overview</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="OrganizedCrimesOverview">Organized Crimes History</a>
-                                    </div>
-                                </li>
-                            }
-@*                             else {
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Crimes" asp-action="PersonalCrimesOverview">Personal Crime Stats</a>
-                                </li>
-                            } *@
                         }
                     </ul>
                 </div>
@@ -88,15 +88,15 @@
                     <ul class="navbar-nav" id="user-access">
                         @if (User.Identity.IsAuthenticated) {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Registration">Register</a>
+                                <a class="nav-link" asp-area="" asp-controller="Registration" asp-action="Registration">Register</a>
                             </li>
                         }
                     </ul>
@@ -104,8 +104,8 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container" style="margin-bottom: 5rem">
+        <main role="main" class="pb-6">
             @RenderBody()
         </main>
     </div>
@@ -115,9 +115,6 @@
             &copy; 2023 - DrunkSquad - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

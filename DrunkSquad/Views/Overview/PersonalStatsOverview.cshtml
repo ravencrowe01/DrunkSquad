@@ -3,100 +3,124 @@
 @{
     ViewData["Title"] = "Personal Stats Overview";
 }
-<style>
-
-</style>
 
 <div>
     <div class="container">
-        <div class="row" style="margin-bottom: 2rem">
+        <div class="row" style="margin-bottom: 1rem">
             <div class="col">
-                <h3>Battle Stats</h3>
-                <div><b>Strength</b>: @Model.Stats.BattleStats.Strength.ToString("N0")</div>
-                <div><b>Defense</b>: @Model.Stats.BattleStats.Defense.ToString("N0")</div>
-                <div><b>Speed</b>: @Model.Stats.BattleStats.Speed.ToString("N0")</div>
-                <div><b>Dexterity</b>: @Model.Stats.BattleStats.Dexterity.ToString("N0")</div>
+                <div class="card border-secondary" style="height: 100%">
+                    <h3 class="card-header" style="text-align: center">Battle Stats</h3>
+
+                    <div class="card-body">
+                        <div><b>Strength</b>: @Model.Stats.BattleStats.Strength.ToString("N0")</div>
+                        <div><b>Defense</b>: @Model.Stats.BattleStats.Defense.ToString("N0")</div>
+                        <div><b>Speed</b>: @Model.Stats.BattleStats.Speed.ToString("N0")</div>
+                        <div><b>Dexterity</b>: @Model.Stats.BattleStats.Dexterity.ToString("N0")</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col" style="margin-right: 27rem">
-                <h3>Working Stats</h3>
-                <div><b>Manual Labor</b>: @Model.Stats.WorkingStats.ManualLabor.ToString("N0")</div>
-                <div><b>Intelligence</b>: @Model.Stats.WorkingStats.Intelligence.ToString("N0")</div>
-                <div><b>Endurance</b>: @Model.Stats.WorkingStats.Endurance.ToString("N0")</div>
+            <div class="col">
+                <div class="card border-secondary" style="height: 100%">
+                    <h3 class="card-header" style="text-align: center">Working Stats</h3>
+
+                    <div class="card-body">
+                        <div><b>Manual Labor</b>: @Model.Stats.WorkingStats.ManualLabor.ToString("N0")</div>
+                        <div><b>Intelligence</b>: @Model.Stats.WorkingStats.Intelligence.ToString("N0")</div>
+                        <div><b>Endurance</b>: @Model.Stats.WorkingStats.Endurance.ToString("N0")</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <h3>Faction Stats</h3>
-                <div><b>Total Money Gained</b>: @Model.Crimes.TotalMoneyGained.ToString("C")</div>
-                <div><b>Total Rep Gained</b>: @Model.Crimes.TotalRepGained.ToString("N0")</div>
-                <div><b>Success Rate</b>: @Model.Crimes.SuccessRate.ToString("P") </div>
-            </div>
-            <div class="col align-text-center">
-                <h3>Current OC</h3>
-                <div><em>@Model.Crimes.CurrentOC.Name</em></div>
-                <div><b>Status</b>: @Model.Crimes.CurrentOC.CurrentStateString</div>
-                @{
-                    var moneyString = "";
-                    var repString = "";
+                <div class="card border-secondary" style="height: 100%">
+                    <h3 class="card-header" style="text-align: center">Faction Stats</h3> 
 
-                    if (Model.Crimes.CurrentOC.Initiated) {
-                        if (Model.Crimes.CurrentOC.Success) {
-                            moneyString = Model.Crimes.CurrentOC.MoneyGain.ToString();
-                            repString = Model.Crimes.CurrentOC.RespectGain.ToString();
-                        }
-                        else {
-                            moneyString = "Failed...";
-                            repString = "Failed...";
-                        }
-                    }
-                    else {
-                        moneyString = "Waiting...";
-                        repString = "Waiting...";
-                    }
-                    <div><b>Money Gained</b>: @moneyString</div>
-                    <div><b>Rep Gained</b>: @repString</div>
-                }
-                @{
-                    var timeStarted = Model.Crimes.CurrentOC.TimeStarted;
-                    var timeReady = Model.Crimes.CurrentOC.TimeReady;
-
-                    var startDateTime = DateTimeOffset.FromUnixTimeSeconds (timeStarted).UtcDateTime.ToString();
-                    var readyDateTime = DateTimeOffset.FromUnixTimeSeconds (timeReady).UtcDateTime.ToString();
-
-                    <div><b>Started at:</b> @startDateTime.ToString()</div>
-                    <div><b>Ready at:</b> @readyDateTime.ToString()</div>
-                }
+                    <div class="card-body">
+                        <div><b>Total Money Gained</b>: @Model.Crimes.TotalMoneyGained.ToString("C")</div>
+                        <div><b>Total Rep Gained</b>: @Model.Crimes.TotalRepGained.ToString("N0")</div>
+                        <div><b>Success Rate</b>: @Model.Crimes.SuccessRate.ToString("P") </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col align-text-center">
-                <h3>Crime Stats</h3>
-                @{
-                    var stats = Model.Crimes.CrimeStats;
+            <div class="col">
+                <div class="card border-secondary" style="height: 100%">
+                    <h3 class="card-header" style="text-align: center">Current OC</h3>
 
-                    if (stats.CrimesVersion == 1) {
-                        <div><b>Auto Theft</b>: @stats.Crimes.AutoTheft.ToString("N0")</div>
-                        <div><b>Computer Crimes</b>: @stats.Crimes.ComputerCrimes.ToString("N0")</div>
-                        <div><b>Drug Deals</b>: @stats.Crimes.DrugDeals.ToString("N0")</div>
-                        <div><b>Fraud Crimes</b>: @stats.Crimes.FraudCrimes.ToString("N0")</div>
-                        <div><b>Murder</b>: @stats.Crimes.Murder.ToString("N0")</div>
-                        <div><b>Theft</b>: @stats.Crimes.Theft.ToString("N0")</div>
-                        <div><b>Other</b>: @stats.Crimes.Other.ToString("N0")</div>
-                        <div><b>Total</b>: @stats.Crimes.Total.ToString("N0")</div>
-                    }
-                    else {
-                        <div><b>Counterfeiting</b>: @stats.Crimes.Counterfeiting.ToString("N0")</div>
-                        <div><b>Cybercrime</b>: @stats.Crimes.Cybercrime.ToString("N0")</div>
-                        <div><b>Extortion</b>: @stats.Crimes.Extortion.ToString("N0")</div>
-                        <div><b>Fraud</b>: @stats.Crimes.Fraud.ToString("N0")</div>
-                        <div><b>Illegal Production</b>: @stats.Crimes.IllegalProduction.ToString("N0")</div>
-                        <div><b>Illicit Services</b>: @stats.Crimes.IllicitServices.ToString("N0")</div>
-                        <div><b>Theft</b>: @stats.Crimes.Theft.ToString("N0")</div>
-                        <div><b>Vandalism</b>: @stats.Crimes.Vandalism.ToString("N0")</div>
-                        <div><b>Total</b>: @stats.Crimes.Total.ToString("N0")</div>
-                    }
-                }
+                    <div class="card-body">
+                        <div><em>@Model.Crimes.CurrentOC.Name</em></div>
+                        <div><b>Status</b>: @Model.Crimes.CurrentOC.CurrentStateString</div>
+                        @{
+                            var moneyString = "";
+                            var repString = "";
+
+                            if (Model.Crimes.CurrentOC.Initiated) {
+                                if (Model.Crimes.CurrentOC.Success) {
+                                    moneyString = Model.Crimes.CurrentOC.MoneyGain.ToString();
+                                    repString = Model.Crimes.CurrentOC.RespectGain.ToString();
+                                }
+                                else {
+                                    moneyString = "Failed...";
+                                    repString = "Failed...";
+                                }
+                            }
+                            else {
+                                moneyString = "Waiting...";
+                                repString = "Waiting...";
+                            }
+                            <div><b>Money Gained</b>: @moneyString</div>
+                            <div><b>Rep Gained</b>: @repString</div>
+                        }
+                        @{
+                            var timeStarted = Model.Crimes.CurrentOC.TimeStarted;
+                            var timeReady = Model.Crimes.CurrentOC.TimeReady;
+
+                            var startDateTime = DateTimeOffset.FromUnixTimeSeconds (timeStarted).UtcDateTime.ToString();
+                            var readyDateTime = DateTimeOffset.FromUnixTimeSeconds (timeReady).UtcDateTime.ToString();
+
+                            <div><b>Planned on:</b> @startDateTime.ToString()</div>
+                            <div><b>Ready at:</b> @readyDateTime.ToString()</div>
+                        }
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-secondary" style="height: 100%">
+                    <h3 class="card-header" style="text-align: center">Crime Stats</h3>
+
+                    <div class="card-body">
+                        @{
+                            var stats = Model.Crimes.CrimeStats;
+
+                            if (stats.CrimesVersion == 1) {
+                                <div><b>Auto Theft</b>: @stats.Crimes.AutoTheft.ToString("N0")</div>
+                                <div><b>Computer Crimes</b>: @stats.Crimes.ComputerCrimes.ToString("N0")</div>
+                                <div><b>Drug Deals</b>: @stats.Crimes.DrugDeals.ToString("N0")</div>
+                                <div><b>Fraud Crimes</b>: @stats.Crimes.FraudCrimes.ToString("N0")</div>
+                                <div><b>Murder</b>: @stats.Crimes.Murder.ToString("N0")</div>
+                                <div><b>Theft</b>: @stats.Crimes.Theft.ToString("N0")</div>
+                                <div><b>Other</b>: @stats.Crimes.Other.ToString("N0")</div>
+                                <div><b>Total</b>: @stats.Crimes.Total.ToString("N0")</div>
+                            }
+                            else {
+                                <div><b>Counterfeiting</b>: @stats.Crimes.Counterfeiting.ToString("N0")</div>
+                                <div><b>Cybercrime</b>: @stats.Crimes.Cybercrime.ToString("N0")</div>
+                                <div><b>Extortion</b>: @stats.Crimes.Extortion.ToString("N0")</div>
+                                <div><b>Fraud</b>: @stats.Crimes.Fraud.ToString("N0")</div>
+                                <div><b>Illegal Production</b>: @stats.Crimes.IllegalProduction.ToString("N0")</div>
+                                <div><b>Illicit Services</b>: @stats.Crimes.IllicitServices.ToString("N0")</div>
+                                <div><b>Theft</b>: @stats.Crimes.Theft.ToString("N0")</div>
+                                <div><b>Vandalism</b>: @stats.Crimes.Vandalism.ToString("N0")</div>
+                                <div><b>Total</b>: @stats.Crimes.Total.ToString("N0")</div>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>

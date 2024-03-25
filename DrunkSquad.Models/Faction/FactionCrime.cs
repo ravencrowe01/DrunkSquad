@@ -50,7 +50,7 @@
             get {
                 if (Initiated) {
                     if (Success) {
-                        return "Succeed";
+                        return "Success";
                     }
                     else {
                         return "Failed";

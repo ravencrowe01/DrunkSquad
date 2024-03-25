@@ -1,0 +1,32 @@
+﻿@model DrunkSquad.Models.Faction.FactionInfo
+
+@{
+    ViewData ["Title"] = "Admin";
+}
+<script>
+    $(function () {
+        $(".date-picker").datepicker();
+    });
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <h4>Faction Data</h4>
+            <button>Refresh Faction Data</button>
+        </div>
+
+        <div class="col">
+            <button>Clean Up Crimes Database</button>
+
+             <div class="col">
+                 <button>Fetch Crimes</button>
+                 <input type="text" class="date-picker"/>
+             </div>
+
+             <div class="col">
+
+            </div>
+        </div>
+    </div>
+</div>

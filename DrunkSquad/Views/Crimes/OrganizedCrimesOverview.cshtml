@@ -6,45 +6,63 @@
     ViewData ["Title"] = "OC Overview";
 }
 
-<div>
-    <div>
+<div class="container card">
+    <div class="row">
         <h1><b>Organized Crimes Overview</b></h1>
     </div>
 
-        <div class="row">
-            <div class="col">Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
-            <div class="col">Total Rep Gained: @Model.TotalRepGained.ToString("N0")</div>
-            <div class="col">Success Rate: @Model.SuccessRate.ToString("P")</div>
-        </div>
-    
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Time Started</th>
-            <th>Time Ready</th>
-            <th>Participants</th>
-            <th>Money Gained</th>
-            <th>Respect Gained</th>
-        </tr>
-        @foreach (var crime in Model.Crimes.OrderByDescending(crime => crime.TimeStarted)) {
-            <tr>
-                <td>@crime.Name</td>
-                <td>@crime.CurrentStateString</td>
-                <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</td>
-                <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</td>
-                <td>@string.Join(", ", crime.ParticipantNames)</td>
-                    @if (crime.Initiated)
-                    {
-                        <td>@crime.MoneyGain.ToString("C")</td>
-                        <td>@crime.RespectGain.ToString("N0")</td>
-                    }
-                    else
-                    {
-                        <td>Waiting...</td>
-                        <td>Waiting...</td>
-                    }
-            </tr>
+    <div class="row" style="margin-bottom: 1rem">
+        <div class="col text-info" style="text-align: center">Total Money Gained: @Model.TotalMoneyGained.ToString("C")</div>
+        <div class="col text-info" style="text-align: center">Total Rep Gained: @Model.TotalRepGained.ToString("N0")</div>
+        @{
+            var success = Model.SuccessRate;
+
+            var text = success > 0.75f ? "text-success" : (success > 0.5f ? "text-warning" : "text-danger");
+            if(success > 0.75f) {
+                <div class="col text-success" style="text-align: center">Success Rate: @Model.SuccessRate.ToString("P")</div>
+            }
+            else if (success > 0.5f) {
+                <div class="col text-warning" style="text-align: center">Success Rate: @Model.SuccessRate.ToString("P")</div>
+            }
+            else {
+                <div class= "col text-danger" style="text-align: center">Success Rate: @Model.SuccessRate.ToString("P")</div>
+            }
         }
-    </table>
+    </div>
+
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Time Started</th>
+                    <th>Time Ready</th>
+                    <th>Participants</th>
+                    <th>Money Gained</th>
+                    <th>Respect Gained</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var crime in Model.Crimes.OrderByDescending (crime => crime.TimeStarted)) {
+                    <tr>
+                        <td>@crime.Name</td>
+                        <td>@crime.CurrentStateString</td>
+                        <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeStarted).UtcDateTime.ToString()</td>
+                        <td>@DateTimeOffset.FromUnixTimeSeconds(crime.TimeReady).UtcDateTime.ToString()</td>
+                        <td>@string.Join(", ", crime.ParticipantNames)</td>
+                        @if (crime.Initiated) {
+                            <td>@crime.MoneyGain.ToString("C")</td>
+                            <td>@crime.RespectGain.ToString("N0")</td>
+                        }
+                        else {
+                            <td>Waiting...</td>
+                            <td>Waiting...</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

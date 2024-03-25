@@ -2,7 +2,6 @@
 using DrunkSquad.Framework.Logic.Faction.Info;
 using DrunkSquad.Framework.Logic.Users;
 using DrunkSquad.Logic.Extensions;
-using DrunkSquad.Logic.Users;
 using DrunkSquad.Models.Faction;
 using DrunkSquad.Models.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -16,7 +15,7 @@ namespace DrunkSquad.Controllers {
         private IProfileHandler _profileHandler = profileHandler;
         private ICrimeHandler _crimeHandler = crimeHandler;
 
-        public async Task<IActionResult> Overview () {
+        public async Task<IActionResult> MemberOverview () {
             var authResult = await HttpContext.AuthenticateAsync ();
 
             if (!authResult.Succeeded) {
@@ -97,16 +96,17 @@ namespace DrunkSquad.Controllers {
 
             var users = _userHandler.GetAllUsers ();
 
-            foreach(var member in members) {
+            foreach (var member in members) {
                 var user = users.FirstOrDefault (user => user.Profile.ProfileID == member.MemberID);
 
-                if(user is not null) {
+                if (user is not null) {
                     overview.Stats.Add (new StatsOverview {
                         Member = member.Name,
                         BattleStats = user.BattleStats,
                         WorkingStats = user.WorkingStats
                     });
-                } else {
+                }
+                else {
                     overview.Stats.Add (new StatsOverview {
                         Member = member.Name
                     });
